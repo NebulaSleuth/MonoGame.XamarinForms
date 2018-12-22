@@ -578,11 +578,12 @@ namespace Microsoft.Xna.Framework
         /// </summary>
         internal void ResetClientBounds()
         {
-#if ANDROID
-            float preferredAspectRatio = (float)PreferredBackBufferWidth /
-                                         (float)PreferredBackBufferHeight;
-            float displayAspectRatio = (float)GraphicsDevice.DisplayMode.Width / 
-                                       (float)GraphicsDevice.DisplayMode.Height;
+#if FORMS && ANDROID
+            float displayAspectRatio = (float)GraphicsDevice.DisplayMode.Width /
+                           (float)GraphicsDevice.DisplayMode.Height;
+
+
+            float preferredAspectRatio = _game?.AspectRatio ?? displayAspectRatio;
 
             float adjustedAspectRatio = preferredAspectRatio;
 
@@ -624,17 +625,70 @@ namespace Microsoft.Xna.Framework
             // Set the veiwport so the (potentially) resized client bounds are drawn in the middle of the screen
             _graphicsDevice.Viewport = new Viewport(newClientBounds.X, -newClientBounds.Y, newClientBounds.Width, newClientBounds.Height);
 
-#if FORMS
             ((AndroidFormsGameWindow)_game.Window).ChangeClientBounds(newClientBounds);
-#else
-            ((AndroidGameWindow)_game.Window).ChangeClientBounds(newClientBounds);
-#endif
             // Touch panel needs latest buffer size for scaling
             TouchPanel.DisplayWidth = newClientBounds.Width;
             TouchPanel.DisplayHeight = newClientBounds.Height;
 
             Android.Util.Log.Debug("MonoGame", "GraphicsDeviceManager.ResetClientBounds: newClientBounds=" + newClientBounds.ToString());
+#elif ANDROID
+            float preferredAspectRatio = (float)PreferredBackBufferWidth /
+                                             (float)PreferredBackBufferHeight;
+                float displayAspectRatio = (float)GraphicsDevice.DisplayMode.Width /
+                                           (float)GraphicsDevice.DisplayMode.Height;
+
+                float adjustedAspectRatio = preferredAspectRatio;
+
+                if ((preferredAspectRatio > 1.0f && displayAspectRatio < 1.0f) ||
+                    (preferredAspectRatio < 1.0f && displayAspectRatio > 1.0f))
+                {
+                    // Invert preferred aspect ratio if it's orientation differs from the display mode orientation.
+                    // This occurs when user sets preferredBackBufferWidth/Height and also allows multiple supported orientations
+                    adjustedAspectRatio = 1.0f / preferredAspectRatio;
+                }
+
+                const float EPSILON = 0.00001f;
+                var newClientBounds = new Rectangle();
+                if (displayAspectRatio > (adjustedAspectRatio + EPSILON))
+                {
+                    // Fill the entire height and reduce the width to keep aspect ratio
+                    newClientBounds.Height = _graphicsDevice.DisplayMode.Height;
+                    newClientBounds.Width = (int)(newClientBounds.Height * adjustedAspectRatio);
+                    newClientBounds.X = (_graphicsDevice.DisplayMode.Width - newClientBounds.Width) / 2;
+                }
+                else if (displayAspectRatio < (adjustedAspectRatio - EPSILON))
+                {
+                    // Fill the entire width and reduce the height to keep aspect ratio
+                    newClientBounds.Width = _graphicsDevice.DisplayMode.Width;
+                    newClientBounds.Height = (int)(newClientBounds.Width / adjustedAspectRatio);
+                    newClientBounds.Y = (_graphicsDevice.DisplayMode.Height - newClientBounds.Height) / 2;
+                }
+                else
+                {
+                    // Set the ClientBounds to match the DisplayMode
+                    newClientBounds.Width = GraphicsDevice.DisplayMode.Width;
+                    newClientBounds.Height = GraphicsDevice.DisplayMode.Height;
+                }
+
+                // Ensure buffer size is reported correctly
+                _graphicsDevice.PresentationParameters.BackBufferWidth = newClientBounds.Width;
+                _graphicsDevice.PresentationParameters.BackBufferHeight = newClientBounds.Height;
+
+                // Set the veiwport so the (potentially) resized client bounds are drawn in the middle of the screen
+                _graphicsDevice.Viewport = new Viewport(newClientBounds.X, -newClientBounds.Y, newClientBounds.Width, newClientBounds.Height);
+
+#if FORMS
+                ((AndroidFormsGameWindow)_game.Window).ChangeClientBounds(newClientBounds);
+#else
+            ((AndroidGameWindow)_game.Window).ChangeClientBounds(newClientBounds);
 #endif
+                // Touch panel needs latest buffer size for scaling
+                TouchPanel.DisplayWidth = newClientBounds.Width;
+                TouchPanel.DisplayHeight = newClientBounds.Height;
+
+                Android.Util.Log.Debug("MonoGame", "GraphicsDeviceManager.ResetClientBounds: newClientBounds=" + newClientBounds.ToString());
+#endif
+
         }
 
     }

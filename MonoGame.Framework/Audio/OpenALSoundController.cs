@@ -388,7 +388,7 @@ namespace Microsoft.Xna.Framework.Audio
                 }
                 _isDisposed = true;
             }
-		}
+        }
 
         /// <summary>
         /// Reserves a sound buffer and return its identifier. If there are no available sources

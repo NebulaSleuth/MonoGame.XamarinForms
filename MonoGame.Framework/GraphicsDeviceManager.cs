@@ -32,6 +32,8 @@ namespace Microsoft.Xna.Framework
         // dirty flag for ApplyChanges
         private bool _shouldApplyChanges;
 
+        private bool _notMyDevice;
+
         /// <summary>
         /// The default back buffer width.
         /// </summary>
@@ -56,6 +58,52 @@ namespace Microsoft.Xna.Framework
             if (game == null)
                 throw new ArgumentNullException("game", "Game cannot be null.");
 
+            _game = game;
+
+            _supportedOrientations = DisplayOrientation.Default;
+            _preferredBackBufferFormat = SurfaceFormat.Color;
+            _preferredDepthStencilFormat = DepthFormat.Depth24;
+            _synchronizedWithVerticalRetrace = true;
+
+            // Assume the window client size as the default back 
+            // buffer resolution in the landscape orientation.
+            var clientBounds = _game.Window.ClientBounds;
+            if (clientBounds.Width >= clientBounds.Height)
+            {
+                _preferredBackBufferWidth = clientBounds.Width;
+                _preferredBackBufferHeight = clientBounds.Height;
+            }
+            else
+            {
+                _preferredBackBufferWidth = clientBounds.Height;
+                _preferredBackBufferHeight = clientBounds.Width;
+            }
+
+            // Default to windowed mode... this is ignored on platforms that don't support it.
+            _wantFullScreen = false;
+
+            // XNA would read this from the manifest, but it would always default
+            // to reach unless changed.  So lets mimic that without the manifest bit.
+            GraphicsProfile = GraphicsProfile.Reach;
+
+            // Let the plaform optionally overload construction defaults.
+            PlatformConstruct();
+
+            if (_game.Services.GetService(typeof(IGraphicsDeviceManager)) != null)
+                throw new ArgumentException("A graphics device manager is already registered.  The graphics device manager cannot be changed once it is set.");
+            _game.graphicsDeviceManager = this;
+
+            _game.Services.AddService(typeof(IGraphicsDeviceManager), this);
+            _game.Services.AddService(typeof(IGraphicsDeviceService), this);
+        }
+
+        public GraphicsDeviceManager(Game game, GraphicsDevice device)
+        {
+            if (game == null)
+                throw new ArgumentNullException("game", "Game cannot be null.");
+
+            _notMyDevice = true;
+            _graphicsDevice = device;
             _game = game;
 
             _supportedOrientations = DisplayOrientation.Default;

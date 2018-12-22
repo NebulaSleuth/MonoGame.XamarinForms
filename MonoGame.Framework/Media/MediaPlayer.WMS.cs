@@ -63,6 +63,22 @@ namespace Microsoft.Xna.Framework.Media
                 _session.BeginGetEvent(this, null);
             }
 
+            public Result QueryInterface(ref Guid guid, out IntPtr comObject)
+            {
+                comObject = IntPtr.Zero;
+                return Result.False;
+            }
+
+            public int AddReference()
+            {
+                return 0;
+            }
+
+            public int Release()
+            {
+                return 0;
+            }
+
             public AsyncCallbackFlags Flags { get; private set; }
             public WorkQueueId WorkQueueId { get; private set; }
         }
@@ -79,6 +95,18 @@ namespace Microsoft.Xna.Framework.Media
             _session.BeginGetEvent(_callback, null);
 
             _clock = _session.Clock.QueryInterface<PresentationClock>();
+        }
+
+        public static void Reset()
+        {
+            Stop();
+
+            //_currentSong = null;
+            //_desiredPosition = null;
+            //_isMuted = false;
+            //_isRepeating = false;
+            //_session = null;
+            //PlatformInitialize();
         }
 
         #region Properties

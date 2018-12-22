@@ -28,7 +28,7 @@ namespace Microsoft.Xna.Framework.Media
             {
                 SourceResolver resolver = new SourceResolver();
 
-                ComObject source = resolver.CreateObjectFromURL(FilePath, SourceResolverFlags.MediaSource);
+                ComObject source = resolver.CreateObjectFromURL(FilePath, SourceResolverFlags.MediaSource) as ComObject;
                 mediaSource = source.QueryInterface<SharpDX.MediaFoundation.MediaSource>();
                 resolver.Dispose();
                 source.Dispose();

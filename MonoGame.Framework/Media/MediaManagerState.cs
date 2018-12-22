@@ -31,7 +31,7 @@ namespace Microsoft.Xna.Framework.Media
         /// </summary>
         public static void CheckShutdown()
         {
-            if(started)
+            if (started)
             {
                 started = false;
                 MediaManager.Shutdown();

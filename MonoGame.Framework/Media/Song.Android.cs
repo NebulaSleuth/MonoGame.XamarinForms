@@ -45,6 +45,12 @@ namespace Microsoft.Xna.Framework.Media
         private void PlatformInitialize(string fileName)
         {
             // Nothing to do here
+            if (_androidPlayer == null)
+            {
+                _androidPlayer = new Android.Media.MediaPlayer();
+                _androidPlayer.Completion += AndroidPlayer_Completion;
+
+            }
         }
 
         static void AndroidPlayer_Completion(object sender, EventArgs e)
@@ -68,7 +74,9 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformDispose(bool disposing)
         {
-            // Appears to be a noOp on Android
+            _androidPlayer.Completion -= AndroidPlayer_Completion;
+            _androidPlayer.Stop();
+            _androidPlayer = null;
         }
 
         internal void Play(TimeSpan? startPosition)

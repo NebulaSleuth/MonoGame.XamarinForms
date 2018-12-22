@@ -186,6 +186,8 @@ namespace Microsoft.Xna.Framework
 
         public virtual void Run(double updatesPerSecond)
         {
+            Resume();
+
             cts = new CancellationTokenSource();
             if (LogFPS)
             {
@@ -391,6 +393,7 @@ namespace Microsoft.Xna.Framework
             {
                 if (!androidSurfaceAvailable)
                 {
+                    Console.WriteLine("No Surface");
                     return;
                 }
             }
@@ -609,7 +612,7 @@ namespace Microsoft.Xna.Framework
                     }
                     break;
 
-                case InternalState.Running_GameThread: // when we are running game 
+                case InternalState.Running_GameThread: // when we are running game
                     processStateRunning(token);
 
                     break;

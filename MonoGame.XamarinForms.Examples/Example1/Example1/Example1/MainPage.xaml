@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Example1"
+             xmlns:controls="clr-namespace:Example1.Controls"
+             x:Class="Example1.MainPage" BackgroundColor="Black"
+             NavigationPage.HasNavigationBar="false">
+
+    <!--<StackLayout>
+        --><!-- Place new controls here --><!--
+        <Label Text="Welcome to Xamarin.Forms!" 
+           HorizontalOptions="Center"
+           VerticalOptions="CenterAndExpand" />
+    </StackLayout>-->
+    <Grid>
+        <!--<BoxView Color="Red" BackgroundColor="DarkBlue" WidthRequest="500" HeightRequest="600" HorizontalOptions="Center" VerticalOptions="Center"></BoxView>--><!--<BoxView Color="Red" BackgroundColor="DarkBlue" WidthRequest="500" HeightRequest="600" HorizontalOptions="Center" VerticalOptions="Center"></BoxView>-->
+        <!--<controls:GameView x:Name="GameView" AutoStart="True" WidthRequest="500" HeightRequest="600" HorizontalOptions="Center" VerticalOptions="Center"/>-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" BackgroundColor="CornflowerBlue"/>
+
+        <Grid Grid.Column="1" x:Name="GameContainer"/>
+        <StackLayout Grid.Column="0" Margin="0,10">
+            <Button Text="Platformer" WidthRequest="140" HeightRequest="45" HorizontalOptions="Center" VerticalOptions="Center" Clicked="Game1_Clicked"/>
+            <Button Text="Neon Shooter" WidthRequest="140" HeightRequest="45" HorizontalOptions="Center" VerticalOptions="Center" Clicked="Game2_Clicked"/>
+        </StackLayout>
+    </Grid>
+
+</ContentPage>

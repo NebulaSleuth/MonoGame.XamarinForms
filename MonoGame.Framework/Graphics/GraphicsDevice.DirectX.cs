@@ -57,6 +57,22 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 #if WINDOWS
 
+#if FORMS
+        private RenderTarget2D _defaultRenderTarget = null;
+        public RenderTarget2D DefaultRenderTarget
+        {
+            get
+            {
+                return _defaultRenderTarget;
+            }
+            internal set
+            {
+                PresentationParameters.BackBufferWidth = _defaultRenderTarget?.Width??GraphicsDeviceManager.DefaultBackBufferWidth;
+                PresentationParameters.BackBufferHeight = _defaultRenderTarget?.Height ?? GraphicsDeviceManager.DefaultBackBufferHeight;
+                _defaultRenderTarget = value;
+            }
+        }
+#endif
         SwapChain _swapChain;
 
 #endif
@@ -945,7 +961,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformDispose()
         {
             // make sure to release full screen or this might cause issues on exit
-            if (_swapChain.IsFullScreen)
+            if (_swapChain?.IsFullScreen == true)
                 _swapChain.SetFullscreenState(false, null);
 
             SharpDX.Utilities.Dispose(ref _renderTargetView);
@@ -1041,7 +1057,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 // The first argument instructs DXGI to block n VSyncs before presenting.
                 lock (_d3dContext)
-                    _swapChain.Present(syncInterval, PresentFlags.None);
+                    _swapChain?.Present(syncInterval, PresentFlags.None);
             }
             catch (SharpDX.SharpDXException)
             {
@@ -1095,6 +1111,11 @@ namespace Microsoft.Xna.Framework.Graphics
             Array.Clear(_currentRenderTargets, 0, _currentRenderTargets.Length);
             _currentRenderTargets[0] = _renderTargetView;
             _currentDepthStencilView = _depthStencilView;
+
+#if FORMS
+            if (DefaultRenderTarget != null)
+                SetRenderTarget(DefaultRenderTarget);
+#endif
 
             lock (_d3dContext)
                 _d3dContext.OutputMerger.SetTargets(_currentDepthStencilView, _currentRenderTargets);

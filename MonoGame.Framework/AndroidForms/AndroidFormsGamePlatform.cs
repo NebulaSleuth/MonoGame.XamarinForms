@@ -14,6 +14,7 @@ namespace Microsoft.Xna.Framework
         public AndroidFormsGamePlatform(Game game)
             : base(game)
         {
+
             System.Diagnostics.Debug.Assert(Game.Activity != null, "Must set Game.Activity before creating the Game instance");
             ((AndroidFormsGameActivity)Game.Activity).Game = Game;
 
@@ -23,15 +24,7 @@ namespace Microsoft.Xna.Framework
             _gameWindow = new AndroidFormsGameWindow(Game.Activity, game);
             Window = _gameWindow;
 
-            MediaLibrary.Context = Game.Activity;
-            try
-            {
-                OpenALSoundController soundControllerInstance = OpenALSoundController.GetInstance;
-            }
-            catch (DllNotFoundException ex)
-            {
-                throw (new NoAudioHardwareException("Failed to init OpenALSoundController", ex));
-            }
+
         }
 
         protected override void Dispose(bool disposing)
@@ -50,7 +43,7 @@ namespace Microsoft.Xna.Framework
 
         public override void Exit()
         {
-            Game.Activity.MoveTaskToBack(true);
+            //Game.Activity.MoveTaskToBack(true);
         }
 
         public override void RunLoop()
@@ -99,7 +92,7 @@ namespace Microsoft.Xna.Framework
 
         public override bool BeforeRun()
         {
-
+            IsActive = true;
             // Run it as fast as we can to allow for more response on threaded GPU resource creation
             _gameWindow.GameView.Run();
 

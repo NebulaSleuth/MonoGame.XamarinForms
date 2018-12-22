@@ -17,10 +17,14 @@ namespace Microsoft.Xna.Framework
 #if DESKTOPGL || ANGLE
             return new SdlGamePlatform(game);
 #elif WINDOWS && DIRECTX
+#if FORMS
+            return new MonoGame.Framework.WPFFormsGamePlatform(game);
+#else
             return new MonoGame.Framework.WinFormsGamePlatform(game);
+#endif
 #elif WINDOWS_UAP
             return new UAPGamePlatform(game);
 #endif
         }
-   }
+    }
 }

@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{608344E9-54E1-4BA2-8D99-C74E237AF5E4}</ProjectGuid>
+    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TemplateGuid>{6143fdea-f3c2-4a09-aafa-6e230626515e}</TemplateGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Example1.iOS</RootNamespace>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <AssemblyName>Example1.iOS</AssemblyName>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <MtouchArch>x86_64</MtouchArch>
+    <MtouchLink>None</MtouchLink>
+    <MtouchDebug>true</MtouchDebug>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <MtouchLink>None</MtouchLink>
+    <MtouchArch>x86_64</MtouchArch>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhone\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <MtouchArch>ARM64</MtouchArch>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchDebug>true</MtouchDebug>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <MtouchArch>ARM64</MtouchArch>
+    <ConsolePause>false</ConsolePause>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\iPhone\Ad-Hoc</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <MtouchArch>ARM64</MtouchArch>
+    <BuildIpa>True</BuildIpa>
+    <CodesignProvision>Automatic:AdHoc</CodesignProvision>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\iPhone\AppStore</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <MtouchArch>ARM64</MtouchArch>
+    <CodesignProvision>Automatic:AppStore</CodesignProvision>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="GameManager.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="AppDelegate.cs" />
+    <Compile Include="Renderers\GameViewRenderer.cs" />
+    <None Include="Entitlements.plist" />
+    <None Include="Info.plist">
+      <SubType>Designer</SubType>
+    </None>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <BundleResource Include="Resources\Platformer2D\Backgrounds\Layer0_0.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Backgrounds\Layer0_1.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Backgrounds\Layer0_2.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Backgrounds\Layer1_0.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Backgrounds\Layer1_1.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Backgrounds\Layer1_2.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Backgrounds\Layer2_0.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Backgrounds\Layer2_1.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Backgrounds\Layer2_2.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Fonts\Hud.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Overlays\you_died.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Overlays\you_lose.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Overlays\you_win.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sounds\ExitReached.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sounds\GemCollected.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sounds\MonsterKilled.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sounds\Music.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sounds\PlayerFall.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sounds\PlayerJump.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sounds\PlayerKilled.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sounds\Powerup.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\Gem.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\VirtualControlArrow.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\MonsterA\Idle.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\MonsterA\Run.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\MonsterB\Idle.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\MonsterB\Run.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\MonsterC\Idle.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\MonsterC\Run.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\MonsterD\Idle.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\MonsterD\Run.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\Player\Celebrate.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\Player\Die.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\Player\Idle.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\Player\Jump.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Sprites\Player\Run.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Tiles\BlockA0.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Tiles\BlockA1.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Tiles\BlockA2.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Tiles\BlockA3.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Tiles\BlockA4.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Tiles\BlockA5.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Tiles\BlockA6.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Tiles\BlockB0.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Tiles\BlockB1.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Tiles\Exit.xnb" />
+    <BundleResource Include="Resources\Platformer2D\Tiles\Platform.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Art\Black Hole.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Art\Bullet.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Art\Glow.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Art\Laser.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Art\Player.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Art\Pointer.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Art\Seeker.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Art\Wanderer.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\explosion-01.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\explosion-02.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\explosion-03.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\explosion-04.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\explosion-05.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\explosion-06.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\explosion-07.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\explosion-08.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\Music.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\shoot-01.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\shoot-02.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\shoot-03.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\shoot-04.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\spawn-01.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\spawn-02.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\spawn-03.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\spawn-04.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\spawn-05.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\spawn-06.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\spawn-07.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Audio\spawn-08.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Shaders\BloomCombine.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Shaders\BloomExtract.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Shaders\GaussianBlur.xnb" />
+    <BundleResource Include="Resources\NeonShooter\Font.xnb" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon1024.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon180.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon167.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon152.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon120.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon87.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon80.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon76.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon60.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon58.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon40.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon29.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon20.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="Xamarin.iOS" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="3.3.0.967583" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\MonoGame.Framework\MonoGame.Framework.iOSForms.csproj">
+      <Project>{b108b16b-3412-43f5-a674-f70dd63cd58f}</Project>
+      <Name>MonoGame.Framework.iOSForms</Name>
+      <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
+    </ProjectReference>
+    <ProjectReference Include="..\Example1\Example1.csproj">
+      <Project>{DD75BE02-4948-4355-B9BC-BB4B7EEED714}</Project>
+      <Name>Example1</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Platformer2D\Levels\0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Platformer2D\Levels\1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Platformer2D\Levels\2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Platformer2D\Sounds\Music.m4a" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\NeonShooter\Audio\Music.m4a" />
+  </ItemGroup>
+</Project>

@@ -73,7 +73,7 @@ namespace MonoGame.Framework
             if (_window != null)
                 _window.Dispose();
             _window = null;
-            Window = null;
+            //Window = null;
         }
 
         public override bool BeforeUpdate(GameTime gameTime)

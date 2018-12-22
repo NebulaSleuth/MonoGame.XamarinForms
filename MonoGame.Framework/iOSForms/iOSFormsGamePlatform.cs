@@ -80,23 +80,23 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
-//using Microsoft.Xna.Framework.GamerServices;
 
 namespace Microsoft.Xna.Framework
 {
     class iOSFormsGamePlatform : GamePlatform
     {
         private iOSFormsGameViewController _viewController;
-        private UIWindow _mainWindow;
         private List<NSObject> _applicationObservers;
         private CADisplayLink _displayLink;
+
+        public static UIWindow MainWindow { get; set; }
 
         public iOSFormsGamePlatform(Game game) :
             base(game)
         {
             game.Services.AddService(typeof(iOSFormsGamePlatform), this);
-			
-			// Setup our OpenALSoundController to handle our SoundBuffer pools
+
+            // Setup our OpenALSoundController to handle our SoundBuffer pools
             try
             {
                 OpenALSoundController soundControllerInstance = OpenALSoundController.GetInstance;
@@ -115,17 +115,17 @@ namespace Microsoft.Xna.Framework
             UIApplication.SharedApplication.SetStatusBarHidden(true, UIStatusBarAnimation.Fade);
 #endif
 
-            _mainWindow = UIApplication.SharedApplication.KeyWindow;
-            //_mainWindow = new UIWindow(UIScreen.MainScreen.Bounds);
-			
-            game.Services.AddService (typeof(UIWindow), _mainWindow);
+            MainWindow = Game.MainWindow;
+
+            if (MainWindow != null)
+                game.Services.AddService(typeof(UIWindow), MainWindow);
 
             _viewController = new iOSFormsGameViewController(this);
 
             game.Services.AddService (typeof(UIViewController), _viewController);
             Window = new iOSFormsGameWindow (_viewController);
 
-            _mainWindow.Add (_viewController.View);
+            MainWindow.Add (_viewController.View);
 
             _viewController.InterfaceOrientationChanged += ViewController_InterfaceOrientationChanged;
 
@@ -176,6 +176,8 @@ namespace Microsoft.Xna.Framework
             base.Dispose(disposing);
             if (disposing)
             {
+                _displayLink?.RemoveFromRunLoop(NSRunLoop.Main, NSRunLoop.NSDefaultRunLoopMode);
+
                 if (_viewController != null)
                 {
                     _viewController.View.RemoveFromSuperview ();
@@ -184,11 +186,13 @@ namespace Microsoft.Xna.Framework
                     _viewController = null;
                 }
 
-                if (_mainWindow != null)
-                {
-                    _mainWindow.Dispose();
-                    _mainWindow = null;
-                }
+                //if (_mainWindow != null)
+                //{
+                //    _mainWindow.Dispose();
+                //    _mainWindow = null;
+                //}
+
+
             }
         }
 
@@ -207,21 +211,26 @@ namespace Microsoft.Xna.Framework
         public override void StartRunLoop()
         {
             // Show the window
-            _mainWindow.MakeKeyAndVisible();
+            //_mainWindow.MakeKeyAndVisible();
 
             // In iOS 8+ we need to set the root view controller *after* Window MakeKey
             // This ensures that the viewController's supported interface orientations
             // will be respected at launch
-            _mainWindow.RootViewController = _viewController;
+            //_mainWindow.RootViewController = _viewController;
 
             BeginObservingUIApplication();
 
-            _viewController.View.BecomeFirstResponder();
+            //_viewController.View.BecomeFirstResponder();
             CreateDisplayLink();
         }
 
         internal void Tick()
         {
+            if (Game == null)
+            {
+                return;
+            }
+
             if (!Game.IsActive)
                 return;
 
@@ -234,7 +243,7 @@ namespace Microsoft.Xna.Framework
             //        point, it should be possible to pass Game.Tick
             //        directly to NSTimer.CreateRepeatingTimer.
             _viewController.View.MakeCurrent();
-            Game.Tick ();
+            Game?.Tick ();
 
             if (!IsPlayingVideo)
             {

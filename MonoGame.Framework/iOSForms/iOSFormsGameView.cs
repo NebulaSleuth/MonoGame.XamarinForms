@@ -99,6 +99,7 @@ namespace Microsoft.Xna.Framework {
 			if (platform == null)
 				throw new ArgumentNullException ("platform");
 			_platform = platform;
+            
 			Initialize ();
 		}
         public iOSFormsGameView(iOSFormsGamePlatform platform)
@@ -112,13 +113,63 @@ namespace Microsoft.Xna.Framework {
 
         private void Initialize ()
 		{
+            UserInteractionEnabled = true;
             #if !TVOS
 			MultipleTouchEnabled = true;
             #endif
 			Opaque = true;
 		}
 
-		protected override void Dispose (bool disposing)
+        public override CGSize SystemLayoutSizeFittingSize(CGSize size)
+        {
+            return SizeThatFits(size);
+            //return base.SystemLayoutSizeFittingSize(size);
+        }
+
+        public override CGSize SystemLayoutSizeFittingSize(CGSize targetSize, float horizontalFittingPriority, float verticalFittingPriority)
+        {
+            return SizeThatFits(targetSize);
+
+            //return base.SystemLayoutSizeFittingSize(targetSize, horizontalFittingPriority, verticalFittingPriority);
+        }
+
+        public override CGSize SizeThatFits(CGSize size)
+        {
+            if ((_platform?.Game.AspectRatio ?? 0) != 0)
+            {
+                // size it
+                nfloat w = size.Width;
+                nfloat h = w / _platform.Game.AspectRatio;
+                if (h > size.Height)
+                {
+                    h = size.Height;
+                    w = h * _platform.Game.AspectRatio;
+                }
+
+                return new CGSize(w, h);
+            }
+            return base.SizeThatFits(size);
+        }
+
+        private CGSize GetAspectSize(nfloat Width, nfloat Height)
+        {
+            if ((_platform?.Game.AspectRatio ?? 0) != 0)
+            {
+                // size it
+                nfloat w = Width;
+                nfloat h = w / _platform.Game.AspectRatio;
+                if (h > Height)
+                {
+                    h = Height;
+                    w = h * _platform.Game.AspectRatio;
+                }
+
+                return new CGSize(w, h);
+            }
+            return new CGSize(Width, Height);
+        }
+
+        protected override void Dispose (bool disposing)
 		{
 			if (disposing) {
 				if (__renderbuffergraphicsContext != null)
@@ -211,15 +262,19 @@ namespace Microsoft.Xna.Framework {
             _platform.Tick();
         }
 
-		private void CreateFramebuffer ()
+        private void CreateFramebuffer ()
 		{
 			this.MakeCurrent();
-			
-			// HACK:  GraphicsDevice itself should be calling
-			//        glViewport, so we shouldn't need to do it
-			//        here and then force the state into
-			//        GraphicsDevice.  However, that change is a
-			//        ways off, yet.
+
+            // HACK:  GraphicsDevice itself should be calling
+            //        glViewport, so we shouldn't need to do it
+            //        here and then force the state into
+            //        GraphicsDevice.  However, that change is a
+            //        ways off, yet.
+            CGSize size = GetAspectSize(Layer.Bounds.Size.Width, Layer.Bounds.Size.Height);
+            Bounds = new CGRect(0, 0, size.Width, size.Height);
+            Layer.Bounds = Bounds;
+
             int viewportHeight = (int)Math.Round(Layer.Bounds.Size.Height * Layer.ContentsScale);
             int viewportWidth = (int)Math.Round(Layer.Bounds.Size.Width * Layer.ContentsScale);
 
@@ -298,6 +353,7 @@ namespace Microsoft.Xna.Framework {
                 pp.BackBufferHeight = height;
                 pp.BackBufferWidth = width;
 
+                Console.WriteLine($"BBSIZE: {width}:{height}");
 				gds.GraphicsDevice.Viewport = new Viewport(
 					0, 0,
 					pp.BackBufferWidth,

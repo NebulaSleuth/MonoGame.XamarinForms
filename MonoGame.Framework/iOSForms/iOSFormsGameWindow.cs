@@ -66,6 +66,7 @@ non-infringement.
 */
 #endregion License
 
+using CoreGraphics;
 using System;
 
 using UIKit;
@@ -96,7 +97,8 @@ namespace Microsoft.Xna.Framework {
 
 		public override Rectangle ClientBounds {
 			get {
-				var bounds = _viewController.View.Bounds;
+
+                var bounds = _viewController.View.Bounds;
                 var scale = _viewController.View.ContentScaleFactor;
 
                 // TODO: Calculate this only when dirty.
@@ -108,7 +110,7 @@ namespace Microsoft.Xna.Framework {
                     int width;
                     int height;
 
-                    if (currentOrientation == DisplayOrientation.LandscapeLeft || 
+                    if (currentOrientation == DisplayOrientation.LandscapeLeft ||
                         currentOrientation == DisplayOrientation.LandscapeRight)
                     {
                         width = (int)Math.Max(bounds.Width, bounds.Height);
@@ -124,13 +126,13 @@ namespace Microsoft.Xna.Framework {
                     width *= (int)scale;
                     height *= (int)scale;
 
-                    return new Rectangle( (int)(bounds.X * scale), (int)(bounds.Y * scale), width, height);
+                    return new Rectangle((int)(bounds.X * scale), (int)(bounds.Y * scale), width, height);
                 }
 
-				return new Rectangle(
+                return new Rectangle(
                     (int)(bounds.X * scale), (int)(bounds.Y * scale),
                     (int)(bounds.Width * scale), (int)(bounds.Height * scale));
-			}
+            }
 		}
 
 		public override DisplayOrientation CurrentOrientation {
@@ -163,13 +165,11 @@ namespace Microsoft.Xna.Framework {
 
 		public override void BeginScreenDeviceChange (bool willBeFullScreen)
 		{
-			throw new NotImplementedException ();
 		}
 
 		public override void EndScreenDeviceChange (
 			string screenDeviceName, int clientWidth, int clientHeight)
 		{
-			throw new NotImplementedException ();
 		}
 
 		internal protected override void SetSupportedOrientations (DisplayOrientation orientations)

@@ -46,6 +46,18 @@
     <Reference Include="System.Xml" />
   </Platform>
 
+  <Platform Type="WPFForms">
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
+  </Platform>
+  
   <Platform Type="WindowsGL">
     <Reference Include="System" />
     <Reference Include="System.Xml" />

@@ -61,6 +61,7 @@ namespace Microsoft.Xna.Framework
 
             if (_orientationListener.CanDetectOrientation())
                 _orientationListener.Disable();
+            Game = null;
         }
 
         public static event EventHandler Resumed;

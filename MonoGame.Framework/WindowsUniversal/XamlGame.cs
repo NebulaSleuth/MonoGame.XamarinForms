@@ -30,6 +30,34 @@ namespace MonoGame.Framework
             return Create(() => new T(), launchParameters, window, swapChainPanel);
         }
 
+        static public Game Create(Type gameType, string launchParameters, CoreWindow window, SwapChainPanel swapChainPanel)
+        {
+            if (launchParameters == null)
+                throw new NullReferenceException("The launch parameters cannot be null!");
+            if (window == null)
+                throw new NullReferenceException("The window cannot be null!");
+            if (swapChainPanel == null)
+                throw new NullReferenceException("The swap chain panel cannot be null!");
+
+            // Save any launch parameters to be parsed by the platform.
+            UAPGamePlatform.LaunchParameters = launchParameters;
+
+            // Setup the window class.
+            UAPGameWindow.Instance.Initialize(window, swapChainPanel, UAPGamePlatform.TouchQueue);
+
+            // Construct the game.
+            var game = Activator.CreateInstance(gameType) as Game;
+
+            var graphicsDeviceManager = game.Services.GetService(typeof(GraphicsDeviceManager)) as GraphicsDeviceManager;
+            if (graphicsDeviceManager == null)
+                throw new NullReferenceException("You must create the GraphicsDeviceManager in the Game constructor!");
+            graphicsDeviceManager.SwapChainPanel = swapChainPanel;
+
+
+            // Return the created game object.
+            return game;
+        }
+
         /// <summary>
         /// Creates your Game class initializing it with <paramref name="gameConstructor"/> to work within a XAML application window.
         /// </summary>

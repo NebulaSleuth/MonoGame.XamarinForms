@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows;
 #if WINDOWS_UAP
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
@@ -13,7 +14,11 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Framework.Media;
 
+#if IOS
+using UIKit;
+#endif
 
 namespace Microsoft.Xna.Framework
 {
@@ -64,6 +69,7 @@ namespace Microsoft.Xna.Framework
         {
             _instance = this;
 
+            AspectRatio = DefaultAspectRatio;
             LaunchParameters = new LaunchParameters();
             _services = new GameServiceContainer();
             _components = new GameComponentCollection();
@@ -93,7 +99,7 @@ namespace Microsoft.Xna.Framework
 			if (Platform != null) Platform.Log(Message);
 		}
 
-        #region IDisposable Implementation
+#region IDisposable Implementation
 
         private bool _isDisposed;
         public void Dispose()
@@ -144,7 +150,7 @@ namespace Microsoft.Xna.Framework
 
                     SoundEffect.PlatformShutdown();
                 }
-#if ANDROID
+#if ANDROID && !FORMS
                 Activity = null;
 #endif
                 _isDisposed = true;
@@ -167,6 +173,62 @@ namespace Microsoft.Xna.Framework
 
         #region Properties
 
+#if FORMS
+        // Ins a XamarinForms implementation, certain things can hang around regardless of the game
+        // Audio for instance is often not released between games, just the assets themselves
+        public static bool StaticShutdown = false;
+        public static void InitStaticData()
+        {
+#if ANDROID
+            MediaLibrary.Context = Activity;
+            try
+            {
+                OpenALSoundController soundControllerInstance = OpenALSoundController.GetInstance;
+            }
+            catch (DllNotFoundException ex)
+            {
+                throw (new NoAudioHardwareException("Failed to init OpenALSoundController", ex));
+            }
+#endif
+        }
+
+
+        public static void DisposeStaticData()
+        {
+            StaticShutdown = true;
+#if ANDROID
+            SoundEffect.PlatformShutdown();
+#endif
+
+        }
+#endif
+        public static float DefaultAspectRatio { get; set; }
+        public float AspectRatio { get; set; }
+        //{
+        //    get
+        //    {
+        //        return _aspectRatio;
+        //    }
+        //    set
+        //    {
+        //        _aspectRatio = value;
+
+        //        //Platform.Dispose();
+        //        //_services.RemoveService(typeof(GamePlatform));
+
+        //        //Platform = GamePlatform.PlatformCreate(this);
+        //        //Platform.Activated += OnActivated;
+        //        //Platform.Deactivated += OnDeactivated;
+        //        //_services.AddService(typeof(GamePlatform), Platform);
+
+        //        //// Calling Update() for first time initializes some systems
+        //        //FrameworkDispatcher.Update();
+
+        //        //// Allow some optional per-platform construction to occur too.
+        //        //PlatformConstruct();
+        //    }
+        //}
+
 #if ANDROID
         [CLSCompliant(false)]
 #if FORMS
@@ -174,6 +236,22 @@ namespace Microsoft.Xna.Framework
 #else
         public static AndroidGameActivity Activity { get; internal set; }
 #endif
+#endif
+#if IOS && FORMS
+        public static UIWindow MainWindow { get; set; }
+#endif
+#if WINDOWS && FORMS
+        public static IntPtr MainWindowHandle { get; set; }
+        private System.Windows.Controls.Image _hostControl;
+        public System.Windows.Controls.Image HostControl
+        {
+            get => _hostControl;
+            set
+            {
+                _hostControl = value;
+                Platform.BeginScreenDeviceChange(false);
+            }
+        }
 #endif
         private static Game _instance = null;
         internal static Game Instance { get { return Game._instance; } }
@@ -288,12 +366,12 @@ namespace Microsoft.Xna.Framework
         [CLSCompliant(false)]
         public GameWindow Window
         {
-            get { return Platform.Window; }
+            get { return Platform?.Window; }
         }
 
-        #endregion Properties
+#endregion Properties
 
-        #region Internal Properties
+#region Internal Properties
 
         // FIXME: Internal members should be eliminated.
         // Currently Game.Initialized is used by the Mac game window class to
@@ -304,9 +382,9 @@ namespace Microsoft.Xna.Framework
             get { return _initialized; }
         }
 
-        #endregion Internal Properties
+#endregion Internal Properties
 
-        #region Events
+#region Events
 
         public event EventHandler<EventArgs> Activated;
         public event EventHandler<EventArgs> Deactivated;
@@ -318,9 +396,9 @@ namespace Microsoft.Xna.Framework
         public ApplicationExecutionState PreviousExecutionState { get; internal set; }
 #endif
 
-        #endregion
+#endregion
 
-        #region Public Methods
+#region Public Methods
 
 #if IOS
         [Obsolete("This platform's policy does not allow programmatically closing.", true)]
@@ -450,7 +528,7 @@ namespace Microsoft.Xna.Framework
 #if WINDOWS && !DESKTOPGL
                 // Sleep for as long as possible without overshooting the update time
                 var sleepTime = (TargetElapsedTime - _accumulatedElapsedTime).TotalMilliseconds;
-                Utilities.TimerHelper.SleepForNoMoreThan(sleepTime);
+                MonoGame.Utilities.TimerHelper.SleepForNoMoreThan(sleepTime);
 #endif
                 // Keep looping until it's time to perform the next update
                 goto RetryTick;
@@ -520,9 +598,9 @@ namespace Microsoft.Xna.Framework
                 Platform.Exit();
         }
 
-        #endregion
+#endregion
 
-        #region Protected Methods
+#region Protected Methods
 
         protected virtual bool BeginDraw() { return true; }
         protected virtual void EndDraw()
@@ -594,9 +672,9 @@ namespace Microsoft.Xna.Framework
             EventHelpers.Raise(sender, Deactivated, args);
 		}
 
-        #endregion Protected Methods
+#endregion Protected Methods
 
-        #region Event Handlers
+#region Event Handlers
 
         private void Components_ComponentAdded(
             object sender, GameComponentCollectionEventArgs e)
@@ -623,9 +701,9 @@ namespace Microsoft.Xna.Framework
 			DoExiting();
         }
 
-        #endregion Event Handlers
+#endregion Event Handlers
 
-        #region Internal Methods
+#region Internal Methods
 
         // FIXME: We should work toward eliminating internal methods.  They
         //        break entirely the possibility that additional platforms could
@@ -701,7 +779,7 @@ namespace Microsoft.Xna.Framework
 			UnloadContent();
 		}
 
-        #endregion Internal Methods
+#endregion Internal Methods
 
         internal GraphicsDeviceManager graphicsDeviceManager
         {

@@ -37,6 +37,20 @@ namespace Microsoft.Xna.Framework
 
         public DisplayOrientation SupportedOrientations { get; set; }
 
+        public Rectangle ClientBounds
+        {
+            get
+            {
+
+                var bounds = View.Bounds;
+                var scale = View.ContentScaleFactor;
+
+                return new Rectangle(
+                    (int)(bounds.X * scale), (int)(bounds.Y * scale),
+                    (int)(bounds.Width * scale), (int)(bounds.Height * scale));
+            }
+        }
+
         public override void LoadView()
         {
 			CGRect frame;
@@ -64,14 +78,31 @@ namespace Microsoft.Xna.Framework
                 #endif
             }
 
-            base.View = new iOSFormsGameView(_platform);
+            //if ((_platform?.Game.AspectRatio??0) != 0)
+            //{
+            //    nfloat w = frame.Width;
+            //    nfloat h = frame.Height;
+            //    h = w / _platform.Game.AspectRatio;
+            //    if (h > frame.Height)
+            //    {
+            //        h = frame.Height;
+            //        w = h * _platform.Game.AspectRatio;
+            //    }
+            //    frame = new CGRect(0, 0, w, h);
+            //}
+            base.View = new iOSFormsGameView(_platform, frame);
 
             // Need to set resize mask to ensure a view resize (which in iOS 8+ corresponds with a rotation) adjusts
             // the view and underlying CALayer correctly
-            View.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
-            #if TVOS
+            View.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;// | UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleTopMargin | UIViewAutoresizing.FlexibleRightMargin | UIViewAutoresizing.FlexibleBottomMargin;
+            //(UIViewAutoresizingFlexibleLeftMargin |
+            // UIViewAutoresizingFlexibleRightMargin |
+            // UIViewAutoresizingFlexibleTopMargin |
+            // UIViewAutoresizingFlexibleBottomMargin)
+#if TVOS
             ControllerUserInteractionEnabled = false;
-            #endif
+#endif
+
         }
 
         public new iOSFormsGameView View

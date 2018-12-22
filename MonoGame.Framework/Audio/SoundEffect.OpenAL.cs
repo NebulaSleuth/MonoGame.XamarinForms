@@ -250,6 +250,16 @@ namespace Microsoft.Xna.Framework.Audio
 
         internal static void PlatformShutdown()
         {
+#if !(ANDROID && FORMS)
+            StaticPlatformShutdown();
+#else
+            if (Game.StaticShutdown)
+                StaticPlatformShutdown();
+#endif
+        }
+
+        internal static void StaticPlatformShutdown()
+        {
             if (ReverbEffect != 0)
             {
                 OpenALSoundController.Efx.DeleteAuxiliaryEffectSlot((int)ReverbSlot);
@@ -257,6 +267,7 @@ namespace Microsoft.Xna.Framework.Audio
             }
             OpenALSoundController.DestroyInstance();
         }
+
     }
 }
 

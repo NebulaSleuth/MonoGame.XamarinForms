@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework.Audio
 
         private static X3DAudio _device3D;
         private static bool _device3DDirty = true;
-        private static Speakers _speakers = Speakers.Stereo;
+        private static Speakers _speakers = (Speakers.FrontLeft | Speakers.FrontRight);
 
         // XNA does not expose this, but it exists in X3DAudio.
         [CLSCompliant(false)]
@@ -356,6 +356,12 @@ namespace Microsoft.Xna.Framework.Audio
 
         internal static void PlatformShutdown()
         {
+            _device3DDirty = true;
+            _speakers = Speakers.FrontLeft | Speakers.FrontRight;// Stereo;
+
+#if FORMS
+            if (!Game.StaticShutdown) return;
+#endif
             if (_reverbVoice != null)
             {
                 _reverbVoice.DestroyVoice();
@@ -376,8 +382,6 @@ namespace Microsoft.Xna.Framework.Audio
                 Device = null;
             }
 
-            _device3DDirty = true;
-            _speakers = Speakers.Stereo;
         }
     }
 }

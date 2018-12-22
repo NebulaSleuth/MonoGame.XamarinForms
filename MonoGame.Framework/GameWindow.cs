@@ -156,11 +156,15 @@ namespace Microsoft.Xna.Framework {
 #if DIRECTX && WINDOWS
         public static GameWindow Create(Game game, int width, int height)
         {
+#if FORMS
+            var window = new MonoGame.Framework.WPFFormsGameWindow((MonoGame.Framework.WPFFormsGamePlatform)game.Platform);
+#else
             var window = new MonoGame.Framework.WinFormsGameWindow((MonoGame.Framework.WinFormsGamePlatform)game.Platform);
+#endif
             window.Initialize(width, height);
 
             return window;
         }
 #endif
-    }
+        }
 }

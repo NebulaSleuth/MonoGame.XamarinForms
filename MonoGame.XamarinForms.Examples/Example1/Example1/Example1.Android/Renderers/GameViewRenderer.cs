@@ -56,7 +56,6 @@ namespace Example1.Droid.Renderers
                 if (_gameView.Game != null)
                 {
                     var gfxManager = new GraphicsDeviceManager(_gameView.Game);
-                    _gameView.Game.AspectRatio = _gameView.AspectRatio;
                     _gameView.Game.Services.AddService(typeof(GraphicsDeviceManager), gfxManager);
                     gfxManager.IsFullScreen = false;
 

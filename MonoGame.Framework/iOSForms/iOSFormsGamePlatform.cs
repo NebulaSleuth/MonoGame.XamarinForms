@@ -114,9 +114,7 @@ namespace Microsoft.Xna.Framework
             #if !TVOS
             UIApplication.SharedApplication.SetStatusBarHidden(true, UIStatusBarAnimation.Fade);
 #endif
-
-            MainWindow = Game.MainWindow;
-
+            MainWindow = UIApplication.SharedApplication.KeyWindow;
             if (MainWindow != null)
                 game.Services.AddService(typeof(UIWindow), MainWindow);
 
@@ -128,9 +126,6 @@ namespace Microsoft.Xna.Framework
             MainWindow.Add (_viewController.View);
 
             _viewController.InterfaceOrientationChanged += ViewController_InterfaceOrientationChanged;
-
-            //(SJ) Why is this called here when it's not in any other project
-            //Guide.Initialise(game);
         }
 
         public override void TargetElapsedTimeChanged ()

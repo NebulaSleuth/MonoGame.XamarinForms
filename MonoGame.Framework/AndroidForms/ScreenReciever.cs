@@ -44,7 +44,7 @@ namespace Microsoft.Xna.Framework
         {
             ScreenReceiver.ScreenLocked = false;
             MediaPlayer.IsMuted = false;
-            ((AndroidFormsGameWindow)Game.Instance.Window).GameView.Resume();
+            ((AndroidFormsGameWindow)Game.Instance?.Window)?.GameView?.Resume();
         }
     }
 }

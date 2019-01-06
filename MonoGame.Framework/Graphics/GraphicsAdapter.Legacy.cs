@@ -76,7 +76,8 @@ namespace Microsoft.Xna.Framework.Graphics
                        SurfaceFormat.Color);
 #elif ANDROID
 #if FORMS
-                View view = ((AndroidFormsGameWindow)Game.Instance.Window).GameView;
+                View view = ((AndroidFormsGameWindow)Game.Instance?.Window)?.GameView;
+                if (view == null) new DisplayMode(0, 0, SurfaceFormat.Color);
                 return new DisplayMode(view.Width, view.Height, SurfaceFormat.Color);
 #else
                 View view = ((AndroidGameWindow)Game.Instance.Window).GameView;

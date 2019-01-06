@@ -18,8 +18,13 @@ using Windows.UI.Xaml.Input;
 
 namespace Microsoft.Xna.Framework
 {
-    internal class InputEvents
+    internal class InputEvents : IDisposable
     {
+
+        CoreIndependentInputSource coreIndependentInputSource;
+        UIElement parentElement;
+        CoreWindow parentWindow;
+
         internal class KeyChar
         {
             public char Character;
@@ -58,7 +63,6 @@ namespace Microsoft.Xna.Framework
                 {
                     var inputDevices = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Pen | CoreInputDeviceTypes.Touch;
 
-                    CoreIndependentInputSource coreIndependentInputSource;
                     if (inputElement is SwapChainBackgroundPanel)
                         coreIndependentInputSource = ((SwapChainBackgroundPanel)inputElement).CreateCoreIndependentInputSource(inputDevices);
                     else
@@ -76,6 +80,7 @@ namespace Microsoft.Xna.Framework
 
             if (inputElement != null)
             {
+                parentElement = inputElement;
                 // If we have an input UIElement then we bind input events
                 // to it else we'll get events for overlapping XAML controls.
                 inputElement.PointerPressed += UIElement_PointerPressed;
@@ -86,6 +91,7 @@ namespace Microsoft.Xna.Framework
             }
             else
             {
+                parentWindow = window;
                 // If we only have a CoreWindow then use it for input events.
                 window.PointerPressed += CoreWindow_PointerPressed;
                 window.PointerReleased += CoreWindow_PointerReleased;
@@ -338,5 +344,77 @@ namespace Microsoft.Xna.Framework
                 Window.Current.CoreWindow.IsInputEnabled = true;
             CoreWindow.GetForCurrentThread().IsInputEnabled = true;
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    if (coreIndependentInputSource != null)
+                    {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                        coreIndependentInputSource.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            coreIndependentInputSource.PointerPressed -= CoreWindow_PointerPressed;
+                            coreIndependentInputSource.PointerMoved -= CoreWindow_PointerMoved;
+                            coreIndependentInputSource.PointerReleased -= CoreWindow_PointerReleased;
+                            coreIndependentInputSource.PointerWheelChanged -= CoreWindow_PointerWheelChanged;
+                            coreIndependentInputSource = null;
+                        });
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    }
+                    if (parentElement != null)
+                    {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                        parentElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            parentElement.PointerPressed -= UIElement_PointerPressed;
+                            parentElement.PointerReleased -= UIElement_PointerReleased;
+                            parentElement.PointerCanceled -= UIElement_PointerReleased;
+                            parentElement.PointerMoved -= UIElement_PointerMoved;
+                            parentElement.PointerWheelChanged -= UIElement_PointerWheelChanged;
+                        });
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    }
+                    if (parentWindow != null)
+                    {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                        parentWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            // If we only have a CoreWindow then use it for input events.
+                            parentWindow.PointerPressed -= CoreWindow_PointerPressed;
+                            parentWindow.PointerReleased -= CoreWindow_PointerReleased;
+                            parentWindow.PointerMoved -= CoreWindow_PointerMoved;
+                            parentWindow.PointerWheelChanged -= CoreWindow_PointerWheelChanged;
+                        });
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    }
+                }
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~InputEvents() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

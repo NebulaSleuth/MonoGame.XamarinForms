@@ -5,10 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 #if WINDOWS_UAP
-using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
+using Windows.UI.Core;
+using Windows.UI.Xaml.Controls;
 #endif
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -87,7 +89,28 @@ namespace Microsoft.Xna.Framework
             PlatformConstruct();
 
         }
+        public Game(float aspectRatio)
+        {
+            _instance = this;
 
+            AspectRatio = aspectRatio;
+            LaunchParameters = new LaunchParameters();
+            _services = new GameServiceContainer();
+            _components = new GameComponentCollection();
+            _content = new ContentManager(_services);
+
+            Platform = GamePlatform.PlatformCreate(this);
+            Platform.Activated += OnActivated;
+            Platform.Deactivated += OnDeactivated;
+            _services.AddService(typeof(GamePlatform), Platform);
+
+            // Calling Update() for first time initializes some systems
+            FrameworkDispatcher.Update();
+
+            // Allow some optional per-platform construction to occur too.
+            PlatformConstruct();
+
+        }
         ~Game()
         {
             Dispose(false);
@@ -145,6 +168,7 @@ namespace Microsoft.Xna.Framework
                         Platform.Dispose();
                         Platform = null;
                     }
+                    _services.RemoveService(typeof(GraphicsDevice));
 
                     ContentTypeReaderManager.ClearTypeCreators();
 
@@ -204,30 +228,6 @@ namespace Microsoft.Xna.Framework
 #endif
         public static float DefaultAspectRatio { get; set; }
         public float AspectRatio { get; set; }
-        //{
-        //    get
-        //    {
-        //        return _aspectRatio;
-        //    }
-        //    set
-        //    {
-        //        _aspectRatio = value;
-
-        //        //Platform.Dispose();
-        //        //_services.RemoveService(typeof(GamePlatform));
-
-        //        //Platform = GamePlatform.PlatformCreate(this);
-        //        //Platform.Activated += OnActivated;
-        //        //Platform.Deactivated += OnDeactivated;
-        //        //_services.AddService(typeof(GamePlatform), Platform);
-
-        //        //// Calling Update() for first time initializes some systems
-        //        //FrameworkDispatcher.Update();
-
-        //        //// Allow some optional per-platform construction to occur too.
-        //        //PlatformConstruct();
-        //    }
-        //}
 
 #if ANDROID
         [CLSCompliant(false)]
@@ -236,9 +236,6 @@ namespace Microsoft.Xna.Framework
 #else
         public static AndroidGameActivity Activity { get; internal set; }
 #endif
-#endif
-#if IOS && FORMS
-        public static UIWindow MainWindow { get; set; }
 #endif
 #if WINDOWS && FORMS
         public static IntPtr MainWindowHandle { get; set; }
@@ -253,6 +250,21 @@ namespace Microsoft.Xna.Framework
             }
         }
 #endif
+
+#if WINDOWS_UAP && FORMS
+        public static CoreWindow CoreWindow { get; set;}
+        private SwapChainPanel _swapChainPanel;
+        public SwapChainPanel SwapChainPanel
+        {
+            get => _swapChainPanel;
+            set
+            {
+                _swapChainPanel = value;
+                ((UAPGamePlatform)Platform).UpdateWindow(this);
+            }
+        }
+#endif
+
         private static Game _instance = null;
         internal static Game Instance { get { return Game._instance; } }
 
@@ -295,7 +307,7 @@ namespace Microsoft.Xna.Framework
 
         public bool IsActive
         {
-            get { return Platform.IsActive; }
+            get { return (Platform?.IsActive)??false; }
         }
 
         public bool IsMouseVisible
@@ -409,6 +421,15 @@ namespace Microsoft.Xna.Framework
             _suppressDraw = true;
         }
 
+        public async Task WaitForExit()
+        {
+#if WINDOWS_UAP && FORMS
+            await ((UAPGamePlatform)Platform).WaitForExit();
+#else
+            await Task.Yield();
+#endif
+        }
+
         public void ResetElapsedTime()
         {
             Platform.ResetElapsedTime();
@@ -456,8 +477,12 @@ namespace Microsoft.Xna.Framework
         public void Run(GameRunBehavior runBehavior)
         {
             AssertNotDisposed();
+
             if (!Platform.BeforeRun())
             {
+#if ANDROID && FORMS
+                Platform.AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
+#endif
                 BeginRun();
                 _gameTimer = Stopwatch.StartNew();
                 return;
@@ -473,7 +498,6 @@ namespace Microsoft.Xna.Framework
             switch (runBehavior)
             {
             case GameRunBehavior.Asynchronous:
-                Platform.AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
                 Platform.StartRunLoop();
                 break;
             case GameRunBehavior.Synchronous:
@@ -595,7 +619,7 @@ namespace Microsoft.Xna.Framework
             }
 
             if (_shouldExit)
-                Platform.Exit();
+                Platform?.Exit();
         }
 
 #endregion

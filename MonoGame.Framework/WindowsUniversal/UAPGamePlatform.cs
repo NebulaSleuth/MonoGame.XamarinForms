@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml;
 using Windows.UI.Core;
 using Microsoft.Xna.Framework.Input;
+using System.Threading.Tasks;
 
 namespace Microsoft.Xna.Framework
 {
@@ -37,7 +38,11 @@ namespace Microsoft.Xna.Framework
             // Setup the game window.
             Window = UAPGameWindow.Instance;
 			UAPGameWindow.Instance.Game = game;
+
+#if FORMS
+            UAPGameWindow.Instance.Initialize(Game.CoreWindow, game.SwapChainPanel, UAPGamePlatform.TouchQueue);
             UAPGameWindow.Instance.RegisterCoreWindowService();
+#endif
 
             // Setup the launch parameters.
             // - Parameters can optionally start with a forward slash.
@@ -48,59 +53,72 @@ namespace Microsoft.Xna.Framework
             bool inQuotes = false;
             var keySeperators = new char[] { ':', '=' };
 
-            while (pos <= LaunchParameters.Length)
+            if (!string.IsNullOrEmpty(LaunchParameters))
             {
-                string arg = string.Empty;
-                if (pos < LaunchParameters.Length)
+                while (pos <= LaunchParameters.Length)
                 {
-                    char c = LaunchParameters[pos];
-                    if (c == '"')
-                        inQuotes = !inQuotes;
-                    else if ((c == ' ') && !inQuotes)
+                    string arg = string.Empty;
+                    if (pos < LaunchParameters.Length)
                     {
-                        arg = LaunchParameters.Substring(paramStart, pos - paramStart).Replace("\"", "");
-                        paramStart = pos + 1;
-                    }
-                }
-                else
-                {
-                    arg = LaunchParameters.Substring(paramStart).Replace("\"", "");
-                }
-                ++pos;
-
-                if (string.IsNullOrWhiteSpace(arg))
-                    continue;
-
-                string key = string.Empty;
-                string value = string.Empty;
-                int keyStart = 0;
-
-                if (arg.StartsWith("/"))
-                    keyStart = 1;
-
-                if (arg.Length > keyStart)
-                {
-                    int keyEnd = arg.IndexOfAny(keySeperators, keyStart);
-
-                    if (keyEnd >= 0)
-                    {
-                        key = arg.Substring(keyStart, keyEnd - keyStart);
-                        int valueStart = keyEnd + 1;
-                        if (valueStart < arg.Length)
-                            value = arg.Substring(valueStart);
+                        char c = LaunchParameters[pos];
+                        if (c == '"')
+                            inQuotes = !inQuotes;
+                        else if ((c == ' ') && !inQuotes)
+                        {
+                            arg = LaunchParameters.Substring(paramStart, pos - paramStart).Replace("\"", "");
+                            paramStart = pos + 1;
+                        }
                     }
                     else
                     {
-                        key = arg.Substring(keyStart);
+                        arg = LaunchParameters.Substring(paramStart).Replace("\"", "");
                     }
+                    ++pos;
 
-                    Game.LaunchParameters.Add(key, value);
+                    if (string.IsNullOrWhiteSpace(arg))
+                        continue;
+
+                    string key = string.Empty;
+                    string value = string.Empty;
+                    int keyStart = 0;
+
+                    if (arg.StartsWith("/"))
+                        keyStart = 1;
+
+                    if (arg.Length > keyStart)
+                    {
+                        int keyEnd = arg.IndexOfAny(keySeperators, keyStart);
+
+                        if (keyEnd >= 0)
+                        {
+                            key = arg.Substring(keyStart, keyEnd - keyStart);
+                            int valueStart = keyEnd + 1;
+                            if (valueStart < arg.Length)
+                                value = arg.Substring(valueStart);
+                        }
+                        else
+                        {
+                            key = arg.Substring(keyStart);
+                        }
+
+                        Game.LaunchParameters.Add(key, value);
+                    }
                 }
             }
-
             CoreApplication.Suspending += this.CoreApplication_Suspending;
 
             Game.PreviousExecutionState = PreviousExecutionState;
+        }
+
+        public void UpdateWindow(Game game)
+        {
+#if FORMS
+            UAPGameWindow.Instance.Dispose();
+
+            UAPGameWindow.Instance.Initialize(Game.CoreWindow, game.SwapChainPanel, UAPGamePlatform.TouchQueue);
+            UAPGameWindow.Instance.RegisterCoreWindowService();
+#endif
+
         }
 
         private void CoreApplication_Suspending(object sender, SuspendingEventArgs e)
@@ -108,36 +126,63 @@ namespace Microsoft.Xna.Framework
             if (this.Game.GraphicsDevice != null)
                 this.Game.GraphicsDevice.Trim();
         }
-
+#if FORMS
+        public override GameRunBehavior DefaultRunBehavior
+        {
+            get { return GameRunBehavior.Asynchronous; }
+        }
+#else
         public override GameRunBehavior DefaultRunBehavior
         {
             get { return GameRunBehavior.Synchronous; }
         }
-
+#endif
         public override void RunLoop()
         {
             UAPGameWindow.Instance.RunLoop();
         }
 
+        private bool _exited;
+
         public override void StartRunLoop()
         {
             var workItemHandler = new WorkItemHandler((action) =>
             {
-                while (true)
+                _exited = false;
+                while (!UAPGameWindow.Instance.IsExiting)
                 {
                     UAPGameWindow.Instance.Tick();
                 }
+                _exited = true;
             });
             var tickWorker = ThreadPool.RunAsync(workItemHandler, WorkItemPriority.High, WorkItemOptions.TimeSliced);
         }
         
         public override void Exit()
         {
+#if FORMS
+            UAPGameWindow.Instance.IsExiting = true;
+#else
             if (!UAPGameWindow.Instance.IsExiting)
             {
 				UAPGameWindow.Instance.IsExiting = true;
                 Application.Current.Exit();
             }
+#endif
+        }
+
+        public async Task WaitForExit()
+        {
+            await Task.Run(async () =>
+            {
+                Console.WriteLine("Start Wait For Exit");
+                while (!_exited)
+                {
+                    await Task.Yield();
+                }
+                Console.WriteLine("End Wait For Exit");
+
+            });
         }
 
         public override bool BeforeUpdate(GameTime gameTime)
@@ -207,12 +252,13 @@ namespace Microsoft.Xna.Framework
         protected override void Dispose(bool disposing)
         {
             // Make sure we dispose the graphics system.
+            
             var graphicsDeviceManager = Game.graphicsDeviceManager;
             if (graphicsDeviceManager != null)
                 graphicsDeviceManager.Dispose();
 
 			UAPGameWindow.Instance.Dispose();
-			
+
 			base.Dispose(disposing);
         }
     }

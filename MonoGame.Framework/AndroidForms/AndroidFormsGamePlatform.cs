@@ -31,8 +31,13 @@ namespace Microsoft.Xna.Framework
         {
             if (disposing)
             {
+                _gameWindow.GameView.Stop();
+
                 AndroidFormsGameActivity.Paused -= Activity_Paused;
                 AndroidFormsGameActivity.Resumed -= Activity_Resumed;
+
+                RaiseAsyncRunLoopEnded();
+
             }
             base.Dispose(disposing);
         }

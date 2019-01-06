@@ -314,7 +314,9 @@ namespace Microsoft.Xna.Framework.Audio
         internal SoundEffectInstance GetPooledInstance(bool forXAct)
         {
             if (!SoundEffectInstancePool.SoundsAvailable)
+            {
                 return null;
+            }
 
             var inst = SoundEffectInstancePool.GetInstance(forXAct);
             inst._effect = this;

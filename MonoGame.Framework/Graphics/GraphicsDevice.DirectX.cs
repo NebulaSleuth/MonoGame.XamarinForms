@@ -1112,7 +1112,8 @@ namespace Microsoft.Xna.Framework.Graphics
             _currentRenderTargets[0] = _renderTargetView;
             _currentDepthStencilView = _depthStencilView;
 
-#if FORMS
+#if FORMS && !NETFX_CORE
+
             if (DefaultRenderTarget != null)
                 SetRenderTarget(DefaultRenderTarget);
 #endif

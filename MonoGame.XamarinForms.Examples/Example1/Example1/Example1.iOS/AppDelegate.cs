@@ -23,22 +23,12 @@ namespace Example1.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            App.GameManager = new GameManager();
-
             global::Xamarin.Forms.Forms.Init();
             var theApp = new App();
             LoadApplication(theApp);
             UIApplication.SharedApplication.StatusBarHidden = true;
             //UIApplication.SharedApplication.StatusBarHidden = true;
-            var rtn = base.FinishedLaunching(app, options);
-
-            // We need to set the MainWindow for the UI elements before creating any game objects.  
-            Game.MainWindow = UIApplication.SharedApplication.KeyWindow;
-
-            // Now that window is set, Let everyone know that we can create games
-            theApp.MonoGameInitialized();
-
-            return rtn;
+            return base.FinishedLaunching(app, options);
         }
     }
 }

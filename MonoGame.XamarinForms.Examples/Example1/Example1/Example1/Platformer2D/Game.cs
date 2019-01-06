@@ -66,7 +66,7 @@ namespace Platformer2D
 
         static bool _staticInit = false;
 
-        public PlatformerGame()
+        public PlatformerGame() : base(1.778f) // Forced Aspect Ratio
         {
             Content.RootDirectory = "Platformer2D";
 

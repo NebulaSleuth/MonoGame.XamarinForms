@@ -23,8 +23,6 @@ namespace Example1.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
-            App.GameManager = new GameManager();
-
             RequestWindowFeature(WindowFeatures.NoTitle);
             base.OnCreate(savedInstanceState);
 
@@ -32,13 +30,11 @@ namespace Example1.Droid
             HideSystemUi();
 
 
+            Game.InitStaticData();
+
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             var app = new App();
             LoadApplication(app);
-
-            Game.InitStaticData();
-            // Let everyone know that we can create games now
-            app.MonoGameInitialized();
         }
 
 

@@ -28,6 +28,7 @@ namespace Microsoft.Xna.Framework
         private DisplayInformation _dinfo;
         private ApplicationView _appView;
         private Rectangle _viewBounds;
+        SwapChainPanel _swapPanel;
 
         private object _eventLocker = new object();
 
@@ -110,6 +111,8 @@ namespace Microsoft.Xna.Framework
 
         public void Initialize(CoreWindow coreWindow, UIElement inputElement, TouchQueue touchQueue)
         {
+            IsExiting = false;
+
             _coreWindow = coreWindow;
             _inputEvents = new InputEvents(_coreWindow, inputElement, touchQueue);
 
@@ -132,9 +135,24 @@ namespace Microsoft.Xna.Framework
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
                 Windows.Phone.UI.Input.HardwareButtons.BackPressed += this.HardwareButtons_BackPressed;
 
-            SetViewBounds(_appView.VisibleBounds.Width, _appView.VisibleBounds.Height);
+#if FORMS
+            if (inputElement != null && inputElement is SwapChainPanel)
+            {
+                _swapPanel = (SwapChainPanel)inputElement;
+                _swapPanel.SizeChanged += Panel_SizeChanged;
+                SetViewBounds(_swapPanel.ActualWidth, _swapPanel.ActualHeight);
+            }
+            else
+            {
+                SetViewBounds(_appView.VisibleBounds.Width, _appView.VisibleBounds.Height);
 
+            }
+            SetCursor(true);
+#else
+            SetViewBounds(_appView.VisibleBounds.Width, _appView.VisibleBounds.Height);
             SetCursor(false);
+#endif
+
 
         }
 
@@ -179,13 +197,40 @@ namespace Microsoft.Xna.Framework
             _viewBounds = new Rectangle(0, 0, pixelWidth, pixelHeight);
         }
 
+        private void Panel_SizeChanged(object Sender, SizeChangedEventArgs args)
+        {
+            lock (_eventLocker)
+            {
+                _isSizeChanged = true;
+                var pixelWidth = Math.Max(1, (int)Math.Round(args.NewSize.Width * _dinfo.RawPixelsPerViewPixel));
+                var pixelHeight = Math.Max(1, (int)Math.Round(args.NewSize.Height * _dinfo.RawPixelsPerViewPixel));
+                _newViewBounds = new Rectangle(0, 0, pixelWidth, pixelHeight);
+            }
+        }
         private void Window_SizeChanged(object sender, WindowSizeChangedEventArgs args)
         {
             lock (_eventLocker)
             {
                 _isSizeChanged = true;
-                var pixelWidth  = Math.Max(1, (int)Math.Round(args.Size.Width * _dinfo.RawPixelsPerViewPixel));
-                var pixelHeight = Math.Max(1, (int)Math.Round(args.Size.Height * _dinfo.RawPixelsPerViewPixel));
+                int pixelWidth;
+                int pixelHeight;
+#if FORMS
+                if (_swapPanel != null)
+                {
+                    pixelWidth = Math.Max(1, (int)Math.Round(_swapPanel.ActualWidth * _dinfo.RawPixelsPerViewPixel));
+                    pixelHeight = Math.Max(1, (int)Math.Round(_swapPanel.ActualHeight * _dinfo.RawPixelsPerViewPixel));
+                }
+                else
+                {
+                    pixelWidth = Math.Max(1, (int)Math.Round(args.Size.Width * _dinfo.RawPixelsPerViewPixel));
+                    pixelHeight = Math.Max(1, (int)Math.Round(args.Size.Height * _dinfo.RawPixelsPerViewPixel));
+
+                }
+#else
+                
+                pixelWidth  = Math.Max(1, (int)Math.Round(args.Size.Width * _dinfo.RawPixelsPerViewPixel));
+                pixelHeight = Math.Max(1, (int)Math.Round(args.Size.Height * _dinfo.RawPixelsPerViewPixel));
+#endif
                 _newViewBounds = new Rectangle(0, 0, pixelWidth, pixelHeight);
             }
         }
@@ -383,11 +428,15 @@ namespace Microsoft.Xna.Framework
                 Game.Tick();
         }
 
-        #region Public Methods
+#region Public Methods
 
         public void Dispose()
         {
             //window.Dispose();
+            _inputEvents.Dispose();
+
+            Game.Services.RemoveService(typeof(CoreWindow));
+
         }
 
         public override void BeginScreenDeviceChange(bool willBeFullScreen)
@@ -399,7 +448,7 @@ namespace Microsoft.Xna.Framework
 
         }
 
-        #endregion
+#endregion
     }
 }
 

@@ -229,11 +229,14 @@ namespace MonoGame.Framework
 
         private void OnActivated(object sender, EventArgs eventArgs)
         {
-            if (_graphicsDevice == null)
-            {
-                InitializeGraphicsDevice(Game);
-                InitializeImageSource();
-            }
+            if (_platform == null) return;
+            if (Host == null) return;
+
+            //if (_graphicsDevice == null && !Game.Initialized)
+            //{
+            //    InitializeGraphicsDevice(Game);
+            //    InitializeImageSource();
+            //}
             _resetBackBuffer = true;
 
 
@@ -266,6 +269,10 @@ namespace MonoGame.Framework
                     };
 
                     _graphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile.HiDef, presentationParameters);
+                    if (game.Services.GetService(typeof(IGraphicsDeviceManager)) != null)
+                    {
+                        game.Services.RemoveService(typeof(IGraphicsDeviceManager));
+                    }
                     _gfxManager = new GraphicsDeviceManager(game, _graphicsDevice);
 
 
@@ -764,7 +771,6 @@ namespace MonoGame.Framework
         {
             if (Host != null)
             {
-                Console.WriteLine("TOUCH DOWN");
                 var position = e.GetTouchPoint(Host);
                 var vec = new Vector2((float)position.Position.X, (float)position.Position.Y);
                 TouchState = TouchLocationState.Pressed;
@@ -776,7 +782,6 @@ namespace MonoGame.Framework
         {
             if (Host != null && TouchState != TouchLocationState.Released && TouchState != TouchLocationState.Invalid)
             {
-                Console.WriteLine("TOUCH MOVE");
                 var position = e.GetTouchPoint(Host);
                 var vec = new Vector2((float)position.Position.X, (float)position.Position.Y);
                 TouchState = TouchLocationState.Moved;
@@ -788,8 +793,6 @@ namespace MonoGame.Framework
         {
             if (Host != null)
             {
-                Console.WriteLine("TOUCH UPP");
-
                 var position = e.GetTouchPoint(Host);
                 var vec = new Vector2((float)position.Position.X, (float)position.Position.Y);
                 TouchState = TouchLocationState.Released;

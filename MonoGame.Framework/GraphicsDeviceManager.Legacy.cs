@@ -582,8 +582,8 @@ namespace Microsoft.Xna.Framework
             float displayAspectRatio = (float)GraphicsDevice.DisplayMode.Width /
                            (float)GraphicsDevice.DisplayMode.Height;
 
-
             float preferredAspectRatio = _game?.AspectRatio ?? displayAspectRatio;
+            if (preferredAspectRatio == 0) preferredAspectRatio = displayAspectRatio;
 
             float adjustedAspectRatio = preferredAspectRatio;
 

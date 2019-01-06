@@ -10,12 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="3.3.0.967583" />
+    <PackageReference Include="Xamarin.Forms" Version="3.4.0.1008975" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
-      <HintPath>..\..\..\..\ThirdParty\XamarinForms.Dependencies\MonoGame.Portable\MonoGame.Framework.dll</HintPath>
+      <HintPath>..\..\..\..\outputlibs\Portable\MonoGame.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
 

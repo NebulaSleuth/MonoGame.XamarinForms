@@ -57,7 +57,6 @@ namespace Example1.WPF.Renderers
                 {
                     this.
                     _game = _gameView.Game;
-                    _game.AspectRatio = _gameView.AspectRatio;
                     _nativeCtrl = new WPFMonoGameContainer();
                     //_nativeCtrl = new HostContainer();
                     //if (_game is Platformer2D.PlatformerGame)

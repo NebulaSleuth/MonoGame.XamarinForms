@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -13,20 +14,11 @@ namespace Example1
 {
     public partial class MainPage : ContentPage
     {
-        bool _ready = false;
         Game _currentGame;
 
         public MainPage()
         {
             InitializeComponent();
-
-
-        }
-
-        public void MonoGameInitialized()
-        {
-            _ready = true;
-
         }
 
         public void Close()
@@ -34,18 +26,24 @@ namespace Example1
             DisposeGame();
         }
 
-        private void DisposeGame()
+        private async Task DisposeGame()
         {
-            _currentGame?.Dispose();
             GameContainer.Children.Clear();
+            if (_currentGame != null)
+            {
+                _currentGame.Exit();
+                await _currentGame.WaitForExit();
+                _currentGame.Dispose();
+
+            }
         }
 
-        private void AddGame(Xamarin.Forms.Layout<View> container, Type gameType, float aspect)
+        private void AddGame(Xamarin.Forms.Layout<View> container, Game game)
         {
-            _currentGame = App.GameManager.PlatformInit(gameType, aspect);
+            //_currentGame = App.GameManager.PlatformInit(gameType, aspect);
+            _currentGame = game;
 
             var gv = new GameView();
-            gv.AspectRatio = aspect;
             gv.AutoStart = true;
             gv.HorizontalOptions = LayoutOptions.FillAndExpand;
             gv.VerticalOptions = LayoutOptions.FillAndExpand;
@@ -53,20 +51,16 @@ namespace Example1
             container.Children.Add(gv);
             gv.ForceLayout();
         }
-        private void Game1_Clicked(object sender, EventArgs e)
+        private async void Game1_Clicked(object sender, EventArgs e)
         {
-            if (!_ready) return;
-
-            DisposeGame();
-            AddGame(GameContainer, typeof(PlatformerGame), 1.778f);
+            await DisposeGame();
+            AddGame(GameContainer, new PlatformerGame());
         }
 
-        private void Game2_Clicked(object sender, EventArgs e)
+        private async void Game2_Clicked(object sender, EventArgs e)
         {
-            if (!_ready) return;
-
-            DisposeGame();
-            AddGame(GameContainer, typeof(NeonShooterGame), 0.0f);
+            await DisposeGame();
+            //AddGame(GameContainer, new NeonShooterGame());
 
         }
 

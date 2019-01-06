@@ -83,7 +83,7 @@ namespace Microsoft.Xna.Framework
 
             Threading.Run();
 
-            if (_game != null)
+            if (_game?.Platform != null)
             {
                 if (!GameView.IsResuming && _game.Platform.IsActive && !ScreenReceiver.ScreenLocked) //Only call draw if an update has occured
                 {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Example1.UWP
         {
             this.InitializeComponent();
 
-            Example1.App.GameManager = new GameManager();
+            Game.CoreWindow = Window.Current.CoreWindow;
 
             LoadApplication(new Example1.App());
 

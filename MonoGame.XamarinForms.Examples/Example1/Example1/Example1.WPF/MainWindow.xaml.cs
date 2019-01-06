@@ -25,16 +25,11 @@ namespace Example1.WPF
     {
         public MainWindow()
         {
-            Example1.App.GameManager = new GameManager();
             InitializeComponent();
 
             Forms.Init();
             var app = new Example1.App();
             LoadApplication(app);
-
-            Game.MainWindowHandle = new WindowInteropHelper(this).Handle;
-
-            app.MonoGameInitialized();
         }
     }
 }

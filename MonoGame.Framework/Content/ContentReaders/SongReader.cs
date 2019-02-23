@@ -14,7 +14,7 @@ namespace Microsoft.Xna.Framework.Content
 		protected internal override Song Read(ContentReader input, Song existingInstance)
 		{
 			var path = input.ReadString();
-			
+
 			if (!String.IsNullOrEmpty(path))
 			{
                 // Add the ContentManager's RootDirectory

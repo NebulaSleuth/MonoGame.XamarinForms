@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using Microsoft.Xna.Framework.Utilities;
 using SharpDX;
 using SharpDX.MediaFoundation;
 
@@ -24,6 +25,11 @@ namespace Microsoft.Xna.Framework.Media
 
             MediaFactory.CreateTopology(out _topology);
 
+
+            if (FilePath.ToLower().Contains(".pak"))
+            {
+                _name = FilePacker.CreateTempFile(FilePath);
+            }
             SharpDX.MediaFoundation.MediaSource mediaSource;
             {
                 SourceResolver resolver = new SourceResolver();
@@ -85,6 +91,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             if (_topology != null)
             {
+                _topology.Clear();
                 _topology.Dispose();
                 _topology = null;
             }

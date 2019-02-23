@@ -493,8 +493,8 @@ namespace Microsoft.Xna.Framework.Graphics
             if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero && PresentationParameters.SwapChainPanel == null)
                 throw new ArgumentException("PresentationParameters.DeviceWindowHandle or PresentationParameters.SwapChainPanel must not be null.");
 #else
-            if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
-                throw new ArgumentException("PresentationParameters.DeviceWindowHandle must not be null.");
+            //if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero)
+            //    throw new ArgumentException("PresentationParameters.DeviceWindowHandle must not be null.");
 #endif
         }
 
@@ -608,12 +608,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
         internal void SetHardwareFullscreen()
         {
-            _swapChain.SetFullscreenState(PresentationParameters.IsFullScreen && PresentationParameters.HardwareModeSwitch, null);
+            _swapChain?.SetFullscreenState(PresentationParameters.IsFullScreen && PresentationParameters.HardwareModeSwitch, null);
         }
 
         internal void ClearHardwareFullscreen()
         {
-            _swapChain.SetFullscreenState(false, null);
+            _swapChain?.SetFullscreenState(false, null);
         }
 
         internal void ResizeTargets()

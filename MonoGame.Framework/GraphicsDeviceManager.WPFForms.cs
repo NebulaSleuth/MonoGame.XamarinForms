@@ -9,12 +9,12 @@ namespace Microsoft.Xna.Framework
 {
     partial class GraphicsDeviceManager
     {
-        [CLSCompliant(false)]
+        //[CLSCompliant(false)]
 
-        partial void PlatformPreparePresentationParameters(PresentationParameters presentationParameters)
-        {
-            presentationParameters.BackBufferWidth = (int)(_game?.HostControl?.ActualWidth??800);
-            presentationParameters.BackBufferHeight = (int)(_game?.HostControl?.ActualHeight ?? 480);
-        }
+        //partial void PlatformPreparePresentationParameters(PresentationParameters presentationParameters)
+        //{
+        //    presentationParameters.BackBufferWidth = (int)(_game?.HostControl?.ActualWidth??800);
+        //    presentationParameters.BackBufferHeight = (int)(_game?.HostControl?.ActualHeight ?? 480);
+        //}
     }
 }

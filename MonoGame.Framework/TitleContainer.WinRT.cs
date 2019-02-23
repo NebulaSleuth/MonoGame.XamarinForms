@@ -2,8 +2,10 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using Microsoft.Xna.Framework.Utilities;
 using System;
 using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources.Core;
 
@@ -17,7 +19,8 @@ namespace Microsoft.Xna.Framework
         static partial void PlatformInit()
         {
             Location = Windows.ApplicationModel.Package.Current.InstalledLocation.Path;
-
+            TempLocation = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+             
             ResourceContext = new Windows.ApplicationModel.Resources.Core.ResourceContext();
             FileResourceMap = ResourceManager.Current.MainResourceMap.GetSubtree("Files");
         }
@@ -26,25 +29,52 @@ namespace Microsoft.Xna.Framework
         {
             NamedResource result;
 
-            if (FileResourceMap != null && FileResourceMap.TryGetValue(name, out result))
+            if (name.ToLower().Contains(".pak"))
             {
-                var resolved = result.Resolve(ResourceContext);
+                // Pull from the .zip files
+                int idx = name.ToLower().IndexOf(".pak") + 4;
+                string zipName = Path.Combine(Location, name.Substring(0, idx));
+                string filename = name.Substring(idx);
+                while (filename.StartsWith("/") || filename.StartsWith("\\"))
+                {
+                    filename = filename.Substring(1);
+                }
 
                 try
                 {
-                    var storageFile = await resolved.GetValueAsFileAsync();
-                    var randomAccessStream = await storageFile.OpenReadAsync();
-                    return randomAccessStream.AsStreamForRead();
+                    if (File.Exists(zipName))
+                    {
+                        return FilePacker.GetFileStream(zipName, filename);
+                    }
                 }
-                catch (IOException)
+                catch
                 {
-                    // The file must not exist... return a null stream.
-                    return null;
                 }
+                return null;
             }
             else
             {
-                return null;
+
+                if (FileResourceMap != null && FileResourceMap.TryGetValue(name, out result))
+                {
+                    var resolved = result.Resolve(ResourceContext);
+
+                    try
+                    {
+                        var storageFile = await resolved.GetValueAsFileAsync();
+                        var randomAccessStream = await storageFile.OpenReadAsync();
+                        return randomAccessStream.AsStreamForRead();
+                    }
+                    catch (IOException)
+                    {
+                        // The file must not exist... return a null stream.
+                        return null;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 

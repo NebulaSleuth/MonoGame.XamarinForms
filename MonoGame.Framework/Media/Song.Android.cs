@@ -2,6 +2,12 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using Android.Content;
+using Android.Content.Res;
+using Android.Database;
+using Android.Provider;
+using Java.IO;
+using Microsoft.Xna.Framework.Utilities;
 using System;
 using System.IO;
 
@@ -79,6 +85,7 @@ namespace Microsoft.Xna.Framework.Media
             _androidPlayer = null;
         }
 
+
         internal void Play(TimeSpan? startPosition)
         {
             // Prepare the player
@@ -90,11 +97,33 @@ namespace Microsoft.Xna.Framework.Media
             }
             else
             {
-                var afd = Game.Activity.Assets.OpenFd(_name);
-                if (afd == null)
-                    return;
+                if (_name.ToLower().Contains(".pak"))
+                {
+                    // Android resources suck and the the MediaPlayer has qeird issues with local files
+                    // So map this and assume the resource is available
+                    string path = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), _name);
+                    int idx = path.ToLower().IndexOf(".pak") + 4;
+                    string pakName = path.Substring(0, idx);
 
-                _androidPlayer.SetDataSource(afd.FileDescriptor, afd.StartOffset, afd.Length);
+                    string filename = path.Substring(idx);
+                    while (filename.StartsWith("/") || filename.StartsWith("\\"))
+                    {
+                        filename = filename.Substring(1);
+                    }
+
+                    var afd = Game.Activity.Assets.OpenFd(filename);
+                    if (afd == null)
+                        return;
+
+                    _androidPlayer.SetDataSource(afd.FileDescriptor, afd.StartOffset, afd.Length);
+                }
+                else
+                {
+                    var afd = Game.Activity.Assets.OpenFd(_name);
+                    if (afd == null)
+                        return;
+                    _androidPlayer.SetDataSource(afd.FileDescriptor, afd.StartOffset, afd.Length);
+                }
             }
 
 

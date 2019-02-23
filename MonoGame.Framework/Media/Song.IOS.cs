@@ -8,6 +8,7 @@ using Foundation;
 using AVFoundation;
 using MediaPlayer;
 using CoreMedia;
+using Microsoft.Xna.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -51,6 +52,12 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformInitialize(string fileName)
         {
+            if (fileName.ToLower().Contains(".pak"))
+            {
+                string path = FilePacker.CreateTempFile(fileName);
+                this.PlatformInitialize(path);
+                return;
+            }
             this.PlatformInitialize(NSUrl.FromFilename(fileName));
         }
 

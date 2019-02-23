@@ -24,6 +24,7 @@ namespace MonoGame.Framework
         public WPFFormsGamePlatform(Game game)
             : base(game)
         {
+            
             MediaPlayer.Reset();
 
             _window = new WPFFormsGameWindow(this);
@@ -83,6 +84,9 @@ namespace MonoGame.Framework
         public override void Exit()
         {
             _window?.StopRendering();
+
+            RaiseAsyncRunLoopEnded();
+
             if (_window != null)
                 _window.Dispose();
             _window = null;

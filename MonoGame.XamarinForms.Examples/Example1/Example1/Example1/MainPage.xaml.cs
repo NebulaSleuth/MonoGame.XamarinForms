@@ -60,7 +60,7 @@ namespace Example1
         private async void Game2_Clicked(object sender, EventArgs e)
         {
             await DisposeGame();
-            //AddGame(GameContainer, new NeonShooterGame());
+            AddGame(GameContainer, new NeonShooterGame());
 
         }
 

@@ -59,132 +59,132 @@ namespace Microsoft.Xna.Framework.WPFForms
 
         private void HostPanel_KeyDown(object sender, KeyEventArgs e)
         {
-            WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
-            if (window != null)
-            {
-                // Forward the event
-                window.KeyDown(e);
-            }
+            //WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
+            //if (window != null)
+            //{
+            //    // Forward the event
+            //    window.KeyDown(e);
+            //}
         }
 
         private void HostPanel_KeyUp(object sender, KeyEventArgs e)
         {
-            WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
-            if (window != null)
-            {
-                // Forward the event
-                window.KeyUp(e);
-            }
+            //WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
+            //if (window != null)
+            //{
+            //    // Forward the event
+            //    window.KeyUp(e);
+            //}
 
         }
 
         private void HostPanel_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
-            if (window != null)
-            {
-                // Forward the event
-                window.MouseDown(e);
-            }
+            //WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
+            //if (window != null)
+            //{
+            //    // Forward the event
+            //    window.MouseDown(e);
+            //}
 
         }
 
         private void HostPanel_MouseEnter(object sender, MouseEventArgs e)
         {
-            WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
-            if (window != null)
-            {
-                // Forward the event
-                window.MouseEnter(e);
-            }
+            //WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
+            //if (window != null)
+            //{
+            //    // Forward the event
+            //    window.MouseEnter(e);
+            //}
 
         }
 
         private void HostPanel_MouseLeave(object sender, MouseEventArgs e)
         {
-            WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
-            if (window != null)
-            {
-                // Forward the event
-                window.MouseLeave(e);
-            }
+            //WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
+            //if (window != null)
+            //{
+            //    // Forward the event
+            //    window.MouseLeave(e);
+            //}
 
         }
 
         private void HostPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
-            if (window != null)
-            {
-                // Forward the event
-                window.MouseLeftButtonDown(e);
-            }
+            //WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
+            //if (window != null)
+            //{
+            //    // Forward the event
+            //    window.MouseLeftButtonDown(e);
+            //}
 
         }
 
         private void HostPanel_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
-            if (window != null)
-            {
-                // Forward the event
-                window.MouseLeftButtonUp(e);
-            }
+            //WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
+            //if (window != null)
+            //{
+            //    // Forward the event
+            //    window.MouseLeftButtonUp(e);
+            //}
 
         }
 
         private void HostPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
-            if (window != null)
-            {
-                // Forward the event
-                window.MouseMove(e);
-            }
+            //WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
+            //if (window != null)
+            //{
+            //    // Forward the event
+            //    window.MouseMove(e);
+            //}
 
         }
 
         private void HostPanel_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
-            if (window != null)
-            {
-                // Forward the event
-                window.MouseRightButtonDown(e);
-            }
+            //WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
+            //if (window != null)
+            //{
+            //    // Forward the event
+            //    window.MouseRightButtonDown(e);
+            //}
 
         }
 
         private void HostPanel_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
-            if (window != null)
-            {
-                // Forward the event
-                window.MouseRightButtonUp(e);
-            }
+            //WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
+            //if (window != null)
+            //{
+            //    // Forward the event
+            //    window.MouseRightButtonUp(e);
+            //}
 
         }
 
         private void HostPanel_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
-            if (window != null)
-            {
-                // Forward the event
-                window.MouseUp(e);
-            }
+            //WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
+            //if (window != null)
+            //{
+            //    // Forward the event
+            //    window.MouseUp(e);
+            //}
 
         }
 
         private void HostPanel_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
-            if (window != null)
-            {
-                // Forward the event
-                window.MouseWheel(e);
-            }
+            //WPFFormsGameWindow window = Game?.Window as WPFFormsGameWindow;
+            //if (window != null)
+            //{
+            //    // Forward the event
+            //    window.MouseWheel(e);
+            //}
 
         }
 
@@ -194,7 +194,7 @@ namespace Microsoft.Xna.Framework.WPFForms
             if (window != null)
             {
                 // Forward the event
-                window.TouchDown(e);
+                window.TouchDown(sender, e);
             }
         }
 
@@ -205,7 +205,7 @@ namespace Microsoft.Xna.Framework.WPFForms
             if (window != null)
             {
                 // Forward the event
-                window.TouchMove(e);
+                window.TouchMove(sender, e);
             }
         }
 
@@ -215,7 +215,7 @@ namespace Microsoft.Xna.Framework.WPFForms
             if (window != null)
             {
                 // Forward the event
-                window.TouchUp(e);
+                window.TouchUp(sender, e);
             }
         }
 

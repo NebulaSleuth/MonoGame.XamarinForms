@@ -171,6 +171,9 @@ namespace Microsoft.Xna.Framework
             base.Dispose(disposing);
             if (disposing)
             {
+
+                RaiseAsyncRunLoopEnded();
+
                 _displayLink?.RemoveFromRunLoop(NSRunLoop.Main, NSRunLoop.NSDefaultRunLoopMode);
 
                 if (_viewController != null)
@@ -181,6 +184,7 @@ namespace Microsoft.Xna.Framework
                     _viewController = null;
                 }
 
+                OpenALSoundController.DestroyInstance();
                 //if (_mainWindow != null)
                 //{
                 //    _mainWindow.Dispose();

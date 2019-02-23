@@ -7,6 +7,7 @@ using SharpDX.MediaFoundation;
 using SharpDX.Multimedia;
 using Windows.UI.Core;
 using Windows.ApplicationModel.Core;
+using Microsoft.Xna.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Media
 {
@@ -15,6 +16,9 @@ namespace Microsoft.Xna.Framework.Media
         // RAYB: This needs to be turned back into a readonly.
         private static MediaEngine _mediaEngineEx;
         private static CoreDispatcher _dispatcher;
+
+        private static TimeSpan? _mediaResumePosition = null;
+        private static string _mediaResumePath = null;
 
         private enum SessionState { Stopped, Started, Paused }
         private static SessionState _sessionState = SessionState.Stopped;
@@ -123,12 +127,23 @@ namespace Microsoft.Xna.Framework.Media
             if (_sessionState != SessionState.Started)
                 return;
             _sessionState = SessionState.Paused;
-            _mediaEngineEx.Pause();
+
+            _mediaResumePosition = PlatformGetPlayPosition();
+            _mediaEngineEx.Source = null;
+            //_mediaEngineEx.Pause();
         }
 
         private static void PlatformPlaySong(Song song, TimeSpan? startPosition)
         {
-            _mediaEngineEx.Source = song.FilePath;
+            string path = song.FilePath;
+            if (path.ToLower().Contains(".pak"))
+            {
+                path = FilePacker.CreateTempFile(path);
+            }
+
+            _mediaResumePosition = null;
+            _mediaResumePath = path;
+            _mediaEngineEx.Source = path;
             _mediaEngineEx.Load();
             _desiredPosition = startPosition;
             _sessionState = SessionState.Started;
@@ -140,7 +155,15 @@ namespace Microsoft.Xna.Framework.Media
         {
             if (_sessionState != SessionState.Paused)
                 return;
-            _mediaEngineEx.Play();
+            if (_mediaResumePosition != null && _mediaResumePath != null)
+            {
+                _mediaEngineEx.Source = _mediaResumePath;
+                _mediaEngineEx.Load();
+                _desiredPosition = _mediaResumePosition;
+                _sessionState = SessionState.Started;
+            }
+            else
+                _mediaEngineEx.Play();
         }
 
         private static void PlatformStop()

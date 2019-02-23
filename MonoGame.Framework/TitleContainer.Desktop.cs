@@ -4,7 +4,7 @@
 
 using System;
 using System.IO;
-using MonoGame.Utilities;
+using Microsoft.Xna.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework
 {
@@ -21,14 +21,43 @@ namespace Microsoft.Xna.Framework
             if (!Directory.Exists (Location))
 #endif
             Location = AppDomain.CurrentDomain.BaseDirectory;
+            TempLocation = AppDomain.CurrentDomain.BaseDirectory;
 #endif
         }
 
         private static Stream PlatformOpenStream(string safeName)
         {
-            var absolutePath = Path.Combine(Location, safeName);
-            return File.OpenRead(absolutePath);
+            if (safeName.ToLower().Contains(".pak"))
+            {
+                // Pull from the .zip files
+                int idx = safeName.ToLower().IndexOf(".pak") + 4;
+                string pakName = Path.Combine(Location, safeName.Substring(0, idx));
+                string filename = safeName.Substring(idx);
+                while (filename.StartsWith("/") || filename.StartsWith("\\"))
+                {
+                    filename = filename.Substring(1);
+                }
+
+                try
+                {
+                    if (File.Exists(pakName))
+                    {
+                        return FilePacker.GetFileStream(pakName, filename);
+                    }
+                }
+                catch
+                {
+                }
+                return null;
+            }
+            else
+            {
+                var absolutePath = Path.Combine(Location, safeName);
+
+                return File.OpenRead(absolutePath);
+            }
         }
     }
+
 }
 

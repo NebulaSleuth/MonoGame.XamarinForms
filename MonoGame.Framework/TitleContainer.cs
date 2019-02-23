@@ -15,10 +15,12 @@ namespace Microsoft.Xna.Framework
         static TitleContainer() 
         {
             Location = string.Empty;
+            TempLocation = string.Empty;
             PlatformInit();
         }
 
         static internal string Location { get; private set; }
+        static internal string TempLocation { get; private set; }
 
         /// <summary>
         /// Returns an open stream to an exsiting file in the title storage area.
@@ -31,8 +33,8 @@ namespace Microsoft.Xna.Framework
                 throw new ArgumentNullException("name");
 
             // We do not accept absolute paths here.
-            if (Path.IsPathRooted(name))
-                throw new ArgumentException("Invalid filename. TitleContainer.OpenStream requires a relative path.", name);
+            //if (Path.IsPathRooted(name))
+            //    throw new ArgumentException("Invalid filename. TitleContainer.OpenStream requires a relative path.", name);
 
             // Normalize the file path.
             var safeName = NormalizeRelativePath(name);

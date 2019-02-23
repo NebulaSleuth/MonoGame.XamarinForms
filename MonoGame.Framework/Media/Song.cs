@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Media
         }
 
 		internal Song(string fileName)
-		{			
+		{
 			_name = fileName;
 
             PlatformInitialize(fileName);

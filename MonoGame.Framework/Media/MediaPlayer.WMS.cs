@@ -99,14 +99,26 @@ namespace Microsoft.Xna.Framework.Media
 
         public static void Reset()
         {
+            if (_session != null)
+            {
+                _session.Dispose();
+                _session = null;
+            }
             Stop();
 
-            //_currentSong = null;
-            //_desiredPosition = null;
-            //_isMuted = false;
-            //_isRepeating = false;
-            //_session = null;
-            //PlatformInitialize();
+
+            _currentSong = null;
+            _desiredPosition = null;
+            _isMuted = false;
+            _isRepeating = false;
+            _session = null;
+            MediaManagerState.CheckStartup();
+            MediaFactory.CreateMediaSession(null, out _session);
+
+            _callback = new Callback();
+            _session.BeginGetEvent(_callback, null);
+
+            _clock = _session.Clock.QueryInterface<PresentationClock>();
         }
 
         #region Properties
@@ -306,6 +318,7 @@ namespace Microsoft.Xna.Framework.Media
                 _session.Start(null, PositionBeginning);
             }
             _session.Stop();
+            
         }
 
         private static void OnSessionStopped()

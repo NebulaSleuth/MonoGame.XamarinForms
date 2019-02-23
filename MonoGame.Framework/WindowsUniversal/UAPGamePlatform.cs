@@ -154,6 +154,9 @@ namespace Microsoft.Xna.Framework
                     UAPGameWindow.Instance.Tick();
                 }
                 _exited = true;
+#if FORMS
+                RaiseAsyncRunLoopEnded();
+#endif
             });
             var tickWorker = ThreadPool.RunAsync(workItemHandler, WorkItemPriority.High, WorkItemOptions.TimeSliced);
         }

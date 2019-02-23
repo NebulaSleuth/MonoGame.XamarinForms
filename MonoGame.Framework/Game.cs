@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 #if WINDOWS_UAP
@@ -419,6 +420,12 @@ namespace Microsoft.Xna.Framework
         {
             _shouldExit = true;
             _suppressDraw = true;
+#if (WINDOWS && FORMS) || (WINDOWS_UAP && FORMS)
+            Platform?.Exit();
+#endif
+#if GTK
+			OpenALSoundController.DestroyInstance();
+#endif
         }
 
         public async Task WaitForExit()
@@ -487,6 +494,10 @@ namespace Microsoft.Xna.Framework
                 _gameTimer = Stopwatch.StartNew();
                 return;
             }
+
+#if FORMS && !ANDROID
+            Platform.AsyncRunLoopEnded += Platform_AsyncRunLoopEnded;
+#endif
 
             if (!_initialized) {
                 DoInitialize ();

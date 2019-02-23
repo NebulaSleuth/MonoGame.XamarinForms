@@ -6,6 +6,7 @@ using System;
 using System.IO;
 #if IOS
 using Foundation;
+using Microsoft.Xna.Framework.Utilities;
 using UIKit;
 #elif MONOMAC
 using Foundation;
@@ -18,6 +19,7 @@ namespace Microsoft.Xna.Framework
         static partial void PlatformInit()
         {
             Location = NSBundle.MainBundle.ResourcePath;
+            TempLocation = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
 #if IOS
             SupportRetina = UIScreen.MainScreen.Scale >= 2.0f;
             RetinaScale = (int)Math.Round(UIScreen.MainScreen.Scale);
@@ -33,6 +35,29 @@ namespace Microsoft.Xna.Framework
         {
 #if IOS
             var absolutePath = Path.Combine(Location, safeName);
+            if (absolutePath.ToLower().Contains(".pak"))
+            {
+                // Pull from the .zip files
+                int idx = absolutePath.ToLower().IndexOf(".pak") + 4;
+                string pakName = Path.Combine(Location, absolutePath.Substring(0, idx));
+                string filename = absolutePath.Substring(idx);
+                while (filename.StartsWith("/") || filename.StartsWith("\\"))
+                {
+                    filename = filename.Substring(1);
+                }
+
+                try
+                {
+                    if (File.Exists(pakName))
+                    {
+                        return FilePacker.GetFileStream(pakName, filename);
+                    }
+                }
+                catch
+                {
+                }
+                return null;
+            }
             if (SupportRetina)
             {
                 for (var scale = RetinaScale; scale >= 2; scale--)

@@ -7,6 +7,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
+using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Framework
 {
@@ -44,6 +45,7 @@ namespace Microsoft.Xna.Framework
             _orientationListener = new OrientationListener(this);
 
 			Game.Activity = this;
+            MediaLibrary.Context = this;
 		}
 
         public static event EventHandler Paused;

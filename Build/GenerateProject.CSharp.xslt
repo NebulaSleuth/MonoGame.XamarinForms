@@ -138,7 +138,7 @@
               <TargetPlatformVersion>
                 <xsl:value-of select="user:DetectWindows10InstalledSDK()"/>
               </TargetPlatformVersion>
-              <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
+              <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
               <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
           </xsl:when>		
           <xsl:when test="$root/Input/Generation/Platform = 'iOS' or $root/Input/Generation/Platform = 'iOSForms' or $root/Input/Generation/Platform = 'PSMobile' or $root/Input/Generation/Platform = 'tvOS'">

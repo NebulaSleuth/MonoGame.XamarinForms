@@ -13,6 +13,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -36,6 +37,8 @@ namespace MonoGame.Framework
         static private List<WPFFormsGameWindow> _allWindows = new List<WPFFormsGameWindow>();
 
         private WPFFormsGamePlatform _platform;
+        private bool _switchingFullScreen;
+
 
         TouchLocationState TouchState = TouchLocationState.Invalid;
 
@@ -50,6 +53,8 @@ namespace MonoGame.Framework
         private bool _resetBackBuffer;
 
         private bool _isResizable;
+        private bool _isMouseHidden;
+        private bool _isMouseInBounds;
 
         // true if window position was moved either through code or by dragging/resizing the form
         #region Internal Properties
@@ -179,6 +184,7 @@ namespace MonoGame.Framework
         internal WPFFormsGameWindow(WPFFormsGamePlatform platform)
         {
             _timer = new Stopwatch();
+            //IsFullScreen = true;
             _platform = platform;
             Game = platform.Game;
             if (Game.HostControl != null)
@@ -188,13 +194,95 @@ namespace MonoGame.Framework
                 Host.SizeChanged += OnResize;
                 Host.Unloaded += OnDeactivate;
                 Host.Loaded += OnActivated;
+
+                Window parentWindow = Window.GetWindow(Host);
+                // Capture mouse events.
+                Microsoft.Xna.Framework.Input.Mouse.WindowHandle = new WindowInteropHelper(parentWindow).Handle;
+                Host.PreviewMouseWheel += OnMouseScroll;
+                //Host.MouseHorizontalWheel += OnMouseHorizontalScroll;
+                Host.MouseEnter += OnMouseEnter;
+                Host.MouseLeave += OnMouseLeave;
+
+//                Touch.FrameReported += new TouchFrameEventHandler(Touch_FrameReported);
+                //Host.KeyDown += OnKeyPress;
             }
             RegisterToAllWindows();
+        }
+
+        void Touch_FrameReported(object sender, TouchFrameEventArgs e)
+        {
+            if (Host != null)
+            {
+                foreach (TouchPoint _touchPoint in e.GetTouchPoints(Host))
+                {
+                    if (_touchPoint.Action == TouchAction.Down)
+                    {
+                        // capture the touch 
+                        _touchPoint.TouchDevice.Capture(Host);
+
+                    }
+
+                    else if (_touchPoint.Action == TouchAction.Move && e.GetPrimaryTouchPoint(Host) != null)
+                    {
+                        // This is the first (primary) touch point. Just record its position.
+                        if (_touchPoint.TouchDevice.Id == e.GetPrimaryTouchPoint(Host).TouchDevice.Id)
+                        {
+                            var vec = new Vector2((float)_touchPoint.Position.X, (float)_touchPoint.Position.Y);
+                            TouchState = TouchLocationState.Pressed;
+                            TouchPanelState.AddEvent(_touchPoint.TouchDevice?.Id ?? 0, TouchState, vec, false);
+                        }
+
+                        // This is not the first touch point. Draw a line from the first point to this one.
+                        else if (_touchPoint.TouchDevice.Id != e.GetPrimaryTouchPoint(Host).TouchDevice.Id)
+                        {
+                            var vec = new Vector2((float)_touchPoint.Position.X, (float)_touchPoint.Position.Y);
+                            TouchState = TouchLocationState.Moved;
+                            TouchPanelState.AddEvent(_touchPoint.TouchDevice?.Id ?? 0, TouchState, vec, false);
+                            //pt2.X = _touchPoint.Position.X;
+                            //pt2.Y = _touchPoint.Position.Y;
+
+                            //Line _line = new Line();
+                            //_line.Stroke = new RadialGradientBrush(Colors.White, Colors.Black);
+                            //_line.X1 = pt1.X;
+                            //_line.X2 = pt2.X;
+                            //_line.Y1 = pt1.Y;
+                            //_line.Y2 = pt2.Y;
+                            //_line.StrokeThickness = 2;
+                            //this.canvas1.Children.Add(_line);
+                        }
+                    }
+                    else if (_touchPoint.Action == TouchAction.Up)
+                    {
+                        // If this touch is captured to the canvas, release it.
+                        if (_touchPoint.TouchDevice.Captured == Host)
+                        {
+                            var vec = new Vector2((float)_touchPoint.Position.X, (float)_touchPoint.Position.Y);
+                            TouchState = TouchLocationState.Released;
+                            TouchPanelState.AddEvent(_touchPoint.TouchDevice?.Id ?? 0, TouchState, vec, false);
+                        }
+                    }
+                }
+            }
         }
 
 
         ~WPFFormsGameWindow()
         {
+            if (Host != null)
+            {
+                Host.SizeChanged -= OnResize;
+                Host.Unloaded -= OnDeactivate;
+                Host.Loaded -= OnActivated;
+
+                //Host.MouseHorizontalWheel += OnMouseHorizontalScroll;
+                Host.MouseEnter -= OnMouseEnter;
+                Host.MouseLeave -= OnMouseLeave;
+                //Host.KeyDown += OnKeyPress;
+
+                //Touch.FrameReported -= new TouchFrameEventHandler(Touch_FrameReported);
+
+            }
+
             Dispose(false);
             _timer?.Stop();
         }
@@ -268,6 +356,7 @@ namespace MonoGame.Framework
                         DeviceWindowHandle = IntPtr.Zero,
                     };
 
+                    //presentationParameters.IsFullScreen = true;
                     _graphicsDevice = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile.HiDef, presentationParameters);
                     if (game.Services.GetService(typeof(IGraphicsDeviceManager)) != null)
                     {
@@ -346,6 +435,7 @@ namespace MonoGame.Framework
                 {
                     CreateBackBuffer();
                 }
+                _d3D11Image?.Lock();
                 var renderingEventArgs = (RenderingEventArgs)eventArgs;
                 if (_lastRenderingTime != renderingEventArgs.RenderingTime || _resetBackBuffer)
                 {
@@ -358,11 +448,11 @@ namespace MonoGame.Framework
                     Render(_timer.Elapsed);
                     _graphicsDevice?.Flush();
                 }
+                _d3D11Image?.Unlock();
             _resetBackBuffer = false;
             }
             _d3D11Image?.Invalidate(); // Always invalidate D3DImage to reduce flickering
                                       // during window resizing.
-
         }
         private void Render(TimeSpan time)
         {
@@ -427,96 +517,126 @@ namespace MonoGame.Framework
 
 
 
-        //private void OnMouseScroll(object sender, System.Windows.Input.MouseEventArgs mouseEventArgs)
-        //{
-        //    MouseState.ScrollWheelValue += mouseEventArgs.Delta;
-        //}
+        private void OnMouseScroll(object sender, System.Windows.Input.MouseWheelEventArgs mouseEventArgs)
+        {
+            MouseState.ScrollWheelValue += mouseEventArgs.Delta;
+        }
 
-        //private void OnMouseHorizontalScroll(object sender, HorizontalMouseWheelEventArgs mouseEventArgs)
-        //{
-        //    MouseState.HorizontalScrollWheelValue += mouseEventArgs.Delta;
-        //}
+        private void OnMouseHorizontalScroll(object sender, HorizontalMouseWheelEventArgs mouseEventArgs)
+        {
+            MouseState.HorizontalScrollWheelValue += mouseEventArgs.Delta;
+        }
 
-        //private void UpdateMouseState()
-        //{
-        //    // If we call the form client functions before the form has
-        //    // been made visible it will cause the wrong window size to
-        //    // be applied at startup.
-        //    if (!Form.Visible)
-        //        return;
+        private void UpdateMouseState()
+        {
+            // If we call the form client functions before the form has
+            // been made visible it will cause the wrong window size to
+            // be applied at startup.
+            if (Host == null) return;
 
-        //    POINTSTRUCT pos;
-        //    GetCursorPos(out pos);
-        //    MapWindowPoints(new HandleRef(null, IntPtr.Zero), new HandleRef(Form, Form.Handle), out pos, 1);
-        //    var clientPos = new System.Drawing.Point(pos.X, pos.Y);
-        //    var withinClient = Form.ClientRectangle.Contains(clientPos);
-        //    var buttons = Control.MouseButtons;
+            if (!Host.IsVisible)
+                return;
 
-        //    var previousState = MouseState.LeftButton;
+            var pos = System.Windows.Input.Mouse.GetPosition(Host);
+            //var clientPos = new System.Drawing.Point((int)pos.X, (int)pos.Y);
+            Window parentWindow = Window.GetWindow(Host);
+            var relativePoint = Host.TransformToAncestor(parentWindow).Transform(new System.Windows.Point(0, 0));
+            Rectangle r = new Rectangle((int)relativePoint.X, (int)relativePoint.Y, (int)Host.ActualWidth, (int)Host.ActualHeight);
+            var withinClient = r.Contains((int)pos.X, (int)pos.Y);
+            var buttons = Control.MouseButtons;
 
-        //    MouseState.X = clientPos.X;
-        //    MouseState.Y = clientPos.Y;
-        //    MouseState.LeftButton = (buttons & MouseButtons.Left) == MouseButtons.Left ? ButtonState.Pressed : ButtonState.Released;
-        //    MouseState.MiddleButton = (buttons & MouseButtons.Middle) == MouseButtons.Middle ? ButtonState.Pressed : ButtonState.Released;
-        //    MouseState.RightButton = (buttons & MouseButtons.Right) == MouseButtons.Right ? ButtonState.Pressed : ButtonState.Released;
-        //    MouseState.XButton1 = (buttons & MouseButtons.XButton1) == MouseButtons.XButton1 ? ButtonState.Pressed : ButtonState.Released;
-        //    MouseState.XButton2 = (buttons & MouseButtons.XButton2) == MouseButtons.XButton2 ? ButtonState.Pressed : ButtonState.Released;
+            var previousState = MouseState.LeftButton;
+            var prevX = MouseState.X;
+            var prevY = MouseState.Y;
 
-        //    // Don't process touch state if we're not active 
-        //    // and the mouse is within the client area.
-        //    if (!_platform.IsActive || !withinClient)
-        //    {                
-        //        if (MouseState.LeftButton == ButtonState.Pressed)
-        //        {
-        //            // Release mouse TouchLocation
-        //            var touchX = MathHelper.Clamp(MouseState.X, 0, Form.ClientRectangle.Width-1);
-        //            var touchY = MathHelper.Clamp(MouseState.Y, 0, Form.ClientRectangle.Height-1);
-        //            TouchPanelState.AddEvent(0, TouchLocationState.Released, new Vector2(touchX, touchY), true);
-        //        }
-        //        return;
-        //    }
-            
-        //    TouchLocationState? touchState = null;
-        //    if (MouseState.LeftButton == ButtonState.Pressed)
-        //        if (previousState == ButtonState.Released)
-        //            touchState = TouchLocationState.Pressed;
-        //        else
-        //            touchState = TouchLocationState.Moved;
-        //    else if (previousState == ButtonState.Pressed)
-        //        touchState = TouchLocationState.Released;
+            MouseState.X = (int)pos.X;
+            MouseState.Y = (int)pos.Y;
+            MouseState.LeftButton = (buttons & MouseButtons.Left) == MouseButtons.Left ? ButtonState.Pressed : ButtonState.Released;
+            MouseState.MiddleButton = (buttons & MouseButtons.Middle) == MouseButtons.Middle ? ButtonState.Pressed : ButtonState.Released;
+            MouseState.RightButton = (buttons & MouseButtons.Right) == MouseButtons.Right ? ButtonState.Pressed : ButtonState.Released;
+            MouseState.XButton1 = (buttons & MouseButtons.XButton1) == MouseButtons.XButton1 ? ButtonState.Pressed : ButtonState.Released;
+            MouseState.XButton2 = (buttons & MouseButtons.XButton2) == MouseButtons.XButton2 ? ButtonState.Pressed : ButtonState.Released;
 
-        //    if (touchState.HasValue)
-        //        TouchPanelState.AddEvent(0, touchState.Value, new Vector2(MouseState.X, MouseState.Y), true);
-        //} 
 
-        //private void OnMouseEnter(object sender, EventArgs e)
-        //{
-        //    _isMouseInBounds = true;
-        //    if (!_platform.IsMouseVisible && !_isMouseHidden)
-        //    {
-        //        _isMouseHidden = true;
-        //        Cursor.Hide();
-        //    }
-        //}
+            //if (MouseState.LeftButton == ButtonState.Pressed) Debug.WriteLine("MOUSE: DOWN");
+            //// Don't process touch state if we're not active 
+            //// and the mouse is within the client area.
+            if (!_platform.IsActive || !withinClient)
+            {
+                //if (MouseState.LeftButton == ButtonState.Pressed)
+                //{
+                //    if (previousState == ButtonState.Pressed && MouseState.X != prevX && MouseState.Y != prevY)
+                //    {
+                //        // Moved
+                //        Debug.WriteLine("MOVED");
+                //        TouchPanelState.AddEvent(0, TouchLocationState.Moved, new Vector2(MouseState.X, MouseState.Y), false);
+                //    }
+                //    else if (previousState != ButtonState.Pressed)
+                //    {
+                //        Debug.WriteLine("PRESSED");
+                //        TouchPanelState.AddEvent(0, TouchLocationState.Pressed, new Vector2(MouseState.X, MouseState.Y), false);
+                //    }
+                //}
+                //else if (previousState != ButtonState.Released)
+                //{
+                //        Debug.WriteLine("RELEASED");
+                //    TouchPanelState.AddEvent(0, TouchLocationState.Released, new Vector2(MouseState.X, MouseState.Y), false);
+                //}
+                //    if (MouseState.LeftButton == ButtonState.Pressed)
+                //    {
+                //        // Release mouse TouchLocation
+                //        var touchX = MathHelper.Clamp(MouseState.X, 0, (int)Host.ActualWidth - 1);
+                //        var touchY = MathHelper.Clamp(MouseState.Y, 0, (int)Host.ActualHeight - 1);
+                //        TouchPanelState.AddEvent(0, TouchLocationState.Released, new Vector2(touchX, touchY), true);
+                //    }
+                //    return;
+            }
 
-        //private void OnMouseLeave(object sender, EventArgs e)
-        //{
-        //    _isMouseInBounds = false;
-        //    if (_isMouseHidden)
-        //    {
-        //        _isMouseHidden = false;
-        //        Cursor.Show();
-        //    }
-        //}
+            //TouchLocationState? touchState = null;
+            //if (MouseState.LeftButton == ButtonState.Pressed)
+            //    if (previousState == ButtonState.Released)
+            //        touchState = TouchLocationState.Pressed;
+            //    else
+            //        touchState = TouchLocationState.Moved;
+            //else if (previousState != ButtonState.Released)
+            //    touchState = TouchLocationState.Released;
 
-        //[DllImport("user32.dll")]
-        //private static extern short VkKeyScanEx(char ch, IntPtr dwhkl);
+            //if (touchState.HasValue)
+            //{
+            //    Debug.WriteLine($"TOUCH: {touchState}");
+            //    TouchPanelState.AddEvent(0, touchState.Value, new Vector2(MouseState.X, MouseState.Y), true);
+            //}
+        }
 
-        //private void OnKeyPress(object sender, KeyPressEventArgs e)
-        //{
-        //    var key = (Keys) (VkKeyScanEx(e.KeyChar, InputLanguage.CurrentInputLanguage.Handle) & 0xff);
-        //    OnTextInput(sender, new TextInputEventArgs(e.KeyChar, key));
-        //}
+        private void OnMouseEnter(object sender, EventArgs e)
+        {
+            _isMouseInBounds = true;
+            if (!_platform.IsMouseVisible && !_isMouseHidden)
+            {
+                _isMouseHidden = true;
+
+                //System.Windows.Input.Mouse.OverrideCursor = System.Windows.Input.Cursors.None;
+            }
+        }
+
+        private void OnMouseLeave(object sender, EventArgs e)
+        {
+            _isMouseInBounds = false;
+            if (_isMouseHidden)
+            {
+                _isMouseHidden = false;
+                //System.Windows.Input.Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
+            }
+        }
+
+        [DllImport("user32.dll")]
+        private static extern short VkKeyScanEx(char ch, IntPtr dwhkl);
+
+        private void OnKeyPress(object sender, KeyPressEventArgs e)
+        {
+            var key = (Keys)(VkKeyScanEx(e.KeyChar, InputLanguage.CurrentInputLanguage.Handle) & 0xff);
+            OnTextInput(sender, new TextInputEventArgs(e.KeyChar, key));
+        }
 
         internal void Initialize(int width, int height)
         {
@@ -529,18 +649,47 @@ namespace MonoGame.Framework
             Console.WriteLine("Initialize");
             //ChangeClientSize(new Size(pp.BackBufferWidth, pp.BackBufferHeight));
 
-            //if (pp.IsFullScreen)
+            if (pp.IsFullScreen)
+            {
+                EnterFullScreen(pp);
+                if (!pp.HardwareModeSwitch)
+                    _platform.Game.GraphicsDevice.OnPresentationChanged();
+            }
+        }
+
+        private void EnterFullScreen(PresentationParameters pp)
+        {
+            _switchingFullScreen = true;
+
+            // store the location of the window so we can restore it later
+            //if (!IsFullScreen)
+            //    _locationBeforeFullScreen = Form.Location;
+
+            _platform.Game.GraphicsDevice.SetHardwareFullscreen();
+
+            //if (!pp.HardwareModeSwitch)
             //{
-            //    EnterFullScreen(pp);
-            //    if (!pp.HardwareModeSwitch)
-            //        _platform.Game.GraphicsDevice.OnPresentationChanged();
+            //    // FIXME: setting the WindowState to Maximized when the form is not shown will not update the ClientBounds
+            //    // this causes the back buffer to be the wrong size when initializing in soft full screen
+            //    // we show the form to bypass the issue
+            //    //Form.Show();
+            //    IsBorderless = true;
+            //    //Form.WindowState = FormWindowState.Maximized;
+            //    //_lastFormState = FormWindowState.Maximized;
             //}
+
+            IsFullScreen = true;
+            HardwareModeSwitch = pp.HardwareModeSwitch;
+
+            _switchingFullScreen = false;
         }
 
         //private FormWindowState _lastFormState;
 
         private void OnResize(object sender, SizeChangedEventArgs eventArgs)
         {
+            //if (_switchingFullScreen || Form.IsResizing)
+            //    return;
 
             _resetBackBuffer = true;
             OnClientSizeChanged();
@@ -574,9 +723,9 @@ namespace MonoGame.Framework
             try
             {
                 // Update the mouse state for each window.
-                //foreach (var window in _allWindows)
-                //    if (window.Game == Game)
-                //        window.UpdateMouseState();
+                foreach (var window in _allWindows)
+                    if (window.Game == Game)
+                        window.UpdateMouseState();
             }
             finally
             {
@@ -767,7 +916,7 @@ namespace MonoGame.Framework
 
         }
 
-        public void TouchDown(TouchEventArgs e)
+        public void TouchDown(object sender, TouchEventArgs e)
         {
             if (Host != null)
             {
@@ -778,7 +927,7 @@ namespace MonoGame.Framework
             }
         }
         
-        public void TouchMove(TouchEventArgs e)
+        public void TouchMove(object sender, TouchEventArgs e)
         {
             if (Host != null && TouchState != TouchLocationState.Released && TouchState != TouchLocationState.Invalid)
             {
@@ -789,7 +938,7 @@ namespace MonoGame.Framework
             }
         }
 
-        public void TouchUp(TouchEventArgs e)
+        public void TouchUp(object sender, TouchEventArgs e)
         {
             if (Host != null)
             {

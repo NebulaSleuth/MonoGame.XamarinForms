@@ -158,6 +158,8 @@ namespace Microsoft.Xna.Framework {
         {
 #if FORMS
             var window = new MonoGame.Framework.WPFFormsGameWindow((MonoGame.Framework.WPFFormsGamePlatform)game.Platform);
+#elif WPF
+            var window = new MonoGame.Framework.WPFGameWindow((MonoGame.Framework.WPFGamePlatform)game.Platform);
 #else
             var window = new MonoGame.Framework.WinFormsGameWindow((MonoGame.Framework.WinFormsGamePlatform)game.Platform);
 #endif

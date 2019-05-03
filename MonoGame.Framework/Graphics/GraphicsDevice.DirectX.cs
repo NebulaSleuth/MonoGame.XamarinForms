@@ -57,7 +57,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 #if WINDOWS
 
-#if FORMS
+#if FORMS || WPF
         private RenderTarget2D _defaultRenderTarget = null;
         public RenderTarget2D DefaultRenderTarget
         {

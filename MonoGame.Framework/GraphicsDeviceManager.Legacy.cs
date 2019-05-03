@@ -38,6 +38,9 @@ namespace Microsoft.Xna.Framework
 #if !WINRT || WINDOWS_UAP
         private bool _wantFullScreen = false;
 #endif
+        public static bool DefaultPreferMultiSampling = false;
+        public static DepthFormat DefaultDepthStencilFormat = DepthFormat.Depth24;
+
         public static readonly int DefaultBackBufferHeight = 480;
         public static readonly int DefaultBackBufferWidth = 800;
 
@@ -62,7 +65,7 @@ namespace Microsoft.Xna.Framework
 #endif
 
             _preferredBackBufferFormat = SurfaceFormat.Color;
-            _preferredDepthStencilFormat = DepthFormat.Depth24;
+            _preferredDepthStencilFormat = DefaultDepthStencilFormat;
             _synchronizedWithVerticalRetrace = true;
 
             // XNA would read this from the manifest, but it would always default
@@ -326,7 +329,7 @@ namespace Microsoft.Xna.Framework
         private void Initialize()
         {
             var presentationParameters = new PresentationParameters();
-            presentationParameters.DepthStencilFormat = DepthFormat.Depth24;
+            presentationParameters.DepthStencilFormat = DefaultDepthStencilFormat;
 
 #if (WINDOWS || WINRT) && !DESKTOPGL
             _game.Window.SetSupportedOrientations(_supportedOrientations);

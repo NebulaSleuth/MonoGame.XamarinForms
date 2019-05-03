@@ -114,6 +114,9 @@
           <xsl:when test="$root/Input/Generation/Platform = 'WPFForms'">
             <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
           </xsl:when>
+          <xsl:when test="$root/Input/Generation/Platform = 'WPF'">
+            <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+          </xsl:when>
           <xsl:when test="$root/Input/Generation/Platform = 'Android'">
             <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
           </xsl:when>
@@ -201,7 +204,7 @@
         <DebugSymbols>true</DebugSymbols>
         <Optimize>false</Optimize>
         <DebugType>full</DebugType>
-        <xsl:if test="$root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms'">
+        <xsl:if test="$root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms' or $root/Input/Generation/HostPlatform = 'WPF'">
           <!-- This ensures that DirectX errors are reported to the Output window on Windows. -->
         <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
         </xsl:if>
@@ -313,7 +316,7 @@
               <xsl:when test="$root/Input/Generation/Platform = 'PSMobile'">
                 <xsl:text>PLATFORM_PSMOBILE</xsl:text>
               </xsl:when>
-              <xsl:when test="$root/Input/Generation/Platform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms'">
+              <xsl:when test="$root/Input/Generation/Platform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms' or $root/Input/Generation/HostPlatform = 'WPF'">
                 <xsl:text>PLATFORM_WINDOWS</xsl:text>
               </xsl:when>
               <xsl:when test="$root/Input/Generation/Platform = 'Windows8'">
@@ -608,7 +611,7 @@
             </xsl:choose>
           </xsl:variable>
           <xsl:choose>
-            <xsl:when test="$root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms'">
+            <xsl:when test="$root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms' or $root/Input/Generation/HostPlatform = 'WPF'">
               <xsl:call-template name="NativeBinary">
                 <xsl:with-param name="project_path"><xsl:value-of select="$source_project/@Path" /></xsl:with-param>
                 <xsl:with-param name="project_name"><xsl:value-of select="$source_project/@Name" /></xsl:with-param>
@@ -1096,7 +1099,7 @@
                 <xsl:when test="$root/Input/Generation/Platform = 'Windows8' or $root/Input/Generation/Platform = 'WindowsUniversal'">
                   <xsl:text>AppContainerExe</xsl:text>
                 </xsl:when>
-                <xsl:when test="$root/Input/Generation/Platform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms'">
+                <xsl:when test="$root/Input/Generation/Platform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms' or $root/Input/Generation/HostPlatform = 'WPF'">
                   <xsl:choose>
                     <xsl:when test="$project/@Type = 'Console'">
                       <xsl:text>Exe</xsl:text>
@@ -1588,7 +1591,7 @@
               <xsl:if test="$root/Input/Generation/HostPlatform = 'Linux' or $root/Input/Generation/HostPlatform = 'MacOS'">
                 <xsl:text>/</xsl:text>
               </xsl:if>
-              <xsl:if test="$root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms'">
+              <xsl:if test="$root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms' or $root/Input/Generation/HostPlatform = 'WPF'">
                 <xsl:text>\</xsl:text>
               </xsl:if>
               <xsl:text>JSIL.Meta.dll</xsl:text>
@@ -1659,25 +1662,27 @@
           </xsl:if>
         </xsl:for-each>
 
-        <xsl:for-each select="$root/Input/NuGet/Package">
-          <Reference>
-            <xsl:attribute name="Include">
-              <xsl:value-of select="@Name" />
-            </xsl:attribute>
-            <HintPath>
-              <xsl:value-of
-                select="user:GetRelativePath(
-                  concat(
-                    $project/@Path,
-                    '\',
-                    $project/@Name,
-                    '.',
-                    $root/Input/Generation/Platform,
-                    '.srcproj'),
-                  .)" />
-            </HintPath>
-          </Reference>
-        </xsl:for-each>
+		<xsl:if test="$root/Input/Generation/Platform != 'WPF'">
+			<xsl:for-each select="$root/Input/NuGet/Package">
+			  <Reference>
+				<xsl:attribute name="Include">
+				  <xsl:value-of select="@Name" />
+				</xsl:attribute>
+				<HintPath>
+				  <xsl:value-of
+					select="user:GetRelativePath(
+					  concat(
+						$project/@Path,
+						'\',
+						$project/@Name,
+						'.',
+						$root/Input/Generation/Platform,
+						'.srcproj'),
+					  .)" />
+				</HintPath>
+			  </Reference>
+			</xsl:for-each>
+		</xsl:if>
       </ItemGroup>
 
       <xsl:variable name="item_types">
@@ -2021,7 +2026,7 @@
                                       /ContentProject[@Name=$include-path]
                                       /Compiled">
                   <xsl:choose>
-                    <xsl:when test="$root/Input/Generation/Platform = 'Windows8' or $root/Input/Generation/Platform = 'WindowsUniversal' or $root/Input/Generation/Platform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms'">
+                    <xsl:when test="$root/Input/Generation/Platform = 'Windows8' or $root/Input/Generation/Platform = 'WindowsUniversal' or $root/Input/Generation/Platform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms' or $root/Input/Generation/HostPlatform = 'WPF'">
                       <Content>
                         <xsl:attribute name="Include">
                           <xsl:value-of
@@ -2223,7 +2228,7 @@
                       </xsl:if>
                       <xsl:text>$(Configuration)/</xsl:text>
                     </xsl:if>
-                    <xsl:if test="$root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms'">
+                    <xsl:if test="$root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms' or $root/Input/Generation/HostPlatform = 'WPF'">
                       <xsl:text>\bin\</xsl:text>
                       <xsl:if test="user:IsTrueDefault($root/Input/Properties/PlatformSpecificOutputFolder)">
                         <xsl:value-of select="$root/Input/Generation/Platform" />
@@ -2252,7 +2257,7 @@
                       </xsl:if>
                       <xsl:text>$(Configuration)</xsl:text>
                     </xsl:if>
-                    <xsl:if test="$root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms'">
+                    <xsl:if test="$root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms' or $root/Input/Generation/HostPlatform = 'WPF'">
                       <xsl:text>\bin\</xsl:text>
                       <xsl:if test="user:IsTrueDefault($root/Input/Properties/PlatformSpecificOutputFolder)">
                         <xsl:value-of select="$root/Input/Generation/Platform" />
@@ -2341,7 +2346,7 @@
         <_PostBuildHookHostPlatform>
           <xsl:choose>
             <!-- We have to choose AnyCPU when targeting iOS on Windows, because Platform will be something like iPhone -->
-            <xsl:when test="($root/Input/Generation/Platform = 'iOS' or $root/Input/Generation/Platform = 'iOSForms' or $root/Input/Generation/Platform = 'tvOS') and $root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms'">
+            <xsl:when test="($root/Input/Generation/Platform = 'iOS' or $root/Input/Generation/Platform = 'iOSForms' or $root/Input/Generation/Platform = 'tvOS') and $root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms' or $root/Input/Generation/HostPlatform = 'WPF'">
               <xsl:text>AnyCPU</xsl:text>
             </xsl:when>
             <xsl:otherwise>
@@ -2372,7 +2377,7 @@
       </xsl:if>
 
       <!-- We need this custom task for Xamarin.iOS on Windows -->
-      <xsl:if test="($root/Input/Generation/Platform = 'iOS' or $root/Input/Generation/Platform = 'iOSForms' or $root/Input/Generation/Platform = 'tvOS') and $root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms'">
+      <xsl:if test="($root/Input/Generation/Platform = 'iOS' or $root/Input/Generation/Platform = 'iOSForms' or $root/Input/Generation/Platform = 'tvOS') and $root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms' or $root/Input/Generation/HostPlatform = 'WPF'">
         <UsingTask
           TaskName="LocalTouch"
           TaskFactory="CodeTaskFactory"
@@ -2463,7 +2468,7 @@
         </xsl:for-each>
         <xsl:choose>
           <!-- We can't use the <Touch> task, because Xamarin iOS remaps it on Windows to be a remote command -->
-          <xsl:when test="($root/Input/Generation/Platform = 'iOS' or $root/Input/Generation/Platform = 'iOSForms' or $root/Input/Generation/Platform = 'tvOS') and $root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms'">
+          <xsl:when test="($root/Input/Generation/Platform = 'iOS' or $root/Input/Generation/Platform = 'iOSForms' or $root/Input/Generation/Platform = 'tvOS') and $root/Input/Generation/HostPlatform = 'Windows' or $root/Input/Generation/HostPlatform = 'WPFForms' or $root/Input/Generation/HostPlatform = 'WPF'">
             <LocalTouch Path="$(_PostBuildHookTimestamp)" />
           </xsl:when>
           <xsl:otherwise>

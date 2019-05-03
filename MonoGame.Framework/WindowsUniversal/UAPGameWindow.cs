@@ -252,6 +252,12 @@ namespace Microsoft.Xna.Framework
                 manager.IsFullScreen = _appView.IsFullScreenMode;
                 manager.PreferredBackBufferWidth = _viewBounds.Width;
                 manager.PreferredBackBufferHeight = _viewBounds.Height;
+                //if (manager.PreferMultiSampling)
+                //{
+                //    manager.PreferredBackBufferWidth *= 2;
+                //    manager.PreferredBackBufferHeight *= 2;
+                //}
+
                 manager.ApplyChanges();
 
                 // Set the new view state which will trigger the 

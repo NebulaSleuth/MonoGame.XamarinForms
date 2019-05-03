@@ -28,6 +28,7 @@ namespace Microsoft.Xna.Framework
                 presentationParameters.DeviceWindowHandle = _game.Window.Handle;
                 presentationParameters.SwapChainPanel = null;
             }
+            presentationParameters.MultiSampleCount = 0; // Not supported in WinRT?
         }
     }
 }

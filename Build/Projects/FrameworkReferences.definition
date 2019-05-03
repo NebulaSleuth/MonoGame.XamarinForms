@@ -82,6 +82,12 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="mscorlib" />
     <Reference Include="System.Core" />
+	<Binary
+        Name="ExoPlayerCore"
+        Path="ThirdParty/XamarinForms.Dependencies/xam.plugins.android.exoplayer/ExoPlayer.Core.dll" />
+	<Binary
+        Name="ExoPlayer"
+        Path="ThirdParty/XamarinForms.Dependencies/xam.plugins.android.exoplayer/ExoPlayer.dll" />
   </Platform>
   
   <Platform Type="AndroidForms">
@@ -116,6 +122,12 @@
     <Binary
         Name="Xamarin.Android.Support.v7.AppCompat"
         Path="ThirdParty/XamarinForms.Dependencies/xamarin.android.support.v7.appcompat.27.0.2.1/MonoAndroid81/Xamarin.Android.Support.v7.AppCompat.dll" />
+	<Binary
+        Name="ExoPlayerCore"
+        Path="ThirdParty/XamarinForms.Dependencies/xam.plugins.android.exoplayer/ExoPlayer.Core.dll" />
+	<Binary
+        Name="ExoPlayer"
+        Path="ThirdParty/XamarinForms.Dependencies/xam.plugins.android.exoplayer/ExoPlayer.dll" />
   </Platform>
 
   <Platform Type="Windows">
@@ -167,9 +179,56 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Runtime.Serialization" />
-	<Binary
-        Name="DotNetZip"
-        Path="ThirdParty/XamarinForms.Dependencies/DotNetZip/net40/DotNetZip.dll" />
+		
+    <Service Name="MonoGame.Framework/DirectXGraphics">
+      <Reference Include="System.Core" />
+      <Reference Include="System.Drawing" />
+      <Reference Include="System.Web" />
+      <Reference Include="System.Web.Services" />
+      <Reference Include="System.Windows.Forms" />
+      <Reference Include="System.Xaml" />
+      <Reference Include="System.Xml" />
+      <Binary
+        Name="SharpDX"
+        Path="ThirdParty/XamarinForms.Dependencies/SharpDX4.2.0/net45/SharpDX.dll" />
+      <Binary
+        Name="SharpDX.Direct2D1"
+        Path="ThirdParty/XamarinForms.Dependencies/SharpDX4.2.0/net45/SharpDX.Direct2D1.dll" />
+      <Binary
+        Name="SharpDX.Direct3D11"
+        Path="ThirdParty/XamarinForms.Dependencies/SharpDX4.2.0/net45/SharpDX.Direct3D11.dll" />
+      <Binary
+        Name="SharpDX.Direct3D11"
+        Path="ThirdParty/XamarinForms.Dependencies/SharpDX4.2.0/net45/SharpDX.Direct3D9.dll" />
+      <Binary
+        Name="SharpDX.DXGI"
+        Path="ThirdParty/XamarinForms.Dependencies/SharpDX4.2.0/net45/SharpDX.DXGI.dll" />
+      <Binary
+        Name="SharpDX.MediaFoundation"
+        Path="ThirdParty/XamarinForms.Dependencies/SharpDX4.2.0/net45/SharpDX.MediaFoundation.dll" />
+      <Binary
+        Name="SharpDX.XAudio2"
+        Path="ThirdParty/XamarinForms.Dependencies/SharpDX4.2.0/net45/SharpDX.XAudio2.dll" />
+      <Binary
+        Name="SharpDX.XInput"
+        Path="ThirdParty/XamarinForms.Dependencies/SharpDX4.2.0/net45/SharpDX.XInput.dll" />
+    </Service>
+
+    <Service Name="MonoGame.Framework/OpenGLGraphics">
+      <Reference Include="System.Core" />
+      <Reference Include="System.Web" />
+      <Reference Include="System.Web.Services" />
+      <Reference Include="System.Windows.Forms" />
+      <Reference Include="System.Xml" />
+    </Service>
+  </Platform>  
+
+  <Platform Type="WPF">
+    <Reference Include="System" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Runtime.Serialization" />
 		
     <Service Name="MonoGame.Framework/DirectXGraphics">
       <Reference Include="System.Core" />

@@ -34,6 +34,8 @@ namespace Microsoft.Xna.Framework
 
         private bool _notMyDevice;
 
+        public static bool DefaultPreferMultiSampling = false;
+        public static DepthFormat DefaultDepthStencilFormat = DepthFormat.Depth24;
         /// <summary>
         /// The default back buffer width.
         /// </summary>
@@ -62,7 +64,7 @@ namespace Microsoft.Xna.Framework
 
             _supportedOrientations = DisplayOrientation.Default;
             _preferredBackBufferFormat = SurfaceFormat.Color;
-            _preferredDepthStencilFormat = DepthFormat.Depth24;
+            _preferredDepthStencilFormat = DefaultDepthStencilFormat;
             _synchronizedWithVerticalRetrace = true;
 
             // Assume the window client size as the default back 
@@ -102,13 +104,15 @@ namespace Microsoft.Xna.Framework
             if (game == null)
                 throw new ArgumentNullException("game", "Game cannot be null.");
 
+            PreferMultiSampling = DefaultPreferMultiSampling;
+
             _notMyDevice = true;
             _graphicsDevice = device;
             _game = game;
 
             _supportedOrientations = DisplayOrientation.Default;
             _preferredBackBufferFormat = SurfaceFormat.Color;
-            _preferredDepthStencilFormat = DepthFormat.Depth24;
+            _preferredDepthStencilFormat = DefaultDepthStencilFormat;
             _synchronizedWithVerticalRetrace = true;
 
             // Assume the window client size as the default back 
@@ -213,7 +217,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        #region IGraphicsDeviceService Members
+#region IGraphicsDeviceService Members
 
         public event EventHandler<EventArgs> DeviceCreated;
         public event EventHandler<EventArgs> DeviceDisposing;
@@ -266,9 +270,9 @@ namespace Microsoft.Xna.Framework
             return gdi;
         }
 
-        #endregion
+#endregion
 
-        #region IDisposable Members
+#region IDisposable Members
 
         public void Dispose()
         {
@@ -293,7 +297,7 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        #endregion
+#endregion
 
         partial void PlatformApplyChanges();
 
@@ -310,8 +314,9 @@ namespace Microsoft.Xna.Framework
             presentationParameters.PresentationInterval = _synchronizedWithVerticalRetrace ? PresentInterval.One : PresentInterval.Immediate;
             presentationParameters.DisplayOrientation = _game.Window.CurrentOrientation;
             presentationParameters.DeviceWindowHandle = _game.Window.Handle;
+            presentationParameters.MultiSampleCount = 0;
 
-            if (_preferMultiSampling)
+            if (_preferMultiSampling && _preferredBackBufferWidth > 10)
             {
                 // always initialize MultiSampleCount to the maximum, if users want to overwrite
                 // this they have to respond to the PreparingDeviceSettingsEvent and modify
@@ -324,6 +329,8 @@ namespace Microsoft.Xna.Framework
             {
                 presentationParameters.MultiSampleCount = 0;
             }
+
+
 
             PlatformPreparePresentationParameters(presentationParameters);
         }
@@ -497,6 +504,20 @@ namespace Microsoft.Xna.Framework
             }
         }
 
+        private static int _oversampleSize =1;
+        public static int OverSampleSize
+        {
+            get
+            {
+                return _oversampleSize;
+            }
+            set
+            {
+                if (value < 1) value = 1;
+                if (value > 4) value = 4;
+                _oversampleSize = value;
+            }
+        }
         /// <summary>
         /// Indicates the desired back buffer color format.
         /// </summary>

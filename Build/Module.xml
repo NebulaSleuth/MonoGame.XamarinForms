@@ -4,8 +4,8 @@
   <DefaultAction>Generate</DefaultAction>
   <DefaultLinuxPlatforms>Android,AndroidForms,Angle,Linux,WindowsGL,Gtk</DefaultLinuxPlatforms>
   <DefaultMacOSPlatforms>Angle,MacOS,iOS,iOSForms,WindowsGL,Android,AndroidForms,tvOS,Linux,Gtk</DefaultMacOSPlatforms>
-  <DefaultWindowsPlatforms>Android,AndroidForms,Angle,Linux,Windows,WPFForms,WindowsGL,WindowsUniversal,iOS,iOSForms,tvOS,Gtk</DefaultWindowsPlatforms>
-  <SupportedPlatforms>Android,AndroidForms,Angle,Linux,Windows,WPFForms,WindowsGL,WindowsUniversal,iOS,iOSForms,MacOS,Web,tvOS,PSVita,XBoxOne,Switch,Gtk</SupportedPlatforms>
+  <DefaultWindowsPlatforms>Android,AndroidForms,Angle,Linux,Windows,WPFForms,WPF,WindowsGL,WindowsUniversal,iOS,iOSForms,tvOS,Gtk</DefaultWindowsPlatforms>
+  <SupportedPlatforms>Android,AndroidForms,Angle,Linux,Windows,WPFForms,WPF,WindowsGL,WindowsUniversal,iOS,iOSForms,MacOS,Web,tvOS,PSVita,XBoxOne,Switch,Gtk</SupportedPlatforms>
   <DisableSynchronisation>true</DisableSynchronisation>
   <GenerateNuGetRepositories>false</GenerateNuGetRepositories>
   <Packages>

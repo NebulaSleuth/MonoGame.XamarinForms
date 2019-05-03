@@ -29,14 +29,14 @@ using XnaPoint = Microsoft.Xna.Framework.Point;
 
 namespace MonoGame.Framework
 {
-    class WPFFormsGameWindow : GameWindow, IDisposable
+    class WPFGameWindow : GameWindow, IDisposable
     {
         System.Windows.Controls.Image Host;
 
         static private ReaderWriterLockSlim _allWindowsReaderWriterLockSlim = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-        static private List<WPFFormsGameWindow> _allWindows = new List<WPFFormsGameWindow>();
+        static private List<WPFGameWindow> _allWindows = new List<WPFGameWindow>();
 
-        private WPFFormsGamePlatform _platform;
+        private WPFGamePlatform _platform;
         private bool _switchingFullScreen;
 
 
@@ -183,7 +183,7 @@ namespace MonoGame.Framework
 
         #endregion
 
-        internal WPFFormsGameWindow(WPFFormsGamePlatform platform)
+        internal WPFGameWindow(WPFGamePlatform platform)
         {
             _timer = new Stopwatch();
             //IsFullScreen = true;
@@ -268,7 +268,7 @@ namespace MonoGame.Framework
         }
 
 
-        ~WPFFormsGameWindow()
+        ~WPFGameWindow()
         {
             if (Host != null)
             {
@@ -356,7 +356,6 @@ namespace MonoGame.Framework
                     {
                         // Do not associate graphics device with window.
                         DeviceWindowHandle = IntPtr.Zero,
-                        DepthStencilFormat = GraphicsDeviceManager.DefaultDepthStencilFormat
                     };
 
                     //presentationParameters.IsFullScreen = true;
@@ -366,6 +365,9 @@ namespace MonoGame.Framework
                         game.Services.RemoveService(typeof(IGraphicsDeviceManager));
                     }
                     _gfxManager = new GraphicsDeviceManager(game, _graphicsDevice);
+                    _gfxManager.PreferMultiSampling = true;
+
+
                 }
             }
         }
@@ -540,7 +542,7 @@ namespace MonoGame.Framework
                     if (_gfxManager.PreferMultiSampling)
                     {
                         mcnt = _graphicsDevice.GraphicsCapabilities.MaxMultiSampleCount;
-                        _renderTarget = new RenderTarget2D(_graphicsDevice, width * GraphicsDeviceManager.OverSampleSize, height * GraphicsDeviceManager.OverSampleSize, false, SurfaceFormat.Bgr32, DepthFormat.Depth24Stencil8, mcnt, RenderTargetUsage.PreserveContents, true);
+                        _renderTarget = new RenderTarget2D(_graphicsDevice, width*2, height*2, false, SurfaceFormat.Bgr32, DepthFormat.Depth24Stencil8, mcnt, RenderTargetUsage.PreserveContents, true);
                         _renderTarget2 = new RenderTarget2D(_graphicsDevice, width, height, false, SurfaceFormat.Bgr32, DepthFormat.Depth24Stencil8, 0, RenderTargetUsage.PreserveContents, true);
                         _aaSpriteBatch = new SpriteBatch(_graphicsDevice);
                         _d3D11Image.SetBackBuffer(_renderTarget2);

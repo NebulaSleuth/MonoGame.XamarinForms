@@ -21,6 +21,8 @@ namespace Microsoft.Xna.Framework
 #elif WINDOWS && DIRECTX
 #if FORMS
             return new MonoGame.Framework.WPFFormsGamePlatform(game);
+#elif WPF
+            return new MonoGame.Framework.WPFGamePlatform(game);
 #else
             return new MonoGame.Framework.WinFormsGamePlatform(game);
 #endif

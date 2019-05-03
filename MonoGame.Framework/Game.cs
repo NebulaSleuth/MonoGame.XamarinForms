@@ -227,6 +227,42 @@ namespace Microsoft.Xna.Framework
 
         }
 #endif
+        protected Vector3 screenScalingFactor = new Vector3();
+
+        public Matrix GetScreenTransform(int width, int height, bool invert)
+        {
+            float horScaling;
+            float verScaling;
+
+            var ScreenSize = new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
+#if WINDOWS && FORMS
+            if (invert & graphicsDeviceManager.PreferMultiSampling)
+            {
+                horScaling = (ScreenSize.X/ GraphicsDeviceManager.OverSampleSize) / width;
+                verScaling = (ScreenSize.Y/ GraphicsDeviceManager.OverSampleSize) / height;
+            }
+            else
+            {
+                horScaling = ScreenSize.X / width;
+                verScaling = ScreenSize.Y / height;
+            }
+#else
+            horScaling = ScreenSize.X / width;
+            verScaling = ScreenSize.Y / height;
+#endif
+            screenScalingFactor.X = horScaling;
+            screenScalingFactor.Y = verScaling;
+            screenScalingFactor.Z = 1;
+
+            var m = Matrix.CreateScale(screenScalingFactor);
+            if (invert)
+            {
+                return Matrix.Invert(m);
+            }
+            return m;
+        }
+
         public static float DefaultAspectRatio { get; set; }
         public float AspectRatio { get; set; }
 
@@ -238,7 +274,7 @@ namespace Microsoft.Xna.Framework
         public static AndroidGameActivity Activity { get; internal set; }
 #endif
 #endif
-#if WINDOWS && FORMS
+#if (WINDOWS && FORMS) || WPF
         public static IntPtr MainWindowHandle { get; set; }
         private System.Windows.Controls.Image _hostControl;
         public System.Windows.Controls.Image HostControl

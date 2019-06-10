@@ -7,3 +7,6 @@ url=https://github.com/MrHelmut/NVorbis.git
 [submodule "ThirdParty/SDL_GameControllerDB"]
 	path = ThirdParty/SDL_GameControllerDB
 	url = https://github.com/gabomdq/SDL_GameControllerDB.git
+[submodule "ThirdParty/XamarinForms.Dependencies"]
+	path = ThirdParty/XamarinForms.Dependencies
+	url = https://github.com/NebulaSleuth/MonoGame.XamarinForms.Dependencies.git

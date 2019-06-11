@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
+using System.Threading.Tasks;
 
 namespace MonoGame.Framework
 {
@@ -37,6 +38,13 @@ namespace MonoGame.Framework
             Mouse.WindowHandle = Game.MainWindowHandle;
             Window = _window;
         }
+
+        public void WaitForExit()
+        {
+			_window?.StopRendering();
+			System.Threading.Thread.Sleep(50);
+        }
+
 
         public override GameRunBehavior DefaultRunBehavior
         {

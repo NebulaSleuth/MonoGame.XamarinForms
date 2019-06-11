@@ -127,6 +127,12 @@ namespace Microsoft.Xna.Framework
         {
             if (!IsActive)
             {
+                if (_gameWindow == null)
+                {
+                    _gameWindow = new AndroidFormsGameWindow(Game.Activity, Game);
+                    Window = _gameWindow;
+                }
+
                 IsActive = true;
                 _gameWindow.GameView.Resume();
 
@@ -146,10 +152,20 @@ namespace Microsoft.Xna.Framework
             {
                 IsActive = false;
                 _MediaPlayer_PrevState = MediaPlayer.State;
-                _gameWindow.GameView.Pause();
-                _gameWindow.GameView.ClearFocus();
-                if (((AndroidFormsGameActivity)Game.Activity).AutoPauseAndResumeMediaPlayer)
-                    MediaPlayer.Pause();
+                try
+                {
+                    _gameWindow.GameView.Pause();
+                    _gameWindow.GameView.ClearFocus();
+                    _gameWindow = null;
+                }
+                catch { }
+                try
+                {
+                    if (((AndroidFormsGameActivity)Game.Activity).AutoPauseAndResumeMediaPlayer)
+                        MediaPlayer.Pause();
+                }
+                catch { }
+
             }
         }
 

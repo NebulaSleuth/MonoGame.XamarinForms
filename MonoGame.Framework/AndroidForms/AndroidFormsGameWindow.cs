@@ -51,6 +51,8 @@ namespace Microsoft.Xna.Framework
 
             Initialize(activity, size);
 
+            if (game.Services.GetService(typeof(View)) != null)
+                game.Services.RemoveService(typeof(View));
             game.Services.AddService(typeof(View), GameView);
         }
 

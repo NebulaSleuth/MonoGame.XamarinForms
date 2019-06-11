@@ -432,6 +432,8 @@ namespace Microsoft.Xna.Framework
             // Update and render the game.
             if (Game != null)
                 Game.Tick();
+            else
+                Console.WriteLine("NULL TICK");
         }
 
 #region Public Methods

@@ -174,18 +174,12 @@ namespace Microsoft.Xna.Framework
 #endif
         }
 
-        public async Task WaitForExit()
+        public void WaitForExit()
         {
-            await Task.Run(async () =>
-            {
-                Console.WriteLine("Start Wait For Exit");
-                while (!_exited)
-                {
-                    await Task.Yield();
-                }
-                Console.WriteLine("End Wait For Exit");
-
-            });
+			while (!_exited)
+			{
+				System.Threading.Thread.Sleep(10);
+			}
         }
 
         public override bool BeforeUpdate(GameTime gameTime)

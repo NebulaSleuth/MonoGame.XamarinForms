@@ -273,8 +273,8 @@ namespace Microsoft.Xna.Framework
         {
             if (!disposed)
             {
-                Mouse.PrimaryWindow = null;
-                TouchPanel.PrimaryWindow = null;
+                //Mouse.PrimaryWindow = null;
+                //TouchPanel.PrimaryWindow = null;
 
                 disposed = true;
             }

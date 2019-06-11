@@ -348,6 +348,7 @@ namespace MonoGame.Framework
         {
             lock (_graphicsDeviceLock)
             {
+
                 _referenceCount++;
                 if (_referenceCount == 1)
                 {
@@ -398,6 +399,7 @@ namespace MonoGame.Framework
 
         public void StartRendering()
         {
+            Console.WriteLine($"Start Rendering: {typeof(Game)}");
             if (_timer.IsRunning)
                 return;
 
@@ -409,14 +411,18 @@ namespace MonoGame.Framework
         public void StopRendering()
         {
 
+            Console.WriteLine($"Stop Rendering: {typeof(Game)}");
             lock (_graphicsDeviceLock)
             {
-                CompositionTarget.Rendering -= OnRendering;
-
                 if (_timer?.IsRunning == true)
+                {
+                    CompositionTarget.Rendering -= OnRendering;
+
                     _timer.Stop();
+                }
                 _resetBackBuffer = false;
             }
+            Console.WriteLine("Stoppped");
 
         }
 
@@ -431,7 +437,6 @@ namespace MonoGame.Framework
             // (e.g. during window resizing).
             lock (_graphicsDeviceLock)
             {
-
                 if (_resetBackBuffer)
                 {
                     CreateBackBuffer();

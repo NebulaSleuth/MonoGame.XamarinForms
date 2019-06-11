@@ -99,6 +99,7 @@ namespace Microsoft.Xna.Framework
             // Add callback to get the SurfaceCreated etc events
             mHolder.AddCallback(this);
             mHolder.SetType(SurfaceType.Gpu);
+            this.SetBackgroundColor(Android.Graphics.Color.Transparent);
         }
 
         public void SurfaceChanged(ISurfaceHolder holder, global::Android.Graphics.Format format, int width, int height)
@@ -1016,6 +1017,7 @@ namespace Microsoft.Xna.Framework
 
                     if (!egl.EglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext))
                         throw new Exception("Could not make EGL current" + GetErrorAsString());
+
 
                     glSurfaceAvailable = true;
 

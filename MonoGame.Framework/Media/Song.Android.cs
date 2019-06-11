@@ -64,6 +64,7 @@ namespace Microsoft.Xna.Framework.Media
                   new DefaultDataSourceFactory(MediaLibrary.Context, userAgent),
                   new DefaultExtractorsFactory(), null, null);
 
+            _androidPlayer.Volume = _volume;
             _androidPlayer.Prepare(audioSource);
             _androidPlayer.PlayWhenReady = true;
         }
@@ -82,6 +83,7 @@ namespace Microsoft.Xna.Framework.Media
                   new DefaultDataSourceFactory(MediaLibrary.Context, userAgent),
                   new DefaultExtractorsFactory(), null, null);
 
+            _androidPlayer.Volume = _volume;
             _androidPlayer.Prepare(audioSource);
             _androidPlayer.PlayWhenReady = true;
         }
@@ -129,6 +131,7 @@ namespace Microsoft.Xna.Framework.Media
                   new BytesFactory(byteArrayDataSource),
                   new DefaultExtractorsFactory(), null, null);
 
+            _androidPlayer.Volume = _volume;
             _androidPlayer.Prepare(audioSource);
             _androidPlayer.PlayWhenReady = true;
         }
@@ -319,29 +322,20 @@ namespace Microsoft.Xna.Framework.Media
             position = TimeSpan.Zero;
         }
 
+        float _volume = 0.5f;
         internal float Volume
         {
             get
             {
-                return 0.0f;
+                return _volume;
             }
 
             set
             {
                 try
                 {
-                    //if (_androidPlayer.IsPlaying || _playingSong != null)
-                    //{
-                    //    return;
-                    //}
-
-                    //var currVolume = 1000.0f * value;
-                    //float log1 = (float)(Math.Log(1000 - currVolume) / Math.Log(1000));
-                    //if (log1 > 1.0) log1 = 1.0f;
-                    //if (log1 < 0) log1 = 0;
-                    //_androidPlayer.SetVolume(log1, log1);
-
-                    _androidPlayer.Volume = value;
+                    _volume = value;
+                    if (_androidPlayer != null) _androidPlayer.Volume = value;
                 }
                 catch (System.Exception ex)
                 {

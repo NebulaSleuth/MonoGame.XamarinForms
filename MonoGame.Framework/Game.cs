@@ -464,12 +464,12 @@ namespace Microsoft.Xna.Framework
 #endif
         }
 
-        public async Task WaitForExit()
+        public void WaitForExit()
         {
-#if WINDOWS_UAP && FORMS
-            await ((UAPGamePlatform)Platform).WaitForExit();
-#else
-            await Task.Yield();
+#if (WINDOWS_UAP && FORMS)
+            ((UAPGamePlatform)Platform).WaitForExit();
+#elif (WINDOWS && FORMS)
+            ((MonoGame.Framework.WPFFormsGamePlatform)Platform).WaitForExit();
 #endif
         }
 
@@ -590,7 +590,7 @@ namespace Microsoft.Xna.Framework
             }
 
             // Advance the accumulated elapsed time.
-            var currentTicks = _gameTimer.Elapsed.Ticks;
+            var currentTicks = _gameTimer?.Elapsed.Ticks??0;
             _accumulatedElapsedTime += TimeSpan.FromTicks(currentTicks - _previousTicks);
             _previousTicks = currentTicks;
 
@@ -865,8 +865,8 @@ namespace Microsoft.Xna.Framework
             }
             set
             {
-                if (_graphicsDeviceManager != null)
-                    throw new InvalidOperationException("GraphicsDeviceManager already registered for this Game object");
+                //if (_graphicsDeviceManager != null)
+                //    throw new InvalidOperationException("GraphicsDeviceManager already registered for this Game object");
                 _graphicsDeviceManager = value;
             }
         }

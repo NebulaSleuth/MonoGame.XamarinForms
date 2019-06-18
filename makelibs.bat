@@ -1,3 +1,13 @@
+nuget restore MonoGame.Framework\MonoGame.Framework.AndroidForms.csproj -SolutionDir .
+nuget restore MonoGame.Framework\MonoGame.Framework.AndroidForms.csproj -SolutionDir .
+nuget restore MonoGame.Framework\MonoGame.Framework.iOS.csproj -SolutionDir .
+nuget restore MonoGame.Framework\MonoGame.Framework.iOSForms.csproj -SolutionDir .
+nuget restore MonoGame.Framework\MonoGame.Framework.Windows.csproj -SolutionDir .
+nuget restore MonoGame.Framework\MonoGame.Framework.WPFForms.csproj -SolutionDir .
+nuget restore MonoGame.Framework\MonoGame.Framework.WPF.csproj -SolutionDir .
+nuget restore MonoGame.Framework\MonoGame.Framework.WindowsUniversal.csproj -SolutionDir .
+
+
 msbuild MonoGame.Framework\MonoGame.Framework.Android.csproj /p:Configuration=Release /p:Platform=AnyCPU /t:Clean,Rebuild
 msbuild MonoGame.Framework\MonoGame.Framework.AndroidForms.csproj /p:Configuration=Release /p:Platform=AnyCPU /t:Clean,Rebuild
 msbuild MonoGame.Framework\MonoGame.Framework.iOS.csproj /p:Configuration=Release /p:Platform=iPhone /t:Clean,Rebuild

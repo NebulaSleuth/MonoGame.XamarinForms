@@ -81,7 +81,7 @@ namespace Microsoft.Xna.Framework
         public void SetWindow(CoreWindow window)
         {
             // Initialize the singleton window.
-            UAPGameWindow.Instance.Initialize(window, null, UAPGamePlatform.TouchQueue);
+            //UAPGameWindow.Instance.Initialize(window, null, UAPGamePlatform.TouchQueue);
         }
 
         public void Uninitialize()

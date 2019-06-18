@@ -43,7 +43,7 @@ namespace MonoGame.Framework
             UAPGamePlatform.LaunchParameters = launchParameters;
 
             // Setup the window class.
-            UAPGameWindow.Instance.Initialize(window, swapChainPanel, UAPGamePlatform.TouchQueue);
+            //((UAPGameWindow)Platform.Window).Initialize(window, swapChainPanel, UAPGamePlatform.TouchQueue);
 
             // Construct the game.
             var game = Activator.CreateInstance(gameType) as Game;
@@ -81,7 +81,7 @@ namespace MonoGame.Framework
             UAPGamePlatform.LaunchParameters = launchParameters;
 
             // Setup the window class.
-            UAPGameWindow.Instance.Initialize(window, swapChainPanel, UAPGamePlatform.TouchQueue);
+            //UAPGameWindow.Instance.Initialize(window, swapChainPanel, UAPGamePlatform.TouchQueue);
 
             // Construct the game.
             var game = gameConstructor();

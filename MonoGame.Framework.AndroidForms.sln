@@ -1,0 +1,26 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22609.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lidgren.Network.AndroidForms", "ThirdParty\Lidgren.Network\Lidgren.Network.AndroidForms.csproj", "{0ED2D2C1-381D-41A4-80F0-8F11C0416C7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Framework.AndroidForms", "MonoGame.Framework\MonoGame.Framework.AndroidForms.csproj", "{B63A68AC-B15A-47D9-B593-C395297C841C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0ED2D2C1-381D-41A4-80F0-8F11C0416C7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ED2D2C1-381D-41A4-80F0-8F11C0416C7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ED2D2C1-381D-41A4-80F0-8F11C0416C7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ED2D2C1-381D-41A4-80F0-8F11C0416C7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B63A68AC-B15A-47D9-B593-C395297C841C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B63A68AC-B15A-47D9-B593-C395297C841C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B63A68AC-B15A-47D9-B593-C395297C841C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B63A68AC-B15A-47D9-B593-C395297C841C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+EndGlobal

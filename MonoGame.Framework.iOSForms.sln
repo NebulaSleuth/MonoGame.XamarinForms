@@ -1,0 +1,26 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lidgren.Network.iOSForms", "ThirdParty\Lidgren.Network\Lidgren.Network.iOSForms.csproj", "{F5B354E5-C20A-4F47-A98A-B1A912088BEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Framework.iOSForms", "MonoGame.Framework\MonoGame.Framework.iOSForms.csproj", "{B108B16B-3412-43F5-A674-F70DD63CD58F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5B354E5-C20A-4F47-A98A-B1A912088BEC}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{F5B354E5-C20A-4F47-A98A-B1A912088BEC}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
+		{B108B16B-3412-43F5-A674-F70DD63CD58F}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{B108B16B-3412-43F5-A674-F70DD63CD58F}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DD80657B-A86B-4F34-AF09-FB400925C5A6}
+	EndGlobalSection
+EndGlobal

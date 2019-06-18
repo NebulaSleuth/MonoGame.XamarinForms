@@ -32,16 +32,17 @@ namespace Microsoft.Xna.Framework
 
         internal static ApplicationExecutionState PreviousExecutionState { get; set; }
 
+        internal bool IsExiting { get; set; }
+
         public UAPGamePlatform(Game game)
             : base(game)
         {
             // Setup the game window.
-            Window = UAPGameWindow.Instance;
-			UAPGameWindow.Instance.Game = game;
+            Window = new UAPGameWindow(this);
 
 #if FORMS
-            UAPGameWindow.Instance.Initialize(Game.CoreWindow, game.SwapChainPanel, UAPGamePlatform.TouchQueue);
-            UAPGameWindow.Instance.RegisterCoreWindowService();
+            ((UAPGameWindow)Window).Initialize(Game.CoreWindow, game.SwapChainPanel, UAPGamePlatform.TouchQueue);
+            ((UAPGameWindow)Window).RegisterCoreWindowService();
 #endif
 
             // Setup the launch parameters.
@@ -113,10 +114,10 @@ namespace Microsoft.Xna.Framework
         public void UpdateWindow(Game game)
         {
 #if FORMS
-            UAPGameWindow.Instance.Dispose();
+            ((UAPGameWindow)Window).Dispose();
 
-            UAPGameWindow.Instance.Initialize(Game.CoreWindow, game.SwapChainPanel, UAPGamePlatform.TouchQueue);
-            UAPGameWindow.Instance.RegisterCoreWindowService();
+            ((UAPGameWindow)Window).Initialize(Game.CoreWindow, game.SwapChainPanel, UAPGamePlatform.TouchQueue);
+            ((UAPGameWindow)Window).RegisterCoreWindowService();
 #endif
 
         }
@@ -139,19 +140,22 @@ namespace Microsoft.Xna.Framework
 #endif
         public override void RunLoop()
         {
-            UAPGameWindow.Instance.RunLoop();
+            IsExiting = false;
+            ((UAPGameWindow)Window).RunLoop();
         }
 
         private bool _exited;
 
         public override void StartRunLoop()
         {
+            IsExiting = false;
+
             var workItemHandler = new WorkItemHandler((action) =>
             {
                 _exited = false;
-                while (!UAPGameWindow.Instance.IsExiting)
+                while (!IsExiting)
                 {
-                    UAPGameWindow.Instance.Tick();
+                    ((UAPGameWindow)Window).Tick();
                 }
                 _exited = true;
 #if FORMS
@@ -164,12 +168,12 @@ namespace Microsoft.Xna.Framework
         public override void Exit()
         {
 #if FORMS
-            UAPGameWindow.Instance.IsExiting = true;
+            IsExiting = true;
 #else
-            if (!UAPGameWindow.Instance.IsExiting)
+            if (!IsExiting)
             {
-				UAPGameWindow.Instance.IsExiting = true;
-                Application.Current.Exit();
+				IsExiting = true;
+                Application.Current.Exit(); 
             }
 #endif
         }
@@ -205,12 +209,12 @@ namespace Microsoft.Xna.Framework
 
         public override void EnterFullScreen()
         {
-            UAPGameWindow.Instance.AppView.TryEnterFullScreenMode();
+            ((UAPGameWindow)Window).AppView.TryEnterFullScreenMode();
 		}
 
 		public override void ExitFullScreen()
         {
-            UAPGameWindow.Instance.AppView.ExitFullScreenMode();
+            ((UAPGameWindow)Window).AppView.ExitFullScreenMode();
         }
 
         internal override void OnPresentationChanged(PresentationParameters pp)
@@ -243,7 +247,7 @@ namespace Microsoft.Xna.Framework
 
         protected override void OnIsMouseVisibleChanged() 
         {
-			UAPGameWindow.Instance.SetCursor(Game.IsMouseVisible);
+            ((UAPGameWindow)Window).SetCursor(Game.IsMouseVisible);
         }
 		
         protected override void Dispose(bool disposing)
@@ -254,7 +258,7 @@ namespace Microsoft.Xna.Framework
             if (graphicsDeviceManager != null)
                 graphicsDeviceManager.Dispose();
 
-			UAPGameWindow.Instance.Dispose();
+            ((UAPGameWindow)Window).Dispose();
 
 			base.Dispose(disposing);
         }

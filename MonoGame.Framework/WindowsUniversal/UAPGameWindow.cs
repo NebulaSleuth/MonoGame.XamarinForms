@@ -43,11 +43,11 @@ namespace Microsoft.Xna.Framework
 
         #region Internal Properties
 
-        internal Game Game { get; set; }
+        //internal Game Game { get; set; }
 
         public ApplicationView AppView { get { return _appView; } }
 
-        internal bool IsExiting { get; set; }
+        //internal bool IsExiting { get; set; }
 
         #endregion
 
@@ -73,7 +73,11 @@ namespace Microsoft.Xna.Framework
             get { return _orientation; }
         }
 
-        private UAPGamePlatform Platform { get { return Game.Instance.Platform as UAPGamePlatform; } }
+        public UAPGameWindow(UAPGamePlatform platform)
+        {
+            Platform = platform;
+        }
+        private UAPGamePlatform Platform { get; set; }// { return Game.Instance.Platform as UAPGamePlatform; } }
 
         protected internal override void SetSupportedOrientations(DisplayOrientation orientations)
         {
@@ -88,7 +92,7 @@ namespace Microsoft.Xna.Framework
             if (orientations == DisplayOrientation.Default)
             {
                 // Make the decision based on the preferred backbuffer dimensions.
-                var manager = Game.graphicsDeviceManager;
+                var manager = Platform.Game.graphicsDeviceManager;
                 if (manager.PreferredBackBufferWidth > manager.PreferredBackBufferHeight)
                     supported = FromOrientation(DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight);
                 else
@@ -102,17 +106,15 @@ namespace Microsoft.Xna.Framework
 
         #endregion
 
-        static public UAPGameWindow Instance { get; private set; }
+        //static public UAPGameWindow Instance { get; private set; }
 
-        static UAPGameWindow()
-        {
-            Instance = new UAPGameWindow();
-        }
+        //static UAPGameWindow()
+        //{
+        //    Instance = new UAPGameWindow();
+        //}
 
         public void Initialize(CoreWindow coreWindow, UIElement inputElement, TouchQueue touchQueue)
         {
-            IsExiting = false;
-
             _coreWindow = coreWindow;
             _inputEvents = new InputEvents(_coreWindow, inputElement, touchQueue);
 
@@ -159,7 +161,7 @@ namespace Microsoft.Xna.Framework
         internal void RegisterCoreWindowService()
         {
             // Register the CoreWindow with the services registry
-            Game.Services.AddService(typeof(CoreWindow), _coreWindow);
+            Platform.Game.Services.AddService(typeof(CoreWindow), _coreWindow);
         }
 
         private void Window_FocusChanged(CoreWindow sender, WindowActivatedEventArgs args)
@@ -186,8 +188,8 @@ namespace Microsoft.Xna.Framework
 
         private void Window_Closed(CoreWindow sender, CoreWindowEventArgs args)
         {
-            Game.SuppressDraw();
-            Game.Platform.Exit();
+            Platform.Game.SuppressDraw();
+            Platform.Game.Platform.Exit();
         }
 
         private void SetViewBounds(double width, double height)
@@ -241,7 +243,7 @@ namespace Microsoft.Xna.Framework
             {
                 _isSizeChanged = false;
 
-                var manager = Game.graphicsDeviceManager;
+                var manager = Platform.Game.graphicsDeviceManager;
 
                 // Set the new client bounds.
                 _viewBounds = _newViewBounds;
@@ -338,7 +340,7 @@ namespace Microsoft.Xna.Framework
 
                 // If we have a valid client bounds then update the graphics device.
                 if (_viewBounds.Width > 0 && _viewBounds.Height > 0)
-                    Game.graphicsDeviceManager.ApplyChanges();
+                    Platform.Game.graphicsDeviceManager.ApplyChanges();
             }
         }
 
@@ -380,7 +382,7 @@ namespace Microsoft.Xna.Framework
 
         internal void RunLoop()
         {
-            SetCursor(Game.IsMouseVisible);
+            SetCursor(Platform.Game.IsMouseVisible);
             _coreWindow.Activate();
 
             while (true)
@@ -390,7 +392,7 @@ namespace Microsoft.Xna.Framework
 
                 Tick();
 
-                if (IsExiting)
+                if (Platform.IsExiting)
                     break;
             }
         }
@@ -430,8 +432,8 @@ namespace Microsoft.Xna.Framework
             ProcessWindowEvents();
 
             // Update and render the game.
-            if (Game != null)
-                Game.Tick();
+            if (Platform.Game != null)
+                Platform.Game.Tick();
             else
                 Console.WriteLine("NULL TICK");
         }
@@ -443,7 +445,7 @@ namespace Microsoft.Xna.Framework
             //window.Dispose();
             _inputEvents.Dispose();
 
-            Game.Services.RemoveService(typeof(CoreWindow));
+            Platform.Game.Services.RemoveService(typeof(CoreWindow));
 
         }
 

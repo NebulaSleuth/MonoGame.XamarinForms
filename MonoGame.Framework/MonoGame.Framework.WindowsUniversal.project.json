@@ -1,7 +1,15 @@
 ﻿{
   "dependencies": {
-    "Microsoft.NETCore.UniversalWindowsPlatform": "6.1.5",
-    "Xamarin.Forms": "3.4.0.1008975"
+    "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8",
+    "SharpDX": "4.2.0",
+    "SharpDX.Direct2D1": "4.2.0",
+    "SharpDX.Direct3D11": "4.2.0",
+    "SharpDX.Direct3D9": "4.2.0",
+    "SharpDX.Mathematics": "4.2.0",
+    "SharpDX.MediaFoundation": "4.2.0",
+    "SharpDX.XAudio2": "4.2.0",
+    "SharpDX.XInput": "4.2.0",
+    "Xamarin.Forms": "4.0.0.497661"
   },
   "frameworks": {
     "uap10.0.16299": {}

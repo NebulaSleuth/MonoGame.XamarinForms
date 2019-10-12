@@ -198,6 +198,22 @@ namespace Microsoft.Xna.Framework.Utilities
             return -1;
         }
 
+        public static long GetAssetLength(string pakfile, string filename)
+        {
+            Stream inFile = File.OpenRead(pakfile);
+            if (CheckHeader(inFile))
+            {
+                var dir = ReadDirectory(inFile, out int dirLen);
+
+                filename = filename.Replace("/", "\\"); // Because the packer is windows
+                PackFileEntry entry = dir.FirstOrDefault(e => e.Name.ToLower() == filename.ToLower());
+                if (entry != null)
+                {
+                    return entry.Length;
+                }
+            }
+            return -1;
+        }
         public static Stream GetFileStream(string pakfile, string filename)
         {
             Stream inFile = File.OpenRead(pakfile);

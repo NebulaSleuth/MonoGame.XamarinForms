@@ -77,7 +77,7 @@ namespace Microsoft.Xna.Framework
             // Initialize and run the game.
             _game.Run();
         }
-       
+        
         public void SetWindow(CoreWindow window)
         {
             // Initialize the singleton window.

@@ -264,14 +264,14 @@ namespace Microsoft.Xna.Framework.Content
             {
                 var assetPath = Path.Combine(RootDirectory, assetName) + ".xnb";
 
-                // This is primarily for editor support. 
-                // Setting the RootDirectory to an absolute path is useful in editor
-                // situations, but TitleContainer can ONLY be passed relative paths.                
-#if DESKTOPGL || WINDOWS
-                if (Path.IsPathRooted(assetPath))                
-                    stream = File.OpenRead(assetPath);                
-                else
-#endif                
+//                // This is primarily for editor support. 
+//                // Setting the RootDirectory to an absolute path is useful in editor
+//                // situations, but TitleContainer can ONLY be passed relative paths.                
+//#if DESKTOPGL || WINDOWS
+//                if (Path.IsPathRooted(assetPath))               
+//                    stream = File.OpenRead(assetPath);                
+//#endif
+                // CHanged so absolute paths are allowed in TitleContainer
                 stream = TitleContainer.OpenStream(assetPath);
 #if ANDROID
                 // Read the asset into memory in one go. This results in a ~50% reduction

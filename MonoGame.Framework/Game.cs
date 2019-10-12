@@ -18,6 +18,10 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
+//using MonoGame.Framework;
+#if WPFSCP
+using Windows.UI.Xaml.Controls;
+#endif
 
 #if IOS
 using UIKit;
@@ -112,6 +116,17 @@ namespace Microsoft.Xna.Framework
             PlatformConstruct();
 
         }
+        public Game(Game parent, float aspectRatio)
+        {
+            // This is a subgame
+            _instance = parent;
+            Game._instance = parent;
+            Platform = parent.Platform;
+            AspectRatio = aspectRatio;
+            Content = parent.Content;
+            _services = parent.Services;
+            _components = parent.Components;
+        }
         ~Game()
         {
             Dispose(false);
@@ -135,6 +150,11 @@ namespace Microsoft.Xna.Framework
 
         protected virtual void Dispose(bool disposing)
         {
+            if (_instance != this)
+            {
+                // We are a child game, the resources are our parents.
+                return;
+            }
             if (!_isDisposed)
             {
                 if (disposing)
@@ -298,6 +318,18 @@ namespace Microsoft.Xna.Framework
             {
                 _swapChainPanel = value;
                 ((UAPGamePlatform)Platform).UpdateWindow(this);
+            }
+        }
+#endif
+#if WPFSCP
+        private SwapChainPanel _swapChainPanel;
+        public SwapChainPanel SwapChainPanel
+        {
+            get => _swapChainPanel;
+            set
+            {
+                _swapChainPanel = value;
+                ((WPFFormsGamePlatform)Platform).UpdateWindow(this);
             }
         }
 #endif

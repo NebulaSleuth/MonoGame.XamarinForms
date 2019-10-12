@@ -37,7 +37,15 @@ namespace Microsoft.Xna.Framework
             //    throw new ArgumentException("Invalid filename. TitleContainer.OpenStream requires a relative path.", name);
 
             // Normalize the file path.
-            var safeName = NormalizeRelativePath(name);
+            string safeName;
+            if (Path.IsPathRooted(name))
+            {
+                safeName = name.Replace(FileHelpers.NotSeparator, FileHelpers.Separator); ;
+            }
+            else
+            {
+                safeName = NormalizeRelativePath(name);
+            }
 
             // Call the platform code to open the stream.  Any errors
             // at this point should result in a file not found.

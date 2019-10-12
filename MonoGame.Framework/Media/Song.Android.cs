@@ -257,23 +257,59 @@ namespace Microsoft.Xna.Framework.Media
                     int idx = path.ToLower().IndexOf(".pak") + 4;
                     string pakName = path.Substring(0, idx);
 
+                    string resPakName = path.Substring(0, idx);
+
                     string filename = path.Substring(idx);
                     while (filename.StartsWith("/") || filename.StartsWith("\\"))
                     {
                         filename = filename.Substring(1);
                     }
 
-                    var afd = Game.Activity.Assets.OpenFd(filename);
-                    if (afd == null)
-                        return;
-
-                    byte[] data = new byte[afd.Length];
-                    MemoryStream ms = new MemoryStream(data);
-                    using (var stream = afd.CreateInputStream())
+                    byte[] data = null;
+                    try
                     {
-                        stream.CopyTo(ms);
+                        long len = FilePacker.GetAssetLength(pakName, filename);
+                        if (len > 0)
+                        {
+                            data = new byte[len];
+                            if (System.IO.File.Exists(pakName))
+                            {
+                                using (System.IO.Stream s = FilePacker.GetFileStream(pakName, filename))
+                                {
+                                    s.Read(data, 0, (int)len);
+                                    s.Close();
+                                }
+                            }
+                            else
+                            {
+                                // Check the rsources
+                                using (System.IO.Stream s = FilePacker.GetFileStream(Android.App.Application.Context.Assets.Open(resPakName, Android.Content.Res.Access.Random), filename))
+                                {
+                                    s.Read(data, 0, (int)len);
+                                    s.Close();
+                                }
+                            }
+                        }
                     }
-                    prepareExoPlayerFromBytes(data);
+                    catch
+                    {
+                        data = null;
+                    }
+
+                    /*
+                                        var afd = Game.Activity.Assets.OpenFd(filename);
+                                        if (afd == null)
+                                            return;
+
+                                        byte[] data = new byte[afd.Length];
+                    */
+                    //MemoryStream ms = new MemoryStream(data);
+                    //using (var stream = afd.CreateInputStream())
+                    //{
+                    //    stream.CopyTo(ms);
+                    //}
+                    if (data != null)
+                        prepareExoPlayerFromBytes(data);
                 }
                 else
                 {
@@ -316,7 +352,7 @@ namespace Microsoft.Xna.Framework.Media
 
         internal void Stop()
         {
-            _androidPlayer.Stop();
+            _androidPlayer?.Stop();
             _playingSong = null;
             _playCount = 0;
             position = TimeSpan.Zero;

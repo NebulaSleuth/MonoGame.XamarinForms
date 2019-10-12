@@ -92,13 +92,20 @@ namespace Microsoft.Xna.Framework
             Init();
         }
 
+
+        //bool _onTop = false;
         private void Init()
         {
             // default
             mHolder = Holder;
             // Add callback to get the SurfaceCreated etc events
             mHolder.AddCallback(this);
+
+            //SetZOrderOnTop(true);
+            //_onTop = true;
+
             mHolder.SetType(SurfaceType.Gpu);
+            mHolder.SetFormat(Android.Graphics.Format.Transparent);
             this.SetBackgroundColor(Android.Graphics.Color.Transparent);
         }
 
@@ -614,6 +621,11 @@ namespace Microsoft.Xna.Framework
                     break;
 
                 case InternalState.Running_GameThread: // when we are running game
+                    //if (_onTop)
+                    //{
+                    //    SetZOrderMediaOverlay(true);
+                    //}
+                    //_onTop = false;
                     processStateRunning(token);
 
                     break;

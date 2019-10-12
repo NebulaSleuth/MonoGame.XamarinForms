@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lidgren.Network.WPFForms", "ThirdParty\Lidgren.Network\Lidgren.Network.WPFForms.csproj", "{ADAAB9A3-D7E1-A1DB-4E65-74776F726B2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Framework.WPFFormsSCP", "MonoGame.Framework\MonoGame.Framework.WPFFormsSCP.csproj", "{A5FAD15C-ACD0-4EAB-BF58-E2FCAAB4D40F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ADAAB9A3-D7E1-A1DB-4E65-74776F726B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADAAB9A3-D7E1-A1DB-4E65-74776F726B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADAAB9A3-D7E1-A1DB-4E65-74776F726B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADAAB9A3-D7E1-A1DB-4E65-74776F726B2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5FAD15C-ACD0-4EAB-BF58-E2FCAAB4D40F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5FAD15C-ACD0-4EAB-BF58-E2FCAAB4D40F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5FAD15C-ACD0-4EAB-BF58-E2FCAAB4D40F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5FAD15C-ACD0-4EAB-BF58-E2FCAAB4D40F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {28C1EB87-E69C-4A33-BE10-34FAC9AF3733}
+	EndGlobalSection
+EndGlobal

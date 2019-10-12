@@ -85,12 +85,16 @@ namespace Microsoft.Xna.Framework.Audio
                     // Clean up managed objects
                 }
                 // Release unmanaged resources
-                if (AL.IsBuffer(openALDataBuffer))
+                try
                 {
-                    ALHelper.CheckError("Failed to fetch buffer state.");
-                    AL.DeleteBuffers(1, ref openALDataBuffer);
-                    ALHelper.CheckError("Failed to delete buffer.");
+                    if (AL.IsBuffer(openALDataBuffer))
+                    {
+                        ALHelper.CheckError("Failed to fetch buffer state.");
+                        AL.DeleteBuffers(1, ref openALDataBuffer);
+                        //ALHelper.CheckError("Failed to delete buffer.");
+                    }
                 }
+                catch { }
 
                 _isDisposed = true;
             }

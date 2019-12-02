@@ -16,7 +16,7 @@
     <TargetFrameworkProfile />
     <LangVersion>Default</LangVersion>
     <FileAlignment>512</FileAlignment>
-    <AndroidSupportedAbis>armeabi,armeabi-v7a,x86</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi-v7a,x86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
     <DeployExternal>False</DeployExternal>

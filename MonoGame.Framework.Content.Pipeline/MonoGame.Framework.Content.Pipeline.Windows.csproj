@@ -11,7 +11,7 @@
     <AssemblyName>MonoGame.Framework.Content.Pipeline</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>1591,0436</NoWarn>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
@@ -531,11 +531,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <NativeBinary>True</NativeBinary>
     </None>
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <_PostBuildHookTimestamp>@(IntermediateAssembly-&gt;'%(FullPath).timestamp')</_PostBuildHookTimestamp>
+    <_PostBuildHookTimestamp>@(IntermediateAssembly->'%(FullPath).timestamp')</_PostBuildHookTimestamp>
     <_PostBuildHookHostPlatform>$(Platform)</_PostBuildHookHostPlatform>
   </PropertyGroup>
   <Target Name="PostBuildHooks" Inputs="@(IntermediateAssembly);@(ReferencePath)" Outputs="@(IntermediateAssembly);$(_PostBuildHookTimestamp)" AfterTargets="CoreCompile" BeforeTargets="AfterCompile">
@@ -543,7 +544,7 @@
   </Target>
   <ItemGroup>
     <ProjectReference Include="..\MonoGame.Framework\MonoGame.Framework.Windows.csproj">
-      <Project>{7DE47032-A904-4C29-BD22-2D235E8D91BA}</Project>
+      <Project>{7de47032-a904-4c29-bd22-2d235e8d91ba}</Project>
       <Name>MonoGame.Framework.Windows</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tools\MonoGame.Build.Tasks\MonoGame.Build.Tasks.Windows.csproj">

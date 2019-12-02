@@ -635,7 +635,6 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.dx11.mgfxo">
       <Services>DirectXGraphics</Services>

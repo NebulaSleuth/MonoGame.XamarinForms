@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.22609.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Framework.WindowsUniversal", "MonoGame.Framework\MonoGame.Framework.WindowsUniversal.csproj", "{09C41A48-7BF3-4A46-9EB8-CE95B4C27CA9}"
 EndProject
@@ -21,6 +21,10 @@ Global
 		{9CE2FA93-3D41-4025-B228-3D9D81F19BE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CE2FA93-3D41-4025-B228-3D9D81F19BE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E735585D-B6B5-48BA-B629-96F941F8304A}
 	EndGlobalSection
 EndGlobal

@@ -9,7 +9,7 @@
     "SharpDX.MediaFoundation": "4.2.0",
     "SharpDX.XAudio2": "4.2.0",
     "SharpDX.XInput": "4.2.0",
-    "Xamarin.Forms": "4.0.0.497661"
+    "Xamarin.Forms": "4.2.0.848062"
   },
   "frameworks": {
     "uap10.0.16299": {}

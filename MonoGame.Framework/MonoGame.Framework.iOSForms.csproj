@@ -753,7 +753,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.mgfxo">
       <Services>_GLCompatible</Services>

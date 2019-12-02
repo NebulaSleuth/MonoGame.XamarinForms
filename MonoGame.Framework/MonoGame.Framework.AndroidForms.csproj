@@ -17,7 +17,7 @@
     <TargetFrameworkProfile />
     <LangVersion>Default</LangVersion>
     <FileAlignment>512</FileAlignment>
-    <AndroidSupportedAbis>armeabi,armeabi-v7a,x86</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi-v7a,x86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
     <DeployExternal>False</DeployExternal>
@@ -864,7 +864,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.mgfxo">
       <Services>_GLCompatible</Services>
@@ -903,7 +902,6 @@
       <Link>libs\x86_64\libopenal32.so</Link>
     </EmbeddedNativeLibrary>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup />
   <ItemGroup />
   <ItemGroup />

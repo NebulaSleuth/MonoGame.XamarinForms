@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Viewport = Microsoft.Xna.Framework.Graphics.Viewport;
 using OpenTK.GLWidget;
+using System.Threading.Tasks;
 
 namespace Microsoft.Xna.Framework
 {
@@ -21,6 +22,7 @@ namespace Microsoft.Xna.Framework
         private GLWidget _glarea;
         private int _isExiting;
         private List<Keys> _keys;
+        GLib.IdleHandler _idle;
 
         private int _width = 800;
         private int _height = 600;
@@ -39,13 +41,12 @@ namespace Microsoft.Xna.Framework
             TempGLArea = _glarea = new GLWidget();
             _glarea.DepthBPP = 8;
             _glarea.StencilBPP = 0;
-            //_glarea.AutoRender = true;
+            //_glarea. = true;
             //_glarea.HasDepthBuffer = true;
             //_glarea.HasStencilBuffer = false;
             _glarea.SizeAllocated += GLArea_SizeAllocated;
 
             _eventArea.Child = _glarea;
-
 
             game.Services.AddService<Widget>(_eventArea);
             game.Services.AddService<GLWidget>(_glarea);
@@ -168,7 +169,6 @@ namespace Microsoft.Xna.Framework
                 return;
 
             _game.RunOneFrame();
-            //_glarea.QueueRender();
         }
 
         public void StartRunLoop()
@@ -183,12 +183,26 @@ namespace Microsoft.Xna.Framework
 
             _glarea.RenderFrame += GLArea_Rendered;
             _glarea.QueueDraw();
-            //_glarea.QueueRender();
+
+            _idle = new GLib.IdleHandler(OnIdleProcessMain);
+            GLib.Idle.Add(_idle);
+
         }
 
+        protected bool OnIdleProcessMain()
+        {
+            if (_isExiting > 0) return false;
+
+            _game.RunOneFrame();
+            OpenTK.Graphics.GraphicsContext.CurrentContext.SwapBuffers();
+            return true;
+        }
+    
         public void Exit()
         {
             _isExiting++;
+            if (_idle != null) GLib.Idle.Remove(_idle); 
+            _idle = null;
         }
 
         public override void BeginScreenDeviceChange(bool willBeFullScreen)

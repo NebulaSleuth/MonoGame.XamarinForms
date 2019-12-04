@@ -18,6 +18,12 @@ namespace Microsoft.Xna.Framework
             _soundControllerInstance = OpenALSoundController.GetInstance;
         }
 
+        public void WaitForExit()
+        {
+            System.Threading.Thread.Sleep(50);
+        }
+
+
         public override GameRunBehavior DefaultRunBehavior => GameRunBehavior.Asynchronous;
 
         public override bool BeforeDraw(GameTime gameTime)
@@ -58,6 +64,16 @@ namespace Microsoft.Xna.Framework
         public override void RunLoop()
         {
 
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (disposing)
+            {
+                _soundControllerInstance?.Dispose();
+            }
         }
 
         public override void StartRunLoop()

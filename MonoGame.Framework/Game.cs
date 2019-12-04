@@ -492,7 +492,8 @@ namespace Microsoft.Xna.Framework
             Platform?.Exit();
 #endif
 #if GTK
-			OpenALSoundController.DestroyInstance();
+            Platform?.Exit();
+            OpenALSoundController.DestroyInstance();
 #endif
         }
 
@@ -502,6 +503,8 @@ namespace Microsoft.Xna.Framework
             ((UAPGamePlatform)Platform).WaitForExit();
 #elif (WINDOWS && FORMS)
             ((MonoGame.Framework.WPFFormsGamePlatform)Platform).WaitForExit();
+#elif (GTK)
+            ((GtkGamePlatform)Platform).WaitForExit();
 #endif
         }
 

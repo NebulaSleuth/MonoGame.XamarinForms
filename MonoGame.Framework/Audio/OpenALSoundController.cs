@@ -27,14 +27,14 @@ namespace Microsoft.Xna.Framework.Audio
         [System.Diagnostics.DebuggerHidden]
         internal static void CheckError(string message = "", params object[] args)
         {
-            ALError error;
-            if ((error = AL.GetError()) != ALError.NoError)
-            {
-                if (args != null && args.Length > 0)
-                    message = String.Format(message, args);
+            //ALError error;
+            //if ((error = AL.GetError()) != ALError.NoError)
+            //{
+            //    if (args != null && args.Length > 0)
+            //        message = String.Format(message, args);
                 
-                throw new InvalidOperationException(message + " (Reason: " + AL.GetErrorString(error) + ")");
-            }
+            //    throw new InvalidOperationException(message + " (Reason: " + AL.GetErrorString(error) + ")");
+            //}
         }
 
         public static bool IsStereoFormat(ALFormat format)

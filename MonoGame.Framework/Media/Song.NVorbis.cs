@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Utilities;
 using MonoGame.OpenAL;
 
 namespace Microsoft.Xna.Framework.Media
@@ -16,6 +17,11 @@ namespace Microsoft.Xna.Framework.Media
 
         private void PlatformInitialize(string fileName)
         {
+            if (FilePath.ToLower().Contains(".pak"))
+            {
+                _name = FilePacker.CreateTempFile(FilePath);
+                fileName = _name;
+            }
             stream = new OggStream(fileName, OnFinishedPlaying);
             stream.Prepare();
 

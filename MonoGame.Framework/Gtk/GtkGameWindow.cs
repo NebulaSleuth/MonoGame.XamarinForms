@@ -23,6 +23,7 @@ namespace Microsoft.Xna.Framework
         private int _isExiting;
         private List<Keys> _keys;
         GLib.IdleHandler _idle;
+        uint _idleSrc = 0;
 
         private int _width = 800;
         private int _height = 600;
@@ -173,6 +174,8 @@ namespace Microsoft.Xna.Framework
 
         public void StartRunLoop()
         {
+            _isExiting = 0;
+
             _eventArea.Toplevel.FocusOutEvent += (o, e) => _keys.Clear();
             _eventArea.Toplevel.AddEvents((int)Gdk.EventMask.KeyPressMask);
             _eventArea.Toplevel.KeyPressEvent += EventBox_KeyPressEvent;
@@ -185,7 +188,7 @@ namespace Microsoft.Xna.Framework
             _glarea.QueueDraw();
 
             _idle = new GLib.IdleHandler(OnIdleProcessMain);
-            GLib.Idle.Add(_idle);
+            _idleSrc = GLib.Idle.Add(_idle);
 
         }
 
@@ -201,7 +204,8 @@ namespace Microsoft.Xna.Framework
         public void Exit()
         {
             _isExiting++;
-            if (_idle != null) GLib.Idle.Remove(_idle); 
+            if (_idleSrc != 0) GLib.Source.Remove(_idleSrc);
+            _idleSrc = 0; 
             _idle = null;
         }
 

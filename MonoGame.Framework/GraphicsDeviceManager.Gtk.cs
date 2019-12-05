@@ -12,5 +12,15 @@ namespace Microsoft.Xna.Framework
         {
 
         }
+
+        partial void PlatformPreparePresentationParameters(PresentationParameters presentationParameters)
+        {
+            if (_game?.Window?.ClientBounds != null)
+            {
+                presentationParameters.BackBufferWidth = _game.Window.ClientBounds.Width;
+                presentationParameters.BackBufferHeight = _game.Window.ClientBounds.Height;
+            }
+        }
+
     }
 }

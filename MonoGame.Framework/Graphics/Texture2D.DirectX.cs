@@ -40,6 +40,43 @@ namespace Microsoft.Xna.Framework.Graphics
             _mipmap = mipmap;
         }
 
+        private void PlatformSetData(int level, IntPtr dataPtr, int length, int startIndex, int elementCount)
+        {
+            int w, h;
+            GetSizeForLevel(Width, Height, level, out w, out h);
+
+            // For DXT compressed formats the width and height must be
+            // a multiple of 4 for the complete mip level to be set.
+            if (_format.IsCompressedFormat())
+            {
+                w = (w + 3) & ~3;
+                h = (h + 3) & ~3;
+            }
+
+            var elementSizeInByte = 1;
+            // Use try..finally to make sure dataHandle is freed in case of an error
+            try
+            {
+                var startBytes = startIndex * elementSizeInByte;
+                var region = new ResourceRegion();
+                region.Top = 0;
+                region.Front = 0;
+                region.Back = 1;
+                region.Bottom = h;
+                region.Left = 0;
+                region.Right = w;
+
+                // TODO: We need to deal with threaded contexts here!
+                var subresourceIndex = CalculateSubresourceIndex(0, level);
+                var d3dContext = GraphicsDevice._d3dContext;
+                lock (d3dContext)
+                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(w), 0);
+            }
+            finally
+            {
+            }
+        }
+
         private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount) where T : struct
         {
             int w, h;
@@ -198,6 +235,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             }
         }
+
 
         protected override void Dispose(bool disposing)
         {

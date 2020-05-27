@@ -39,8 +39,11 @@ namespace Microsoft.Xna.Framework
             {
                 // Pull from the .zip files
                 int idx = absolutePath.ToLower().IndexOf(".pak") + 4;
-                string pakName = Path.Combine(Location, absolutePath.Substring(0, idx));
+                int idx2 = safeName.ToLower().IndexOf(".pak") + 4;
+                string pakName = absolutePath.Substring(0, idx);
+                string tpakName = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), safeName.Substring(0, idx2));
                 string filename = absolutePath.Substring(idx);
+
                 while (filename.StartsWith("/") || filename.StartsWith("\\"))
                 {
                     filename = filename.Substring(1);
@@ -51,6 +54,10 @@ namespace Microsoft.Xna.Framework
                     if (File.Exists(pakName))
                     {
                         return FilePacker.GetFileStream(pakName, filename);
+                    }
+                    else if (File.Exists(tpakName))
+                    {
+                        return FilePacker.GetFileStream(tpakName, filename);
                     }
                 }
                 catch

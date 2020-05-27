@@ -192,18 +192,30 @@ namespace Microsoft.Xna.Framework.Graphics
             PlatformSetData(0, data, startIndex, elementCount);
         }
 
-		/// <summary>
+        /// <summary>
+        /// Changes the texture's pixels
+        /// </summary>
+        /// <typeparam name="T">New data for the texture</typeparam>
+        /// <param name="data"></param>
+        /// <param name="length"></param>
+        public void SetData(IntPtr data, int length) 
+		{
+            Rectangle checkedRect;
+            ValidateParams(0, 0, null, data, length, 0, length, out checkedRect);
+            PlatformSetData(0, data, length, 0, length);
+        }
+
+        /// <summary>
         /// Changes the texture's pixels
         /// </summary>
         /// <typeparam name="T">New data for the texture</typeparam>
         /// <param name="data"></param>
 		public void SetData<T>(T[] data) where T : struct
-		{
+        {
             Rectangle checkedRect;
             ValidateParams(0, 0, null, data, 0, data.Length, out checkedRect);
             PlatformSetData(0, data, 0, data.Length);
         }
-
         /// <summary>
         /// Retrieves the contents of the texture
         /// Throws ArgumentException if data is null, data.length is too short or
@@ -400,5 +412,71 @@ namespace Microsoft.Xna.Framework.Graphics
                                             "elementCount * sizeof(T) is {0}, but data size is {1}.",
                                             elementCount * tSize, dataByteSize), "elementCount");
         }
-	}
+        private void ValidateParams(int level, int arraySlice, Rectangle? rect, IntPtr data, int length,
+            int startIndex, int elementCount, out Rectangle checkedRect) 
+        {
+            var textureBounds = new Rectangle(0, 0, Math.Max(width >> level, 1), Math.Max(height >> level, 1));
+            checkedRect = rect ?? textureBounds;
+            if (level < 0 || level >= LevelCount)
+                throw new ArgumentException("level must be smaller than the number of levels in this texture.", "level");
+            if (arraySlice > 0 && !GraphicsDevice.GraphicsCapabilities.SupportsTextureArrays)
+                throw new ArgumentException("Texture arrays are not supported on this graphics device", "arraySlice");
+            if (arraySlice < 0 || arraySlice >= ArraySize)
+                throw new ArgumentException("arraySlice must be smaller than the ArraySize of this texture and larger than 0.", "arraySlice");
+            if (!textureBounds.Contains(checkedRect) || checkedRect.Width <= 0 || checkedRect.Height <= 0)
+                throw new ArgumentException("Rectangle must be inside the texture bounds", "rect");
+            if (data == null)
+                throw new ArgumentNullException("data");
+            var tSize = 1;
+            var fSize = Format.GetSize();
+            if (tSize > fSize || fSize % tSize != 0)
+                throw new ArgumentException("Type T is of an invalid size for the format of this texture.", "T");
+            if (startIndex < 0 || startIndex >= length)
+                throw new ArgumentException("startIndex must be at least zero and smaller than data.Length.", "startIndex");
+            if (length < startIndex + elementCount)
+                throw new ArgumentException("The data array is too small.");
+
+            int dataByteSize;
+            if (Format.IsCompressedFormat())
+            {
+                int blockWidth, blockHeight;
+                Format.GetBlockSize(out blockWidth, out blockHeight);
+                int blockWidthMinusOne = blockWidth - 1;
+                int blockHeightMinusOne = blockHeight - 1;
+                // round x and y down to next multiple of block size; width and height up to next multiple of block size
+                var roundedWidth = (checkedRect.Width + blockWidthMinusOne) & ~blockWidthMinusOne;
+                var roundedHeight = (checkedRect.Height + blockHeightMinusOne) & ~blockHeightMinusOne;
+                checkedRect = new Rectangle(checkedRect.X & ~blockWidthMinusOne, checkedRect.Y & ~blockHeightMinusOne,
+#if OPENGL
+                    // OpenGL only: The last two mip levels require the width and height to be
+                    // passed as 2x2 and 1x1, but there needs to be enough data passed to occupy
+                    // a full block.
+                    checkedRect.Width < blockWidth && textureBounds.Width < blockWidth ? textureBounds.Width : roundedWidth,
+                    checkedRect.Height < blockHeight && textureBounds.Height < blockHeight ? textureBounds.Height : roundedHeight);
+#else
+                    roundedWidth, roundedHeight);
+#endif
+                if (Format == SurfaceFormat.RgbPvrtc2Bpp || Format == SurfaceFormat.RgbaPvrtc2Bpp)
+                {
+                    dataByteSize = (Math.Max(checkedRect.Width, 16) * Math.Max(checkedRect.Height, 8) * 2 + 7) / 8;
+                }
+                else if (Format == SurfaceFormat.RgbPvrtc4Bpp || Format == SurfaceFormat.RgbaPvrtc4Bpp)
+                {
+                    dataByteSize = (Math.Max(checkedRect.Width, 8) * Math.Max(checkedRect.Height, 8) * 4 + 7) / 8;
+                }
+                else
+                {
+                    dataByteSize = roundedWidth * roundedHeight * fSize / (blockWidth * blockHeight);
+                }
+            }
+            else
+            {
+                dataByteSize = checkedRect.Width * checkedRect.Height * fSize;
+            }
+            if (elementCount * tSize != dataByteSize)
+                throw new ArgumentException(string.Format("elementCount is not the right size, " +
+                                            "elementCount * sizeof(T) is {0}, but data size is {1}.",
+                                            elementCount * tSize, dataByteSize), "elementCount");
+        }
+    }
 }

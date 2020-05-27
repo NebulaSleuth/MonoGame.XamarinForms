@@ -18,7 +18,8 @@ namespace Microsoft.Xna.Framework
 
         static partial void PlatformInit()
         {
-            Location = Windows.ApplicationModel.Package.Current.InstalledLocation.Path;
+            //Location = Windows.ApplicationModel.Package.Current.InstalledLocation.Path;
+            Location = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
             TempLocation = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
              
             ResourceContext = new Windows.ApplicationModel.Resources.Core.ResourceContext();

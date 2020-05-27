@@ -1,6 +1,6 @@
 ﻿{
   "dependencies": {
-    "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.10",
     "SharpDX": "4.2.0",
     "SharpDX.Direct2D1": "4.2.0",
     "SharpDX.Direct3D11": "4.2.0",
@@ -9,7 +9,7 @@
     "SharpDX.MediaFoundation": "4.2.0",
     "SharpDX.XAudio2": "4.2.0",
     "SharpDX.XInput": "4.2.0",
-    "Xamarin.Forms": "4.2.0.848062"
+    "Xamarin.Forms": "4.5.0.356"
   },
   "frameworks": {
     "uap10.0.16299": {}

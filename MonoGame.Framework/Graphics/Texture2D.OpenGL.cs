@@ -83,6 +83,51 @@ namespace Microsoft.Xna.Framework.Graphics
             });
         }
 
+        private void PlatformSetData(int level, IntPtr dataPtr, int length, int startIndex, int elementCount) 
+        {
+            int w, h;
+            GetSizeForLevel(Width, Height, level, out w, out h);
+            Threading.BlockOnUIThread(() =>
+            {
+                var elementSizeInByte = 1;
+                var startBytes = startIndex * elementSizeInByte;
+                // Store the current bound texture.
+                var prevTexture = GraphicsExtensions.GetBoundTexture2D();
+
+                if (prevTexture != glTexture)
+                {
+                    GL.BindTexture(TextureTarget.Texture2D, glTexture);
+                    GraphicsExtensions.CheckGLError();
+                }
+
+                GenerateGLTextureIfRequired();
+                GL.PixelStore(PixelStoreParameter.UnpackAlignment, Math.Min(_format.GetSize(), 8));
+
+                if (glFormat == (PixelFormat)GLPixelFormat.CompressedTextureFormats)
+                {
+                    GL.CompressedTexImage2D(TextureTarget.Texture2D, level, glInternalFormat, w, h, 0, elementCount * elementSizeInByte, dataPtr);
+                }
+                else
+                {
+                    GL.TexImage2D(TextureTarget.Texture2D, level, glInternalFormat, w, h, 0, glFormat, glType, dataPtr);
+                }
+                GraphicsExtensions.CheckGLError();
+
+#if !ANDROID
+                // Required to make sure that any texture uploads on a thread are completed
+                // before the main thread tries to use the texture.
+                GL.Finish();
+                GraphicsExtensions.CheckGLError();
+#endif
+                // Restore the bound texture.
+                if (prevTexture != glTexture)
+                {
+                    GL.BindTexture(TextureTarget.Texture2D, prevTexture);
+                    GraphicsExtensions.CheckGLError();
+                }
+            });
+        }
+
         private void PlatformSetData<T>(int level, T[] data, int startIndex, int elementCount) where T : struct
         {
             int w, h;
@@ -192,6 +237,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
             });
         }
+
 
         private void PlatformGetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount) where T : struct
         {

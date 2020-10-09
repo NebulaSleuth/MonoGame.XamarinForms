@@ -8,8 +8,8 @@ using Gtk;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Viewport = Microsoft.Xna.Framework.Graphics.Viewport;
-using OpenTK.GLWidget;
 using System.Threading.Tasks;
+using OpenTK;
 
 namespace Microsoft.Xna.Framework
 {
@@ -40,8 +40,8 @@ namespace Microsoft.Xna.Framework
             _eventArea.MotionNotifyEvent += EventBox_MotionNotifyEvent;
 
             TempGLArea = _glarea = new GLWidget();
-            _glarea.DepthBPP = 8;
-            _glarea.StencilBPP = 0;
+            //_glarea.DepthBPP = 8;
+            //_glarea.StencilBPP = 0;
             //_glarea. = true;
             //_glarea.HasDepthBuffer = true;
             //_glarea.HasStencilBuffer = false;
@@ -116,7 +116,7 @@ namespace Microsoft.Xna.Framework
         }
 
         [GLib.ConnectBefore]
-        private void EventBox_KeyPressEvent(object sender, KeyPressEventArgs args)
+        private void EventBox_KeyPressEvent(object sender, Gtk.KeyPressEventArgs args)
         {
             var xnakey = KeyboardUtil.ToXna(args.Event.HardwareKeycode);
             if (!_keys.Contains(xnakey))
@@ -184,7 +184,8 @@ namespace Microsoft.Xna.Framework
 
             GLArea_SizeAllocated(null, EventArgs.Empty);
 
-            _glarea.RenderFrame += GLArea_Rendered;
+            _glarea.Render += GLArea_Rendered;
+            //_glarea.RenderFrame += GLArea_Rendered;
             _glarea.QueueDraw();
 
             _idle = new GLib.IdleHandler(OnIdleProcessMain);

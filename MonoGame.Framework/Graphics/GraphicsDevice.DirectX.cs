@@ -21,6 +21,13 @@ using System.Runtime.InteropServices;
 #endif
 
 
+#if WINDOWS_SWAPCHAIN
+using Windows.UI.Xaml.Controls;
+using System.Runtime.InteropServices;
+using Windows.Graphics.Display;
+using Windows.Foundation;
+#endif
+
 namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class GraphicsDevice
@@ -32,7 +39,7 @@ namespace Microsoft.Xna.Framework.Graphics
         internal SharpDX.Direct3D11.DepthStencilView _depthStencilView;
         private int _vertexBufferSlotsUsed;
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINDOWS_SWAPCHAIN
 
         // Declare Direct2D Objects
         SharpDX.Direct2D1.Factory1 _d2dFactory;
@@ -47,7 +54,7 @@ namespace Microsoft.Xna.Framework.Graphics
         SharpDX.Direct2D1.Bitmap1 _bitmapTarget;
         SharpDX.DXGI.SwapChain1 _swapChain;
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINDOWS_SWAPCHAIN
 		SwapChainPanel _swapChainPanel;
 #else
 		SwapChainBackgroundPanel _swapChainBackgroundPanel;
@@ -57,7 +64,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 #if WINDOWS
 
-#if FORMS || WPF
+#if (FORMS || WPF) && (!WINDOWS_SWAPCHAIN)
         private RenderTarget2D _defaultRenderTarget = null;
         public RenderTarget2D DefaultRenderTarget
         {
@@ -73,7 +80,9 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 #endif
+#if !WINDOWS_SWAPCHAIN
         SwapChain _swapChain;
+#endif
 
 #endif
 
@@ -87,7 +96,7 @@ namespace Microsoft.Xna.Framework.Graphics
         private DynamicIndexBuffer _userIndexBuffer16;
         private DynamicIndexBuffer _userIndexBuffer32;
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINDOWS_SWAPCHAIN
 
         internal float Dpi
         {
@@ -124,12 +133,12 @@ namespace Microsoft.Xna.Framework.Graphics
             MaxTextureSlots = 16;
             MaxVertexTextureSlots = 16;
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINDOWS_SWAPCHAIN
 			CreateDeviceIndependentResources();
 			CreateDeviceResources();
 			Dpi = DisplayInformation.GetForCurrentView().LogicalDpi;
 #endif
-#if WINDOWS
+#if WINDOWS && !WINDOWS_SWAPCHAIN
             CreateDeviceResources();
 #endif
 
@@ -138,24 +147,24 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformInitialize()
         {
-#if WINDOWS
+#if WINDOWS && !WINDOWS_SWAPCHAIN
             CorrectBackBufferSize();
 #endif
             CreateSizeDependentResources();
         }
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINDOWS_SWAPCHAIN
 
         /// <summary>
         /// Creates resources not tied the active graphics device.
         /// </summary>
         protected void CreateDeviceIndependentResources()
         {
-#if DEBUG
-            var debugLevel = SharpDX.Direct2D1.DebugLevel.Information;
-#else
+//#if DEBUG
+//            var debugLevel = SharpDX.Direct2D1.DebugLevel.Information;
+//#else
             var debugLevel = SharpDX.Direct2D1.DebugLevel.None; 
-#endif
+//#endif
             // Dispose previous references.
             if (_d2dFactory != null)
                 _d2dFactory.Dispose();
@@ -187,11 +196,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Windows requires BGRA support out of DX.
             var creationFlags = SharpDX.Direct3D11.DeviceCreationFlags.BgraSupport;
-#if DEBUG
-            var enableDebugLayers = true;
-#else 
+//#if DEBUG
+//            var enableDebugLayers = true;
+//#else 
             var enableDebugLayers = false;
-#endif
+//#endif
 
             if (GraphicsAdapter.UseDebugLayers)
             {
@@ -343,12 +352,17 @@ namespace Microsoft.Xna.Framework.Graphics
             // Otherwise, create a new swap chain.
             else
             {
+                var w = PresentationParameters.BackBufferWidth;
+                var h = PresentationParameters.BackBufferHeight;
+                if (w < 1) w = 1;
+                if (h < 1) h = 1;
+
                 // SwapChain description
                 var desc = new SharpDX.DXGI.SwapChainDescription1()
                 {
                     // Automatic sizing
-                    Width = PresentationParameters.BackBufferWidth,
-                    Height = PresentationParameters.BackBufferHeight,
+                    Width = w,
+                    Height = h,
                     Format = format,
                     Stereo = false,
                     SampleDescription = multisampleDesc,
@@ -361,6 +375,9 @@ namespace Microsoft.Xna.Framework.Graphics
                     Scaling = SharpDX.DXGI.Scaling.Stretch,
                 };
 
+
+                //desc.SwapEffect = SwapEffect.FlipDiscard;
+
                 // Once the desired swap chain description is configured, it must be created on the same adapter as our D3D Device
 
                 // First, retrieve the underlying DXGI Device from the D3D Device.
@@ -369,6 +386,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 using (var dxgiAdapter = dxgiDevice2.Adapter)
                 using (var dxgiFactory2 = dxgiAdapter.GetParent<SharpDX.DXGI.Factory2>())
                 {
+#if !WINDOWS_SWAPCHAIN
                     if (PresentationParameters.DeviceWindowHandle != IntPtr.Zero)
                     {
                         // Creates a SwapChain from a CoreWindow pointer.
@@ -377,6 +395,7 @@ namespace Microsoft.Xna.Framework.Graphics
                            _swapChain = new SwapChain1(dxgiFactory2, dxgiDevice2, comWindow, ref desc);
                     }
                     else
+#endif
                     {
 						_swapChainPanel = PresentationParameters.SwapChainPanel;
 						using (var nativePanel = ComObject.As<SharpDX.DXGI.ISwapChainPanelNative>(PresentationParameters.SwapChainPanel))
@@ -389,7 +408,7 @@ namespace Microsoft.Xna.Framework.Graphics
                     // Ensure that DXGI does not queue more than one frame at a time. This both reduces 
                     // latency and ensures that the application will only render after each VSync, minimizing 
                     // power consumption.
-                    dxgiDevice2.MaximumFrameLatency = 1;
+                    dxgiDevice2.MaximumFrameLatency = 4;
                 }
             }
 
@@ -400,8 +419,8 @@ namespace Microsoft.Xna.Framework.Graphics
             if (PresentationParameters.SwapChainPanel != null)
             {
                 var asyncResult = PresentationParameters.SwapChainPanel.Dispatcher.RunIdleAsync( (e) =>
-                {   
-                var inverseScale = new RawMatrix3x2();
+                {
+                    var inverseScale = new RawMatrix3x2();
                 inverseScale.M11 = 1.0f / PresentationParameters.SwapChainPanel.CompositionScaleX;
                 inverseScale.M22 = 1.0f / PresentationParameters.SwapChainPanel.CompositionScaleY;
                 using (var swapChain2 = _swapChain.QueryInterface<SwapChain2>())
@@ -485,11 +504,11 @@ namespace Microsoft.Xna.Framework.Graphics
 
         partial void PlatformReset()
         {
-#if WINDOWS
+#if WINDOWS && !WINDOWS_SWAPCHAIN
             CorrectBackBufferSize();
 #endif
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINDOWS_SWAPCHAIN
             if (PresentationParameters.DeviceWindowHandle == IntPtr.Zero && PresentationParameters.SwapChainPanel == null)
                 throw new ArgumentException("PresentationParameters.DeviceWindowHandle or PresentationParameters.SwapChainPanel must not be null.");
 #else
@@ -498,7 +517,7 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
         }
 
-#if  WINDOWS_UAP
+#if  WINDOWS_UAP || WINDOWS_SWAPCHAIN
 
         private void SetMultiSamplingToMaximum(PresentationParameters presentationParameters, out int quality)
         {
@@ -506,7 +525,7 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 #endif
-#if WINDOWS
+#if WINDOWS && !WINDOWS_SWAPCHAIN
 
         private void CorrectBackBufferSize()
         {
@@ -977,7 +996,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             SharpDX.Utilities.Dispose(ref _swapChain);
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINDOWS_SWAPCHAIN
 
             if (_bitmapTarget != null)
             {
@@ -1019,7 +1038,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private void PlatformPresent()
         {
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINDOWS_SWAPCHAIN
             // The application may optionally specify "dirty" or "scroll" rects to improve efficiency
             // in certain scenarios.  In this sample, however, we do not utilize those features.
             var parameters = new SharpDX.DXGI.PresentParameters();
@@ -1049,7 +1068,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
 
 #endif
-#if WINDOWS
+#if WINDOWS && !WINDOWS_SWAPCHAIN
 
             try
             {
@@ -1114,8 +1133,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
 #if FORMS && !NETFX_CORE
 
+#if (!WINDOWS_SWAPCHAIN)
             if (DefaultRenderTarget != null)
                 SetRenderTarget(DefaultRenderTarget);
+#endif
 #endif
 
             lock (_d3dContext)
@@ -1174,7 +1195,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return renderTarget;
         }
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINDOWS_SWAPCHAIN
         internal void ResetRenderTargets()
         {
             if (_d3dContext != null)

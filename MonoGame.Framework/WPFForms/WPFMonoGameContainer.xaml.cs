@@ -44,7 +44,9 @@ namespace Microsoft.Xna.Framework.WPFForms
             {
                 instance.Game = e.NewValue as Game;
                 if (instance.Game != null)
+                {
                     instance.Game.HostControl = instance.HostPanel;
+                }
             }
         }
 

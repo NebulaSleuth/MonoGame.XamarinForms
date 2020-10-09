@@ -108,6 +108,17 @@ namespace MonoGame.Framework
 
         public override bool BeforeDraw(GameTime gameTime)
         {
+#if WINDOWS_SWAPCHAIN
+            var device = Game.GraphicsDevice;
+            if (device != null)
+            {
+                // For a UAP app we need to re-apply the
+                // render target before every draw.  
+                // 
+                // I guess the OS changes it and doesn't restore it?
+                device.ResetRenderTargets();
+            }
+#endif
             return true;
         }
 

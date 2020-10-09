@@ -3,7 +3,9 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
-
+#if WINDOWS_SWAPCHAIN
+using Windows.UI.Xaml.Controls;
+#endif
 #if WINDOWS_UAP
 using Windows.UI.Xaml.Controls;
 #endif
@@ -17,13 +19,13 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public class PresentationParameters
     {
-        #region Constants
+#region Constants
 
         public const int DefaultPresentRate = 60;
 
-        #endregion Constants
+#endregion Constants
 
-        #region Private Fields
+#region Private Fields
 
         private DepthFormat depthStencilFormat;
         private SurfaceFormat backBufferFormat;
@@ -35,9 +37,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private bool isFullScreen;
         private bool hardwareModeSwitch = true;
 
-        #endregion Private Fields
+#endregion Private Fields
 
-        #region Constructors
+#region Constructors
 
         /// <summary>
         /// Create a <see cref="PresentationParameters"/> instance with default values for all properties.
@@ -47,9 +49,9 @@ namespace Microsoft.Xna.Framework.Graphics
             Clear();
         }
 
-        #endregion Constructors
+#endregion Constructors
 
-        #region Properties
+#region Properties
 
         /// <summary>
         /// Get or set the format of the back buffer.
@@ -95,7 +97,7 @@ namespace Microsoft.Xna.Framework.Graphics
             set { deviceWindowHandle = value; }
         }
 
-#if WINDOWS_UAP
+#if WINDOWS_UAP || WINDOWS_SWAPCHAIN
         [CLSCompliant(false)]
         public SwapChainPanel SwapChainPanel { get; set; }
 #endif
@@ -170,10 +172,10 @@ namespace Microsoft.Xna.Framework.Graphics
         /// </summary>
 		public RenderTargetUsage RenderTargetUsage { get; set; }
 
-        #endregion Properties
+#endregion Properties
 
 
-        #region Methods
+#region Methods
 
         /// <summary>
         /// Reset all properties to their default values.
@@ -233,7 +235,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return clone;
         }
 
-        #endregion Methods
+#endregion Methods
 
     }
 }

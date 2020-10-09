@@ -1,118 +1,116 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.UI.XamlHost.6.1.2\build\Microsoft.Toolkit.UI.XamlHost.props" Condition="Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.UI.XamlHost.6.1.2\build\Microsoft.Toolkit.UI.XamlHost.props')" />
+  <Import Project="..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Windows.SDK.Contracts.10.0.18362.2005\build\Microsoft.Windows.SDK.Contracts.props" Condition="Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Windows.SDK.Contracts.10.0.18362.2005\build\Microsoft.Windows.SDK.Contracts.props')" />
+  <Import Project="..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.XamlApplication.6.1.2\build\Microsoft.Toolkit.Win32.UI.XamlApplication.props" Condition="Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.XamlApplication.6.1.2\build\Microsoft.Toolkit.Win32.UI.XamlApplication.props')" />
+  <Import Project="..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.SDK.6.1.2\build\Microsoft.Toolkit.Win32.UI.SDK.props" Condition="Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.SDK.6.1.2\build\Microsoft.Toolkit.Win32.UI.SDK.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{DB8508BB-9849-4CC2-BC0F-8EB5DACB3C47}</ProjectGuid>
-    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{A5FAD15C-ACD0-4EAB-BF58-E2FCAAB4D40F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>1591,0436</NoWarn>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <LangVersion>Default</LangVersion>
-    <SynchReleaseVersion>False</SynchReleaseVersion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-    <OutputPath>bin\iOS\iPhone\Debug</OutputPath>
-    <IntermediateOutputPath>obj\iOS\iPhone\Debug</IntermediateOutputPath>
-    <DocumentationFile>bin\iOS\iPhone\Debug\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>DEBUG;OPENGL;OPENAL;IOS;GLES</DefineConstants>
+    <OutputPath>bin\WPFFormsCore\AnyCPU\Debug\</OutputPath>
+    <IntermediateOutputPath>obj\WPFForms\AnyCPU\Debug</IntermediateOutputPath>
+    <DocumentationFile>bin\WPFFormsCore\AnyCPU\Debug\MonoGame.Framework.xml</DocumentationFile>
+    <DefineConstants>TRACE;DEBUG;XNADESIGNPROVIDED;WINDOWS;FORMS;DIRECTX;WINDOWS_MEDIA_SESSION;NET45;NET45;NET45;WINDOWS_SWAPCHAIN</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <MtouchDebug>True</MtouchDebug>
-    <MtouchUseArmv7>false</MtouchUseArmv7>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <DebugType>none</DebugType>
-    <OutputPath>bin\iOS\iPhone\Release</OutputPath>
-    <IntermediateOutputPath>obj\iOS\iPhone\Release</IntermediateOutputPath>
-    <DocumentationFile>bin\iOS\iPhone\Release\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>OPENGL;OPENAL;IOS;GLES</DefineConstants>
+    <OutputPath>bin\WPFFormsCore\AnyCPU\Release\</OutputPath>
+    <IntermediateOutputPath>obj\WPFForms\AnyCPU\Release</IntermediateOutputPath>
+    <DocumentationFile>bin\WPFFormsCore\AnyCPU\Release\MonoGame.Framework.xml</DocumentationFile>
+    <DefineConstants>TRACE;XNADESIGNPROVIDED;WINDOWS;FORMS;DIRECTX;WINDOWS_MEDIA_SESSION;WINDOWS_SWAPCHAIN;NET45;NET45;WINDOWS_SWAPCHAIN</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <MtouchUseArmv7>false</MtouchUseArmv7>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <DebugType>full</DebugType>
-    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-    <OutputPath>bin\iOS\iPhoneSimulator\Debug</OutputPath>
-    <IntermediateOutputPath>obj\iOS\iPhoneSimulator\Debug</IntermediateOutputPath>
-    <DocumentationFile>bin\iOS\iPhoneSimulator\Debug\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>DEBUG;OPENGL;OPENAL;IOS;GLES</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <MtouchDebug>True</MtouchDebug>
-    <MtouchUseArmv7>false</MtouchUseArmv7>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <OutputPath>bin\iOS\iPhoneSimulator\Release</OutputPath>
-    <IntermediateOutputPath>obj\iOS\iPhoneSimulator\Release</IntermediateOutputPath>
-    <DocumentationFile>bin\iOS\iPhoneSimulator\Release\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>OPENGL;OPENAL;IOS;GLES</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <MtouchUseArmv7>false</MtouchUseArmv7>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <OutputPath>bin\iOS\iPhone\Ad-Hoc</OutputPath>
-    <IntermediateOutputPath>obj\iOS\iPhone\Ad-Hoc</IntermediateOutputPath>
-    <DocumentationFile>bin\iOS\iPhone\Ad-Hoc\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>OPENGL;OPENAL;IOS;GLES</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <MtouchUseArmv7>false</MtouchUseArmv7>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-    <OutputPath>bin\iOS\iPhone\AppStore</OutputPath>
-    <IntermediateOutputPath>obj\iOS\iPhone\AppStore</IntermediateOutputPath>
-    <DocumentationFile>bin\iOS\iPhone\AppStore\MonoGame.Framework.xml</DocumentationFile>
-    <DefineConstants>OPENGL;OPENAL;IOS;GLES</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <MtouchUseArmv7>false</MtouchUseArmv7>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Xamarin.iOS" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Toolkit.Win32.UI.XamlHost.Managed, Version=6.1.0.0, Culture=neutral, PublicKeyToken=4aff67a105548ee2, processorArchitecture=MSIL">
+      <HintPath>..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.UI.XamlHost.6.1.2\lib\net462\Microsoft.Toolkit.Win32.UI.XamlHost.Managed.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Toolkit.Wpf.UI.Controls, Version=6.1.0.0, Culture=neutral, PublicKeyToken=4aff67a105548ee2, processorArchitecture=MSIL">
+      <HintPath>..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Wpf.UI.Controls.6.1.2\lib\net462\Microsoft.Toolkit.Wpf.UI.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Toolkit.Wpf.UI.XamlHost, Version=6.1.0.0, Culture=neutral, PublicKeyToken=4aff67a105548ee2, processorArchitecture=MSIL">
+      <HintPath>..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Wpf.UI.XamlHost.6.1.2\lib\net462\Microsoft.Toolkit.Wpf.UI.XamlHost.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=3.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.3.1.0\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=3.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.GLControl.3.1.0\lib\net20\OpenTK.GLControl.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Net" />
+    <Reference Include="Windows.Foundation.FoundationContract">
+      <HintPath>C:\Program Files (x86)\Windows Kits\10\References\10.0.18362.0\Windows.Foundation.FoundationContract\3.0.0.0\Windows.Foundation.FoundationContract.winmd</HintPath>
+    </Reference>
+    <Reference Include="Windows.Foundation.UniversalApiContract">
+      <HintPath>C:\Program Files (x86)\Windows Kits\10\References\10.0.18362.0\Windows.Foundation.UniversalApiContract\8.0.0.0\Windows.Foundation.UniversalApiContract.winmd</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Core" />
-    <Reference Include="OpenTK">
-      <HintPath>..\packages\OpenTK.3.0.1\lib\net20\OpenTK.dll</HintPath>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="SharpDX">
+      <HintPath>..\ThirdParty\XamarinForms.Dependencies\SharpDX4.2.0\net45\SharpDX.dll</HintPath>
     </Reference>
-    <Reference Include="FormsViewGroup">
-      <HintPath>..\packages\Xamarin.Forms.4.1.0.483098-pre1\lib\MonoAndroid81\FormsViewGroup.dll</HintPath>
+    <Reference Include="SharpDX.Direct2D1">
+      <HintPath>..\ThirdParty\XamarinForms.Dependencies\SharpDX4.2.0\net45\SharpDX.Direct2D1.dll</HintPath>
     </Reference>
-    <Reference Include="webkit-sharp">
-      <HintPath>..\packages\Xamarin.Forms.Platform.GTK.4.1.0.483098-pre1\lib\net45\webkit-sharp.dll</HintPath>
+    <Reference Include="SharpDX.Direct3D11">
+      <HintPath>..\ThirdParty\XamarinForms.Dependencies\SharpDX4.2.0\net45\SharpDX.Direct3D11.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11">
+      <HintPath>..\ThirdParty\XamarinForms.Dependencies\SharpDX4.2.0\net45\SharpDX.Direct3D9.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI">
+      <HintPath>..\ThirdParty\XamarinForms.Dependencies\SharpDX4.2.0\net45\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.MediaFoundation">
+      <HintPath>..\ThirdParty\XamarinForms.Dependencies\SharpDX4.2.0\net45\SharpDX.MediaFoundation.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.XAudio2">
+      <HintPath>..\ThirdParty\XamarinForms.Dependencies\SharpDX4.2.0\net45\SharpDX.XAudio2.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.XInput">
+      <HintPath>..\ThirdParty\XamarinForms.Dependencies\SharpDX4.2.0\net45\SharpDX.XInput.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\AssemblyInfo.iOS.cs">
-      <Platforms>iOS,iOSForms</Platforms>
+    <Compile Include="Properties\AssemblyInfo.Windows.cs">
+      <Platforms>Windows,WPFForms,WPF</Platforms>
     </Compile>
     <Compile Include="BoundingBox.cs" />
     <Compile Include="BoundingFrustum.cs" />
@@ -135,8 +133,8 @@
     <Compile Include="GameComponent.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GamePlatform.cs" />
-    <Compile Include="GamePlatform.Mobile.cs">
-      <Platforms>Android,AndroidForms,iOS,iOSForms,Web,tvOS</Platforms>
+    <Compile Include="GamePlatform.Desktop.cs">
+      <Platforms>Angle,Linux,Gtk,MacOS,Windows,WPFForms,WPF,WindowsGL,WindowsUniversal</Platforms>
     </Compile>
     <Compile Include="GameRunBehavior.cs" />
     <Compile Include="GameServiceContainer.cs" />
@@ -160,12 +158,12 @@
     <Compile Include="Ray.cs" />
     <Compile Include="Rectangle.cs" />
     <Compile Include="ReusableItemList.cs" />
-    <Compile Include="Threading.cs">
-      <Platforms>Android,AndroidForms,Angle,iOS,iOSForms,Linux,Gtk,MacOS,WindowsGL,tvOS</Platforms>
+    <Compile Include="TextInputEventArgs.cs">
+      <Platforms>Angle,Linux,Gtk,MacOS,Windows,WPFForms,WPF,WindowsGL,WindowsUniversal</Platforms>
     </Compile>
     <Compile Include="TitleContainer.cs" />
-    <Compile Include="TitleContainer.MacOS.cs">
-      <Platforms>iOS,iOSForms,tvOS</Platforms>
+    <Compile Include="TitleContainer.Desktop.cs">
+      <Platforms>Angle,Linux,Gtk,Windows,WPFForms,WPF,WindowsGL,Web,MacOS</Platforms>
     </Compile>
     <Compile Include="Vector2.cs" />
     <Compile Include="Vector3.cs" />
@@ -173,38 +171,26 @@
     <Compile Include="Audio\AudioChannels.cs" />
     <Compile Include="Audio\AudioEmitter.cs" />
     <Compile Include="Audio\AudioListener.cs" />
-    <Compile Include="Audio\AudioLoader.cs">
-      <Services>OpenALAudio</Services>
-    </Compile>
     <Compile Include="Audio\DynamicSoundEffectInstance.cs" />
-    <Compile Include="Audio\DynamicSoundEffectInstance.OpenAL.cs">
-      <Services>OpenALAudio</Services>
+    <Compile Include="Audio\DynamicSoundEffectInstance.XAudio.cs">
+      <Services>XAudioAudio</Services>
     </Compile>
     <Compile Include="Audio\DynamicSoundEffectInstanceManager.cs" />
     <Compile Include="Audio\InstancePlayLimitException.cs" />
     <Compile Include="Audio\NoAudioHardwareException.cs" />
-    <Compile Include="Audio\OALSoundBuffer.cs">
-      <Services>OpenALAudio</Services>
-    </Compile>
-    <Compile Include="Audio\OpenAL.cs">
-      <Services>OpenALAudio</Services>
-    </Compile>
-    <Compile Include="Audio\OpenALSoundController.cs">
-      <Services>OpenALAudio</Services>
-    </Compile>
     <Compile Include="Audio\SoundEffect.cs" />
-    <Compile Include="Audio\SoundEffect.OpenAL.cs">
-      <Services>OpenALAudio</Services>
+    <Compile Include="Audio\SoundEffect.XAudio.cs">
+      <Services>XAudioAudio</Services>
     </Compile>
     <Compile Include="Audio\SoundEffectInstance.cs" />
-    <Compile Include="Audio\SoundEffectInstance.OpenAL.cs">
-      <Services>OpenALAudio</Services>
+    <Compile Include="Audio\SoundEffectInstance.XAudio.cs">
+      <Services>XAudioAudio</Services>
     </Compile>
     <Compile Include="Audio\SoundEffectInstancePool.cs" />
     <Compile Include="Audio\SoundState.cs" />
     <Compile Include="Audio\Microphone.cs" />
-    <Compile Include="Audio\Microphone.OpenAL.cs">
-      <Services>OpenALAudio</Services>
+    <Compile Include="Audio\Microphone.Default.cs">
+      <Services>XAudioAudio,WebAudio</Services>
     </Compile>
     <Compile Include="Audio\NoMicrophoneConnectedException.cs" />
     <Compile Include="Audio\Xact\AudioCategory.cs" />
@@ -287,6 +273,9 @@
     <Compile Include="Content\ContentReaders\SpriteFontReader.cs" />
     <Compile Include="Content\ContentReaders\StringReader.cs" />
     <Compile Include="Content\ContentReaders\Texture2DReader.cs" />
+    <Compile Include="Content\ContentReaders\Texture3DReader.cs">
+      <ExcludePlatforms>Android,AndroidForms,iOS,iOSForms,tvOS,Web</ExcludePlatforms>
+    </Compile>
     <Compile Include="Content\ContentReaders\TextureCubeReader.cs">
       <ExcludePlatforms>Web</ExcludePlatforms>
     </Compile>
@@ -322,8 +311,11 @@
     <Compile Include="Graphics\DeviceLostException.cs" />
     <Compile Include="Graphics\DeviceNotResetException.cs" />
     <Compile Include="GraphicsDeviceInformation.cs" />
-    <Compile Include="GraphicsDeviceManager.Legacy.cs">
-      <Platforms>Android,AndroidForms,Angle,iOS,iOSForms,tvOS</Platforms>
+    <Compile Include="GraphicsDeviceManager.cs">
+      <Platforms>Windows,WPFForms,WPF,WindowsGL,Linux,Gtk,WindowsUniversal,Web,MacOS</Platforms>
+    </Compile>
+    <Compile Include="GraphicsDeviceManager.WPFForms.cs">
+      <Platforms>WPFForms</Platforms>
     </Compile>
     <Compile Include="Graphics\GraphicsMetrics.cs" />
     <Compile Include="Graphics\DirectionalLight.cs" />
@@ -347,8 +339,8 @@
     <Compile Include="Graphics\Effect\EffectPassCollection.cs" />
     <Compile Include="Graphics\Effect\EffectPass.cs" />
     <Compile Include="Graphics\Effect\EffectResource.cs" />
-    <Compile Include="Graphics\Effect\EffectResource.OpenGL.cs">
-      <Services>OpenGLGraphics,WebGraphics</Services>
+    <Compile Include="Graphics\Effect\EffectResource.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\Effect\EffectTechniqueCollection.cs" />
     <Compile Include="Graphics\Effect\EffectTechnique.cs" />
@@ -362,24 +354,24 @@
       <ExcludePlatforms>Web</ExcludePlatforms>
     </Compile>
     <Compile Include="Graphics\Effect\SpriteEffect.cs" />
-    <Compile Include="Graphics\GraphicsAdapter.Legacy.cs">
-      <Platforms>Android,AndroidForms,Angle,iOS,iOSForms,Linux,Gtk,MacOS,WindowsGL,tvOS,Web</Platforms>
+    <Compile Include="Graphics\GraphicsAdapter.cs">
+      <ExcludePlatforms>Android,AndroidForms,Angle,iOS,iOSForms,Linux,Gtk,MacOS,WindowsGL,tvOS,Web</ExcludePlatforms>
+    </Compile>
+    <Compile Include="Graphics\GraphicsAdapter.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\GraphicsCapabilities.cs" />
-    <Compile Include="Graphics\GraphicsCapabilities.OpenGL.cs">
-      <Services>OpenGLGraphics,ANGLEGraphics</Services>
+    <Compile Include="Graphics\GraphicsCapabilities.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\GraphicsDebug.cs" />
-    <Compile Include="Graphics\GraphicsDebug.Default.cs">
-      <Services>OpenGLGraphics,WebGraphics,ANGLEGraphics</Services>
+    <Compile Include="Graphics\GraphicsDebug.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\GraphicsDebugMessage.cs" />
     <Compile Include="Graphics\GraphicsDevice.cs" />
-    <Compile Include="Graphics\GraphicsDevice.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
-    </Compile>
-    <Compile Include="Graphics\GraphicsDevice.OpenGL.FramebufferHelper.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\GraphicsDevice.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\GraphicsDeviceStatus.cs" />
     <Compile Include="Graphics\GraphicsExtensions.cs" />
@@ -398,11 +390,11 @@
     <Compile Include="Graphics\ModelMeshPartCollection.cs" />
     <Compile Include="Graphics\ModelMeshPart.cs" />
     <Compile Include="Graphics\NoSuitableGraphicsDeviceException.cs" />
-    <Compile Include="Graphics\OpenGL.cs">
-      <Platforms>WindowsGL,Linux,Gtk,iOS,iOSForms,MacOS,Android,AndroidForms,Ouya,tvOS</Platforms>
+    <Compile Include="Graphics\OcclusionQuery.cs">
+      <ExcludePlatforms>iOS,iOSForms,Android,AndroidForms</ExcludePlatforms>
     </Compile>
-    <Compile Include="Graphics\OpenGL.iOS.cs">
-      <Platforms>iOS,iOSForms,tvOS</Platforms>
+    <Compile Include="Graphics\OcclusionQuery.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\PackedVector\Alpha8.cs" />
     <Compile Include="Graphics\PackedVector\Bgr565.cs" />
@@ -427,33 +419,36 @@
     <Compile Include="Graphics\PresentationParameters.cs" />
     <Compile Include="Graphics\PresentInterval.cs" />
     <Compile Include="Graphics\RenderTarget2D.cs" />
-    <Compile Include="Graphics\RenderTarget2D.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\RenderTarget2D.DirectX.cs">
+      <Services>DirectXGraphics</Services>
+    </Compile>
+    <Compile Include="Graphics\RenderTarget3D.cs">
+      <Services>DirectXGraphics</Services>
+    </Compile>
+    <Compile Include="Graphics\RenderTarget3D.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\RenderTargetBinding.cs" />
     <Compile Include="Graphics\RenderTargetCube.cs" />
-    <Compile Include="Graphics\RenderTargetCube.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\RenderTargetCube.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\RenderTargetUsage.cs" />
     <Compile Include="Graphics\ResourceCreatedEventArgs.cs" />
     <Compile Include="Graphics\ResourceDestroyedEventArgs.cs" />
     <Compile Include="Graphics\SamplerStateCollection.cs" />
-    <Compile Include="Graphics\SamplerStateCollection.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\SamplerStateCollection.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\SetDataOptions.cs" />
     <Compile Include="Graphics\Shader\ConstantBufferCollection.cs" />
     <Compile Include="Graphics\Shader\ConstantBuffer.cs" />
-    <Compile Include="Graphics\Shader\ConstantBuffer.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\Shader\ConstantBuffer.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\Shader\Shader.cs" />
-    <Compile Include="Graphics\Shader\Shader.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
-    </Compile>
-    <Compile Include="Graphics\Shader\ShaderProgramCache.cs">
-      <Platforms>Android,AndroidForms,Angle,iOS,iOSForms,Linux,Gtk,MacOS,WindowsGL,tvOS</Platforms>
+    <Compile Include="Graphics\Shader\Shader.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\Shader\ShaderStage.cs" />
     <Compile Include="Graphics\SpriteBatch.cs" />
@@ -465,24 +460,24 @@
     <Compile Include="Graphics\States\Blend.cs" />
     <Compile Include="Graphics\States\BlendFunction.cs" />
     <Compile Include="Graphics\States\BlendState.cs" />
-    <Compile Include="Graphics\States\BlendState.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\States\BlendState.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\States\CompareFunction.cs" />
     <Compile Include="Graphics\States\CullMode.cs" />
     <Compile Include="Graphics\States\DepthFormat.cs" />
     <Compile Include="Graphics\States\DepthStencilState.cs" />
-    <Compile Include="Graphics\States\DepthStencilState.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\States\DepthStencilState.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\States\FillMode.cs" />
     <Compile Include="Graphics\States\RasterizerState.cs" />
-    <Compile Include="Graphics\States\RasterizerState.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\States\RasterizerState.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\States\SamplerState.cs" />
-    <Compile Include="Graphics\States\SamplerState.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\States\SamplerState.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\States\StencilOperation.cs" />
     <Compile Include="Graphics\States\TargetBlendState.cs" />
@@ -490,51 +485,66 @@
     <Compile Include="Graphics\States\TextureFilter.cs" />
     <Compile Include="Graphics\States\TextureFilterMode.cs" />
     <Compile Include="Graphics\SurfaceFormat.cs" />
+    <Compile Include="Graphics\SwapChainRenderTarget.cs">
+      <Platforms>Windows,WPFForms,WPF</Platforms>
+    </Compile>
     <Compile Include="Graphics\Texture2D.cs" />
-    <Compile Include="Graphics\Texture2D.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\Texture2D.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\Texture3D.cs" />
-    <Compile Include="Graphics\Texture3D.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\Texture3D.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\TextureCollection.cs" />
-    <Compile Include="Graphics\TextureCollection.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\TextureCollection.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\Texture.cs" />
-    <Compile Include="Graphics\Texture.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\Texture.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\TextureCube.cs" />
-    <Compile Include="Graphics\TextureCube.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\TextureCube.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\Vertices\BufferUsage.cs" />
     <Compile Include="Graphics\Vertices\DynamicIndexBuffer.cs" />
     <Compile Include="Graphics\Vertices\DynamicVertexBuffer.cs" />
+    <Compile Include="Graphics\Vertices\ImmutableVertexInputLayout.cs">
+      <Services>DirectXGraphics</Services>
+    </Compile>
     <Compile Include="Graphics\Vertices\IndexBuffer.cs" />
-    <Compile Include="Graphics\Vertices\IndexBuffer.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\Vertices\IndexBuffer.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\Vertices\IndexElementSize.cs" />
+    <Compile Include="Graphics\Vertices\InputLayoutCache.cs">
+      <Services>DirectXGraphics</Services>
+    </Compile>
     <Compile Include="Graphics\Vertices\IVertexType.cs" />
     <Compile Include="Graphics\Vertices\PrimitiveType.cs" />
     <Compile Include="Graphics\Vertices\VertexBuffer.cs" />
-    <Compile Include="Graphics\Vertices\VertexBuffer.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
+    <Compile Include="Graphics\Vertices\VertexBuffer.DirectX.cs">
+      <Services>DirectXGraphics</Services>
     </Compile>
     <Compile Include="Graphics\Vertices\VertexBufferBinding.cs" />
     <Compile Include="Graphics\Vertices\VertexBufferBindings.cs" />
+    <Compile Include="Graphics\Vertices\VertexBufferBindings.DirectX.cs">
+      <Services>DirectXGraphics</Services>
+    </Compile>
     <Compile Include="Graphics\Vertices\VertexDeclarationCache.cs" />
     <Compile Include="Graphics\Vertices\VertexDeclaration.cs" />
-    <Compile Include="Graphics\Vertices\VertexDeclaration.OpenGL.cs">
-      <Services>OpenGLGraphics</Services>
-    </Compile>
     <Compile Include="Graphics\Vertices\VertexElement.cs" />
+    <Compile Include="Graphics\Vertices\VertexElement.DirectX.cs">
+      <Services>DirectXGraphics</Services>
+    </Compile>
     <Compile Include="Graphics\Vertices\VertexElementFormat.cs" />
     <Compile Include="Graphics\Vertices\VertexElementUsage.cs" />
     <Compile Include="Graphics\Vertices\VertexInputLayout.cs" />
+    <Compile Include="Graphics\Vertices\VertexInputLayout.DirectX.cs">
+      <Services>DirectXGraphics</Services>
+    </Compile>
     <Compile Include="Graphics\Vertices\VertexPosition.cs" />
     <Compile Include="Graphics\Vertices\VertexPositionColor.cs" />
     <Compile Include="Graphics\Vertices\VertexPositionColorTexture.cs" />
@@ -544,8 +554,8 @@
     <Compile Include="Input\Buttons.cs" />
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\GamePad.cs" />
-    <Compile Include="Input\GamePad.IOS.cs">
-      <Platforms>iOS,iOSForms</Platforms>
+    <Compile Include="Input\GamePad.XInput.cs">
+      <Platforms>Windows,WPFForms,WPF</Platforms>
     </Compile>
     <Compile Include="Input\GamePadButtons.cs" />
     <Compile Include="Input\GamePadCapabilities.cs" />
@@ -565,14 +575,14 @@
     <Compile Include="Input\Keyboard.cs">
       <ExcludePlatforms>Android,AndroidForms</ExcludePlatforms>
     </Compile>
-    <Compile Include="Input\Keyboard.Default.cs">
-      <ExcludePlatforms>Android,AndroidForms,WindowsUniversal,Windows,WPFForms,WPF,WindowsGL,Linux,MacOS</ExcludePlatforms>
+    <Compile Include="Input\Keyboard.Windows.cs">
+      <Platforms>Windows,WPFForms,WPF</Platforms>
     </Compile>
     <Compile Include="Input\KeyboardInput.cs">
       <Platforms>Android,AndroidForms,iOS,iOSForms,Windows,WPFForms,WPF,WindowsUniversal</Platforms>
     </Compile>
-    <Compile Include="Input\KeyboardInput.IOS.cs">
-      <Platforms>iOS,iOSForms</Platforms>
+    <Compile Include="Input\KeyboardInput.Windows.cs">
+      <Platforms>Windows,WPFForms,WPF</Platforms>
     </Compile>
     <Compile Include="Input\KeyboardState.cs" />
     <Compile Include="Input\Keys.cs" />
@@ -580,16 +590,16 @@
     <Compile Include="Input\MessageBox.cs">
       <Platforms>Android,AndroidForms,iOS,iOSForms,Windows,WPFForms,WPF,WindowsUniversal</Platforms>
     </Compile>
-    <Compile Include="Input\MessageBox.IOS.cs">
-      <Platforms>iOS,iOSForms</Platforms>
+    <Compile Include="Input\MessageBox.Windows.cs">
+      <Platforms>Windows,WPFForms,WPF</Platforms>
     </Compile>
     <Compile Include="Input\Mouse.cs" />
-    <Compile Include="Input\Mouse.Default.cs">
-      <ExcludePlatforms>WindowsGL,Linux,Windows,WPFForms,WPF,MacOS</ExcludePlatforms>
+    <Compile Include="Input\Mouse.Windows.cs">
+      <Platforms>Windows,WPFForms,WPF</Platforms>
     </Compile>
     <Compile Include="Input\MouseCursor.cs" />
-    <Compile Include="Input\MouseCursor.Default.cs">
-      <ExcludePlatforms>Linux,WindowsGL,Windows,WPFForms,WPF,MacOS</ExcludePlatforms>
+    <Compile Include="Input\MouseCursor.Windows.cs">
+      <Platforms>Windows,WPFForms,WPF</Platforms>
     </Compile>
     <Compile Include="Input\MouseState.cs" />
     <Compile Include="Input\Touch\GestureSample.cs" />
@@ -605,12 +615,15 @@
     <Compile Include="Media\Artist.cs" />
     <Compile Include="Media\Genre.cs" />
     <Compile Include="Media\MediaLibrary.cs" />
-    <Compile Include="Media\MediaLibrary.IOS.cs">
-      <Platforms>iOS,iOSForms</Platforms>
+    <Compile Include="Media\MediaLibrary.Default.cs">
+      <ExcludePlatforms>iOS,iOSForms,Android,AndroidForms,WindowsUniversal</ExcludePlatforms>
+    </Compile>
+    <Compile Include="Media\MediaManagerState.cs">
+      <Platforms>Windows,WPFForms,WPF</Platforms>
     </Compile>
     <Compile Include="Media\MediaPlayer.cs" />
-    <Compile Include="Media\MediaPlayer.Default.cs">
-      <Platforms>Angle,WindowsGL,Linux,Gtk,MacOS,iOS,iOSForms,Android,AndroidForms,Web,tvOS</Platforms>
+    <Compile Include="Media\MediaPlayer.WMS.cs">
+      <Platforms>Windows,WPFForms,WPF</Platforms>
     </Compile>
     <Compile Include="Media\MediaQueue.cs" />
     <Compile Include="Media\MediaSource.cs" />
@@ -620,59 +633,38 @@
     <Compile Include="Media\Playlist.cs" />
     <Compile Include="Media\SongCollection.cs" />
     <Compile Include="Media\Song.cs" />
-    <Compile Include="Media\Song.IOS.cs">
-      <Platforms>iOS,iOSForms,tvOS</Platforms>
+    <Compile Include="Media\Song.WMS.cs">
+      <Platforms>Windows,WPFForms,WPF</Platforms>
     </Compile>
     <Compile Include="Media\VideoSoundtrackType.cs" />
     <Compile Include="Media\Video.cs">
       <ExcludePlatforms>Angle,Linux,Gtk,WindowsGL,Web,tvOS</ExcludePlatforms>
     </Compile>
-    <Compile Include="Media\Video.IOS.cs">
-      <Platforms>iOS,iOSForms</Platforms>
+    <Compile Include="Media\Video.WMS.cs">
+      <Platforms>Windows,WPFForms,WPF</Platforms>
     </Compile>
     <Compile Include="Media\VideoPlayer.cs">
       <ExcludePlatforms>Angle,Linux,Gtk,WindowsGL,Web,tvOS</ExcludePlatforms>
     </Compile>
-    <Compile Include="Media\VideoPlayer.IOS.cs">
-      <Platforms>iOS,iOSForms</Platforms>
+    <Compile Include="Media\VideoPlayer.WMS.cs">
+      <Platforms>Windows,WPFForms,WPF</Platforms>
     </Compile>
-    <Compile Include="Microsoft\Devices\Sensors\AccelerometerFailedException.cs">
-      <Platforms>Android,AndroidForms,iOS,iOSForms</Platforms>
+    <Compile Include="Utilities\AssemblyHelper.cs">
+      <Platforms>Angle,Linux,Gtk,MacOS,Windows,WPFForms,WPF,WindowsGL</Platforms>
     </Compile>
-    <Compile Include="Microsoft\Devices\Sensors\AccelerometerReading.cs">
-      <Platforms>Android,AndroidForms,iOS,iOSForms</Platforms>
-    </Compile>
-    <Compile Include="Microsoft\Devices\Sensors\CalibrationEventArgs.cs">
-      <Platforms>Android,AndroidForms,iOS,iOSForms</Platforms>
-    </Compile>
-    <Compile Include="Microsoft\Devices\Sensors\CompassReading.cs">
-      <Platforms>Android,AndroidForms,iOS,iOSForms</Platforms>
-    </Compile>
-    <Compile Include="Microsoft\Devices\Sensors\ISensorReading.cs">
-      <Platforms>Android,AndroidForms,iOS,iOSForms</Platforms>
-    </Compile>
-    <Compile Include="Microsoft\Devices\Sensors\SensorBase.cs">
-      <Platforms>Android,AndroidForms,iOS,iOSForms</Platforms>
-    </Compile>
-    <Compile Include="Microsoft\Devices\Sensors\SensorFailedException.cs">
-      <Platforms>Android,AndroidForms,iOS,iOSForms</Platforms>
-    </Compile>
-    <Compile Include="Microsoft\Devices\Sensors\SensorReadingEventArgs.cs">
-      <Platforms>Android,AndroidForms,iOS,iOSForms</Platforms>
-    </Compile>
-    <Compile Include="Microsoft\Devices\Sensors\SensorState.cs">
-      <Platforms>Android,AndroidForms,iOS,iOSForms</Platforms>
+    <Compile Include="Utilities\CurrentPlatform.cs">
+      <Platforms>Windows,WPFForms,WPF,MacOS,WindowsGL,Linux,Gtk</Platforms>
     </Compile>
     <Compile Include="Utilities\Hash.cs" />
     <Compile Include="Utilities\FileHelpers.cs" />
     <Compile Include="Utilities\FilePacker.cs" />
     <Compile Include="Utilities\SubStream.cs" />
-    <Compile Include="Utilities\InteropHelpers.cs">
-      <Services>OpenGLGraphics,OpenALAudio</Services>
-    </Compile>
     <Compile Include="Utilities\ReflectionHelpers.cs" />
-    <Compile Include="Utilities\ReflectionHelpers.Default.cs">
-      <Platforms>Android,AndroidForms,iOS,iOSForms,WindowsUniversal,tvOS</Platforms>
+    <Compile Include="Utilities\ReflectionHelpers.Legacy.cs">
+      <Platforms>Angle,Linux,Gtk,MacOS,Windows,WPFForms,WPF,WindowsGL,Web</Platforms>
+    </Compile>
+    <Compile Include="Utilities\TimerHelper.cs">
+      <Platforms>Windows,WPFForms,WPF</Platforms>
     </Compile>
     <Compile Include="Utilities\Lz4Stream\Lz4DecoderStream.cs" />
     <Compile Include="Utilities\LzxStream\LzxDecoderStream.cs" />
@@ -689,58 +681,86 @@
     <Compile Include="Utilities\Imaging\ImageWriter.cs" />
     <Compile Include="Utilities\Imaging\Operations.cs" />
     <Compile Include="Utilities\Imaging\PinnedArray.cs" />
-    <Compile Include="Utilities\FuncLoader.iOS.cs">
-      <Platforms>iOS,iOSForms,tvOS</Platforms>
+    <Compile Include="Windows\SharpDXHelper.cs">
+      <Platforms>Windows,WPFForms,WPF,WindowsUniversal</Platforms>
     </Compile>
-    <Compile Include="iOS\Devices\Sensors\Accelerometer.cs">
-      <Platforms>iOS</Platforms>
+    <Compile Include="Windows\HorizontalMouseWheelEventArgs.cs">
+      <Platforms>WPFForms,WPF</Platforms>
     </Compile>
-    <Compile Include="iOS\Devices\Sensors\Compass.cs">
-      <Platforms>iOS</Platforms>
+    <Compile Include="WPFForms\WPFFormsGamePlatform.cs">
+      <Platforms>WPFForms</Platforms>
     </Compile>
-    <Compile Include="iOS\iOSGamePlatform.cs">
-      <Platforms>iOS</Platforms>
+    <Compile Include="WPFForms\WPFFormsGameWindow.cs">
+      <Platforms>WPFForms</Platforms>
     </Compile>
-    <Compile Include="iOS\iOSGameViewController.cs">
-      <Platforms>iOS</Platforms>
+    <Compile Include="Media\VideoSampleGrabber.cs">
+      <Platforms>WPFForms,WPF</Platforms>
     </Compile>
-    <Compile Include="iOS\iOSGameView.cs">
-      <Platforms>iOS</Platforms>
+    <Compile Include="WPFForms\D3D9.cs">
+      <Platforms>WPFForms</Platforms>
     </Compile>
-    <Compile Include="iOS\iOSGameView_GLAbstraction.cs">
-      <Platforms>iOS</Platforms>
+    <Compile Include="WPFForms\D3D11Image.cs">
+      <Platforms>WPFForms</Platforms>
     </Compile>
-    <Compile Include="iOS\iOSGameView_Touch.cs">
-      <Platforms>iOS</Platforms>
+    <Compile Include="WPFForms\WPFMonoGameContainer.xaml.cs">
+      <Platforms>WPFForms</Platforms>
+      <DependentUpon>WPFMonoGameContainer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="iOS\iOSGameWindow.cs">
-      <Platforms>iOS</Platforms>
+    <Compile Include="Design\VectorConversion.cs">
+      <Services>_XNADesignProvided</Services>
     </Compile>
-    <Compile Include="iOS\OrientationConverter.cs">
-      <Platforms>iOS</Platforms>
+    <Compile Include="Design\Vector2TypeConverter.cs">
+      <Services>_XNADesignProvided</Services>
+    </Compile>
+    <Compile Include="Design\Vector3TypeConverter.cs">
+      <Services>_XNADesignProvided</Services>
+    </Compile>
+    <Compile Include="Design\Vector4TypeConverter.cs">
+      <Services>_XNADesignProvided</Services>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms">
+      <Version>4.5.0.356</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Forms.Platform.WPF">
+      <Version>4.5.0.356</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.dx11.mgfxo">
+      <Services>DirectXGraphics</Services>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.dx11.mgfxo">
+      <Services>DirectXGraphics</Services>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.dx11.mgfxo">
+      <Services>DirectXGraphics</Services>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.dx11.mgfxo">
+      <Services>DirectXGraphics</Services>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.dx11.mgfxo">
+      <Services>DirectXGraphics</Services>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.dx11.mgfxo">
+      <Services>DirectXGraphics</Services>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
   <ItemGroup />
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.mgfxo">
-      <Services>_GLCompatible</Services>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\Effect\Resources\BasicEffect.ogl.mgfxo">
-      <Services>_GLCompatible</Services>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\Effect\Resources\DualTextureEffect.ogl.mgfxo">
-      <Services>_GLCompatible</Services>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.ogl.mgfxo">
-      <Services>_GLCompatible</Services>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.ogl.mgfxo">
-      <Services>_GLCompatible</Services>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.ogl.mgfxo">
-      <Services>_GLCompatible</Services>
-    </EmbeddedResource>
+    <Page Include="WPFForms\WPFMonoGameContainer.xaml">
+      <Platforms>WPFForms</Platforms>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
@@ -751,37 +771,13 @@
   <ItemGroup />
   <ItemGroup />
   <ItemGroup />
-  <ItemGroup />
-  <ItemGroup />
-  <ItemGroup />
-  <ItemGroup />
-  <ItemGroup />
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <_PostBuildHookTimestamp>@(IntermediateAssembly->'%(FullPath).timestamp')</_PostBuildHookTimestamp>
-    <_PostBuildHookHostPlatform>AnyCPU</_PostBuildHookHostPlatform>
+    <_PostBuildHookHostPlatform>$(Platform)</_PostBuildHookHostPlatform>
   </PropertyGroup>
-  <UsingTask TaskName="LocalTouch" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll">
-    <ParameterGroup>
-      <Path ParameterType="System.String" Required="true" />
-    </ParameterGroup>
-    <Task>
-      <Using Namespace="System" />
-      <Using Namespace="System.IO" />
-      <Code Type="Fragment" Language="cs">
-              
-                  if (!File.Exists(Path))
-                  {
-                    var stream = File.Create(Path);
-                    stream.Dispose();
-                  }
-                  File.SetLastAccessTime(Path, DateTime.Now);
-                  
-            </Code>
-    </Task>
-  </UsingTask>
   <Target Name="PostBuildHooks" Inputs="@(IntermediateAssembly);@(ReferencePath)" Outputs="@(IntermediateAssembly);$(_PostBuildHookTimestamp)" AfterTargets="CoreCompile" BeforeTargets="AfterCompile">
-    <LocalTouch Path="$(_PostBuildHookTimestamp)" />
+    <Touch Files="$(_PostBuildHookTimestamp)" AlwaysCreate="True" />
   </Target>
   <PropertyGroup>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' != 'v4.0' And '$(TargetFrameworkVersion)' != 'v3.5' And '$(TargetFrameworkVersion)' != 'v3.0' And '$(TargetFrameworkVersion)' != 'v2.0' ">$(DefineConstants);NET45</DefineConstants>
@@ -800,4 +796,25 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.SDK.6.1.2\build\Microsoft.Toolkit.Win32.UI.SDK.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.SDK.6.1.2\build\Microsoft.Toolkit.Win32.UI.SDK.props'))" />
+    <Error Condition="!Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.SDK.6.1.2\build\Microsoft.Toolkit.Win32.UI.SDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.SDK.6.1.2\build\Microsoft.Toolkit.Win32.UI.SDK.targets'))" />
+    <Error Condition="!Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.XamlApplication.6.1.2\build\Microsoft.Toolkit.Win32.UI.XamlApplication.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.XamlApplication.6.1.2\build\Microsoft.Toolkit.Win32.UI.XamlApplication.props'))" />
+    <Error Condition="!Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.XamlApplication.6.1.2\build\Microsoft.Toolkit.Win32.UI.XamlApplication.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.XamlApplication.6.1.2\build\Microsoft.Toolkit.Win32.UI.XamlApplication.targets'))" />
+    <Error Condition="!Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\System.Runtime.WindowsRuntime.4.6.0\build\net461\System.Runtime.WindowsRuntime.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\repos\Bingonomics\BarXtreme\packages\System.Runtime.WindowsRuntime.4.6.0\build\net461\System.Runtime.WindowsRuntime.targets'))" />
+    <Error Condition="!Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\System.Runtime.WindowsRuntime.UI.Xaml.4.6.0\build\net461\System.Runtime.WindowsRuntime.UI.Xaml.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\repos\Bingonomics\BarXtreme\packages\System.Runtime.WindowsRuntime.UI.Xaml.4.6.0\build\net461\System.Runtime.WindowsRuntime.UI.Xaml.targets'))" />
+    <Error Condition="!Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Windows.SDK.Contracts.10.0.18362.2005\build\Microsoft.Windows.SDK.Contracts.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Windows.SDK.Contracts.10.0.18362.2005\build\Microsoft.Windows.SDK.Contracts.props'))" />
+    <Error Condition="!Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Windows.SDK.Contracts.10.0.18362.2005\build\Microsoft.Windows.SDK.Contracts.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Windows.SDK.Contracts.10.0.18362.2005\build\Microsoft.Windows.SDK.Contracts.targets'))" />
+    <Error Condition="!Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.UI.XamlHost.6.1.2\build\Microsoft.Toolkit.UI.XamlHost.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.UI.XamlHost.6.1.2\build\Microsoft.Toolkit.UI.XamlHost.props'))" />
+    <Error Condition="!Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.UI.XamlHost.6.1.2\build\Microsoft.Toolkit.UI.XamlHost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.UI.XamlHost.6.1.2\build\Microsoft.Toolkit.UI.XamlHost.targets'))" />
+  </Target>
+  <Import Project="..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.SDK.6.1.2\build\Microsoft.Toolkit.Win32.UI.SDK.targets" Condition="Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.SDK.6.1.2\build\Microsoft.Toolkit.Win32.UI.SDK.targets')" />
+  <Import Project="..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.XamlApplication.6.1.2\build\Microsoft.Toolkit.Win32.UI.XamlApplication.targets" Condition="Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.Win32.UI.XamlApplication.6.1.2\build\Microsoft.Toolkit.Win32.UI.XamlApplication.targets')" />
+  <Import Project="..\..\..\repos\Bingonomics\BarXtreme\packages\System.Runtime.WindowsRuntime.4.6.0\build\net461\System.Runtime.WindowsRuntime.targets" Condition="Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\System.Runtime.WindowsRuntime.4.6.0\build\net461\System.Runtime.WindowsRuntime.targets')" />
+  <Import Project="..\..\..\repos\Bingonomics\BarXtreme\packages\System.Runtime.WindowsRuntime.UI.Xaml.4.6.0\build\net461\System.Runtime.WindowsRuntime.UI.Xaml.targets" Condition="Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\System.Runtime.WindowsRuntime.UI.Xaml.4.6.0\build\net461\System.Runtime.WindowsRuntime.UI.Xaml.targets')" />
+  <Import Project="..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Windows.SDK.Contracts.10.0.18362.2005\build\Microsoft.Windows.SDK.Contracts.targets" Condition="Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Windows.SDK.Contracts.10.0.18362.2005\build\Microsoft.Windows.SDK.Contracts.targets')" />
+  <Import Project="..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.UI.XamlHost.6.1.2\build\Microsoft.Toolkit.UI.XamlHost.targets" Condition="Exists('..\..\..\repos\Bingonomics\BarXtreme\packages\Microsoft.Toolkit.UI.XamlHost.6.1.2\build\Microsoft.Toolkit.UI.XamlHost.targets')" />
 </Project>

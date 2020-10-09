@@ -1,8 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.22609.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Framework.WPF", "MonoGame.Framework\MonoGame.Framework.WPF.csproj", "{AAA4ECB-4B74-4B15-A13B-D4F228FCC195}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Framework.WPF", "MonoGame.Framework\MonoGame.Framework.WPF.csproj", "{338FFEE1-E292-46FA-995E-FEFB03404C9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,11 +10,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AAA4ECB-4B74-4B15-A13B-D4F228FCC195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AAA4ECB-4B74-4B15-A13B-D4F228FCC195}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AAA4ECB-4B74-4B15-A13B-D4F228FCC195}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AAA4ECB-4B74-4B15-A13B-D4F228FCC195}.Release|Any CPU.Build.0 = Release|Any CPU
+		{338FFEE1-E292-46FA-995E-FEFB03404C9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{338FFEE1-E292-46FA-995E-FEFB03404C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{338FFEE1-E292-46FA-995E-FEFB03404C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{338FFEE1-E292-46FA-995E-FEFB03404C9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {22003857-BD5E-4BD1-ACA2-D61118793EF2}
 	EndGlobalSection
 EndGlobal

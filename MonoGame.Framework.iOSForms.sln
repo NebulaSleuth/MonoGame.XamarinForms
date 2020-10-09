@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.645
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lidgren.Network.iOSForms", "ThirdParty\Lidgren.Network\Lidgren.Network.iOSForms.csproj", "{F5B354E5-C20A-4F47-A98A-B1A912088BEC}"
 EndProject
@@ -12,10 +12,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F5B354E5-C20A-4F47-A98A-B1A912088BEC}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
-		{F5B354E5-C20A-4F47-A98A-B1A912088BEC}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
-		{B108B16B-3412-43F5-A674-F70DD63CD58F}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
-		{B108B16B-3412-43F5-A674-F70DD63CD58F}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
+		{F5B354E5-C20A-4F47-A98A-B1A912088BEC}.Debug|Any CPU.ActiveCfg = Debug|iPhone
+		{F5B354E5-C20A-4F47-A98A-B1A912088BEC}.Release|Any CPU.ActiveCfg = Release|iPhone
+		{B108B16B-3412-43F5-A674-F70DD63CD58F}.Debug|Any CPU.ActiveCfg = Debug|iPhone
+		{B108B16B-3412-43F5-A674-F70DD63CD58F}.Release|Any CPU.ActiveCfg = Release|iPhone
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

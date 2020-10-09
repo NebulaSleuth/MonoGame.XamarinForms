@@ -18,6 +18,11 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
+
+#if WINDOWS_SWAPCHAIN
+using Windows.UI.Xaml.Controls;
+#endif
+
 //using MonoGame.Framework;
 #if WPFSCP
 using Windows.UI.Xaml.Controls;
@@ -214,9 +219,9 @@ namespace Microsoft.Xna.Framework
             }
         }
 
-        #endregion IDisposable Implementation
+#endregion IDisposable Implementation
 
-        #region Properties
+#region Properties
 
 #if FORMS
         // Ins a XamarinForms implementation, certain things can hang around regardless of the game
@@ -306,6 +311,17 @@ namespace Microsoft.Xna.Framework
                 Platform.BeginScreenDeviceChange(false);
             }
         }
+
+        private FrameworkElement _hostContainer;
+        public FrameworkElement HostContainer
+        {
+            get => _hostContainer;
+            set
+            {
+                _hostContainer = value;
+                Platform.BeginScreenDeviceChange(false);
+            }
+        }
 #endif
 
 #if WINDOWS_UAP && FORMS
@@ -318,6 +334,18 @@ namespace Microsoft.Xna.Framework
             {
                 _swapChainPanel = value;
                 ((UAPGamePlatform)Platform).UpdateWindow(this);
+            }
+        }
+#endif
+#if WINDOWS_SWAPCHAIN
+        private SwapChainPanel _swapChainPanel;
+        public SwapChainPanel SwapChainPanel
+        {
+            get => _swapChainPanel;
+            set
+            {
+                _swapChainPanel = value;
+                //((UAPGamePlatform)Platform).UpdateWindow(this);
             }
         }
 #endif

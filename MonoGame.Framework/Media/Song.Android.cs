@@ -27,8 +27,8 @@ namespace Microsoft.Xna.Framework.Media
     public sealed partial class Song : Java.Lang.Object, IEquatable<Song>, IDisposable, IPlayerEventListener
     {
         //static Android.Media.MediaPlayer _androidPlayer;
-        static SimpleExoPlayer _androidPlayer;
-        static Song _playingSong;
+        SimpleExoPlayer _androidPlayer;
+        //static Song _playingSong;
 
         private Album album;
         private Artist artist;
@@ -44,11 +44,11 @@ namespace Microsoft.Xna.Framework.Media
             get { return this.assetUri; }
         }
 
-        static Song()
-        {
-            //_androidPlayer = new Android.Media.MediaPlayer();
-            //_androidPlayer.Completion += AndroidPlayer_Completion;
-        }
+        //static Song()
+        //{
+        //    //_androidPlayer = new Android.Media.MediaPlayer();
+        //    //_androidPlayer.Completion += AndroidPlayer_Completion;
+        //}
 
         private void prepareExoPlayerFromFile(string path)
         {
@@ -150,13 +150,15 @@ namespace Microsoft.Xna.Framework.Media
             prepareExoPlayerFromFile(fileName);
         }
 
-        static void AndroidPlayer_Completion(object sender, EventArgs e)
+        void AndroidPlayer_Completion(object sender, EventArgs e)
         {
-            var playingSong = _playingSong;
-            _playingSong = null;
 
-            if (playingSong != null && playingSong.DonePlaying != null)
-                playingSong.DonePlaying(sender, e);
+            //var playingSong = _playingSong;
+            //_playingSong = null;
+
+            //if (playingSong != null && playingSong.DonePlaying != null)
+            //    playingSong.DonePlaying(sender, e);
+            DonePlaying?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -330,7 +332,7 @@ namespace Microsoft.Xna.Framework.Media
 
             //_androidPlayer.Prepare();
             //_androidPlayer.Looping = MediaPlayer.IsRepeating;
-            _playingSong = this;
+            //_playingSong = this;
 
             if (startPosition.HasValue)
                 Position = startPosition.Value;
@@ -353,7 +355,7 @@ namespace Microsoft.Xna.Framework.Media
         internal void Stop()
         {
             _androidPlayer?.Stop();
-            _playingSong = null;
+            //_playingSong = null;
             _playCount = 0;
             position = TimeSpan.Zero;
         }
@@ -384,7 +386,7 @@ namespace Microsoft.Xna.Framework.Media
         {
             get
             {
-                if (_playingSong == this)
+                //if (_playingSong == this)
                     position = TimeSpan.FromMilliseconds(_androidPlayer.CurrentPosition);
 
                 return position;

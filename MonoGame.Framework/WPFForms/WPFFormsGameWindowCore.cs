@@ -22,6 +22,9 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Windows;
 using MonoGame.Framework.WPFForms;
+using Windows.UI.Core;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using Point = System.Drawing.Point;
@@ -245,30 +248,49 @@ namespace MonoGame.Framework
 
         internal WPFFormsGameWindow(WPFFormsGamePlatform platform)
         {
+            Console.WriteLine("WPFFormsGameWindow");
             _timer = new Stopwatch();
             //IsFullScreen = true;
-            _platform = platform;
-            Game = platform.Game;
-            if (Game.HostControl != null)
+            try
             {
-                Host = Game.HostControl;
+                _platform = platform;
+                Game = platform.Game;
+                Console.WriteLine("WPFFormsGameWindow 1");
+                if (Game.HostContainer != null)
+                {
+                    Console.WriteLine("WPFFormsGameWindow 3");
+                    HostContainer = Game.HostContainer;
 
-                Host.SizeChanged += OnResize;
-                Host.Unloaded += OnDeactivate;
-                Host.Loaded += OnActivated;
+                    HostContainer.SizeChanged += OnResize;
+                    HostContainer.Unloaded += OnDeactivate;
+                    HostContainer.Loaded += OnActivated;
 
-                Window parentWindow = Window.GetWindow(Host);
-                // Capture mouse events.
-                Microsoft.Xna.Framework.Input.Mouse.WindowHandle = new WindowInteropHelper(parentWindow).Handle;
-                Host.PreviewMouseWheel += OnMouseScroll;
-                //Host.MouseHorizontalWheel += OnMouseHorizontalScroll;
-                Host.MouseEnter += OnMouseEnter;
-                Host.MouseLeave += OnMouseLeave;
+                    Window parentWindow = Window.GetWindow(HostContainer);
+                    // Capture mouse events.
+                    Microsoft.Xna.Framework.Input.Mouse.WindowHandle = new WindowInteropHelper(parentWindow).Handle;
+                    HostContainer.PreviewMouseWheel += OnMouseScroll;
+                    //Host.MouseHorizontalWheel += OnMouseHorizontalScroll;
+                    HostContainer.MouseEnter += OnMouseEnter;
+                    HostContainer.MouseLeave += OnMouseLeave;
+#if WINDOWS_SWAPCHAIN
+                    Console.WriteLine("WPFFormsGameWindow 4");
+                    if (Game.SwapChainPanel != null)
+                    {
+                        Game.SwapChainPanel.PointerEntered += OnPointerEnter;
+                        Game.SwapChainPanel.PointerExited += OnPointerExit;
+                        Game.SwapChainPanel.PointerMoved += OnPointerMoved;
+                        Game.SwapChainPanel.PointerPressed += OnPointerPressed;
+                        Game.SwapChainPanel.PointerReleased += OnPointeReleased;
 
-                //                Touch.FrameReported += new TouchFrameEventHandler(Touch_FrameReported);
-                //Host.KeyDown += OnKeyPress;
+                    }
+#endif
+                }
+                RegisterToAllWindows();
             }
-            RegisterToAllWindows();
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
 
@@ -513,6 +535,7 @@ namespace MonoGame.Framework
 
         public void StartRendering()
         {
+            Console.WriteLine($"Start Rendering: {typeof(Game)}");
             if (_timer.IsRunning)
                 return;
 
@@ -524,6 +547,7 @@ namespace MonoGame.Framework
         public void StopRendering()
         {
 
+            Console.WriteLine($"Stop Rendering: {typeof(Game)}");
             lock (_graphicsDeviceLock)
             {
                 if (_timer?.IsRunning == true)
@@ -933,11 +957,13 @@ namespace MonoGame.Framework
 
         internal void Initialize(int width, int height)
         {
+            Console.WriteLine("Initialize");
             //ChangeClientSize(new Size(width, height));
         }
 
         internal void Initialize(PresentationParameters pp)
         {
+            Console.WriteLine("Initialize");
             //ChangeClientSize(new Size(pp.BackBufferWidth, pp.BackBufferHeight));
 
             if (pp.IsFullScreen)
@@ -1060,7 +1086,7 @@ namespace MonoGame.Framework
         //[DllImport("User32.dll", CharSet = CharSet.Auto)]
         //private static extern bool PeekMessage(out NativeMessage msg, IntPtr hWnd, uint messageFilterMin, uint messageFilterMax, uint flags);
 
-#region Public Methods
+        #region Public Methods
 
         public void Dispose()
         {
@@ -1191,7 +1217,7 @@ namespace MonoGame.Framework
         }
 
 
-#endregion
+        #endregion
 
 
         public void KeyUp(System.Windows.Input.KeyEventArgs e)

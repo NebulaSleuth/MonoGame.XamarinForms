@@ -9,13 +9,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A5FAD15C-ACD0-4EAB-BF58-E2FCAAB4D40F}</ProjectGuid>
+    <ProjectGuid>{A9E3D8DA-9C5B-4927-B759-E0A055E94B88}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <AssemblyName>MonoGame.Framework</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>1591,0436</NoWarn>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <LangVersion>Default</LangVersion>
     <NuGetPackageImportStamp>
@@ -690,9 +690,6 @@
     <Compile Include="WPFForms\WPFFormsGamePlatform.cs">
       <Platforms>WPFForms</Platforms>
     </Compile>
-    <Compile Include="WPFForms\WPFFormsGameWindow.cs">
-      <Platforms>WPFForms</Platforms>
-    </Compile>
     <Compile Include="Media\VideoSampleGrabber.cs">
       <Platforms>WPFForms,WPF</Platforms>
     </Compile>
@@ -702,6 +699,7 @@
     <Compile Include="WPFForms\D3D11Image.cs">
       <Platforms>WPFForms</Platforms>
     </Compile>
+    <Compile Include="WPFForms\WPFFormsGameWindowCore.cs" />
     <Compile Include="WPFForms\WPFMonoGameContainer.xaml.cs">
       <Platforms>WPFForms</Platforms>
       <DependentUpon>WPFMonoGameContainer.xaml</DependentUpon>

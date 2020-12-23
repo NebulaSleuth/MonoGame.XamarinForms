@@ -25,7 +25,7 @@ namespace MonoGame.Framework
         public WPFFormsGamePlatform(Game game)
             : base(game)
         {
-            
+
             MediaPlayer.Reset();
 
             _window = new WPFFormsGameWindow(this);

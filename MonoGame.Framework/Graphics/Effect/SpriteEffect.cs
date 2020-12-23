@@ -63,7 +63,11 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             var viewport = GraphicsDevice.Viewport;
 
-            var projection = Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, 1);
+            Matrix projection;
+            if (Projection == null)
+                projection = Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, 1);
+            else
+                projection = Projection;
             var halfPixelOffset = Matrix.CreateTranslation(0, 0, 0);
 
             if (SpriteBatch.NeedsHalfPixelOffset){
@@ -73,6 +77,7 @@ namespace Microsoft.Xna.Framework.Graphics
             matrixParam.SetValue(halfPixelOffset * projection);
         }
 
+        public Matrix Projection { get; set; }
 
         #endregion
     }

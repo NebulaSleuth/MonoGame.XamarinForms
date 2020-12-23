@@ -256,8 +256,70 @@ namespace Microsoft.Xna.Framework.Content
             loadedAssets[key] = result;
             return result;
 		}
-		
-		protected virtual Stream OpenStream(string assetName)
+
+        public virtual T Load<T>(string assetName, Stream stream)
+        {
+            if (string.IsNullOrEmpty(assetName))
+            {
+                throw new ArgumentNullException("assetName");
+            }
+            if (disposed)
+            {
+                throw new ObjectDisposedException("ContentManager");
+            }
+
+            T result = default(T);
+
+            // On some platforms, name and slash direction matter.
+            // We store the asset by a /-seperating key rather than how the
+            // path to the file was passed to us to avoid
+            // loading "content/asset1.xnb" and "content\\ASSET1.xnb" as if they were two 
+            // different files. This matches stock XNA behavior.
+            // The dictionary will ignore case differences
+            var key = assetName.Replace('\\', '/');
+
+            // Check for a previously loaded asset first
+            object asset = null;
+            if (loadedAssets.TryGetValue(key, out asset))
+            {
+                if (asset is T)
+                {
+                    return (T)asset;
+                }
+            }
+
+            // Load the asset.
+            if (stream == null)
+                result = ReadAsset<T>(assetName, null);
+            else
+                result = ReadAssetFromStream<T>(assetName, stream, null);
+            loadedAssets[key] = result;
+            return result;
+        }
+
+        public virtual void Unload(string assetName)
+        {
+            // On some platforms, name and slash direction matter.
+            // We store the asset by a /-seperating key rather than how the
+            // path to the file was passed to us to avoid
+            // loading "content/asset1.xnb" and "content\\ASSET1.xnb" as if they were two 
+            // different files. This matches stock XNA behavior.
+            // The dictionary will ignore case differences
+            var key = assetName.Replace('\\', '/');
+            object asset = null;
+            if (loadedAssets.TryGetValue(key, out asset))
+            {
+                IDisposable d = asset as IDisposable;
+                if (d != null)
+                {
+                    d.Dispose();
+                }
+
+                loadedAssets.Remove(key);
+            }
+        }
+
+        protected virtual Stream OpenStream(string assetName)
 		{
 			Stream stream;
 			try
@@ -340,6 +402,46 @@ namespace Microsoft.Xna.Framework.Content
 
 			return (T)result;
 		}
+
+        protected T ReadAssetFromStream<T>(string assetName, Stream stream, Action<IDisposable> recordDisposableObject)
+        {
+            if (string.IsNullOrEmpty(assetName))
+            {
+                throw new ArgumentNullException("assetName");
+            }
+            if (disposed)
+            {
+                throw new ObjectDisposedException("ContentManager");
+            }
+
+            string originalAssetName = assetName;
+            object result = null;
+
+            if (this.graphicsDeviceService == null)
+            {
+                this.graphicsDeviceService = serviceProvider.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
+                if (this.graphicsDeviceService == null)
+                {
+                    throw new InvalidOperationException("No Graphics Device Service");
+                }
+            }
+
+            // Try to load as XNB file
+            using (var xnbReader = new BinaryReader(stream))
+            {
+                using (var reader = GetContentReaderFromXnb(assetName, stream, xnbReader, recordDisposableObject))
+                {
+                    result = reader.ReadAsset<T>();
+                    if (result is GraphicsResource)
+                        ((GraphicsResource)result).Name = originalAssetName;
+                }
+            }
+
+            if (result == null)
+                throw new ContentLoadException("Could not load " + originalAssetName + " asset!");
+
+            return (T)result;
+        }
 
         private ContentReader GetContentReaderFromXnb(string originalAssetName, Stream stream, BinaryReader xnbReader, Action<IDisposable> recordDisposableObject)
         {

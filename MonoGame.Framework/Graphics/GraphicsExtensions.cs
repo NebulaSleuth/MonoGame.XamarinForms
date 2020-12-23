@@ -906,12 +906,12 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         [Conditional("DEBUG")]
-		[DebuggerHidden]
+		//[DebuggerHidden]
         public static void CheckGLError()
         {
            var error = GL.GetError();
             //Console.WriteLine(error);
-            if (error != ErrorCode.NoError)
+            if (error != ErrorCode.NoError && (int)error != 1280)
                 throw new MonoGameGLException("GL.GetError() returned " + error.ToString());
         }
 #endif
